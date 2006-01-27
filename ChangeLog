@@ -1,0 +1,18 @@
+2006-01-28  Henning Makholm  <henning@makholm.net>
+
+	* Version 0.7
+	* xcf2png added
+	* Test suite added
+	* Various bug fixes
+
+2006-01-24  Henning Makholm  <henning@makholm.net>
+
+	* Version 0.6
+	* Allow X11 color names with -b option
+
+2006-01-22  Henning Makholm  <henning@makholm.net>
+
+	* Version 0.5
+	* First public release
+	   - xcfinfo
+	   - xcf2pnm

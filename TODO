@@ -1,0 +1,12 @@
+These are things I want to do before bumping the version
+number of Xcftools to 1.0:
+
+- Add tests of error reporting to the test suite.
+
+- Get the program tested on various architectures.
+
+- Finish localization infrastucture (some work has been done
+  but is not completely systematic).
+
+
+

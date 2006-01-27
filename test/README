@@ -1,0 +1,27 @@
+This regression test requires perl, bash, and some programs from
+netpbm: pngtopnm, pnmdepth and pgmtoppm.
+
+The expected outputs are stored as PNG files, which compress better
+than just gzipped PxM, but the output from xcf2png is not compared
+byte-to-byte with the stored files, because different libpng and zlib
+versions may take different, but legitimate, decisions about IDAT
+chunk division and compression. Instead pixel comparisions are
+done with cmp(1) on PxM representations, which have less possibility
+for variations.
+
+The test of xcftopnm assumes that the layout of the ascii header
+in the output from xcftopnm matches byte-for-byte what netpbm produces.
+There is an undocumented -@ switch that does this, but if you have a
+wildly different version of netpbm you may need to fiddle with the
+implementation of -@ and/or insert filters in the test driver
+routines.
+
+
+
+There are yet no tests for correct reporting of errors.
+
+
+
+Note: display(1) from imagemagick 6.0.6.2 apparently does not display
+  PNG files with grayscale+alpha correctly - the alpha channel is
+  ignored.

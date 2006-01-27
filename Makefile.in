@@ -1,0 +1,180 @@
+# Makefile(.in) for xcftools
+# Copyright (C) 2006  Henning Makholm
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of version 2 of the GNU General Public License as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+all:
+
+@SET_MAKE@
+
+srcdir			= @srcdir@
+prefix			= @prefix@
+exec_prefix		= @exec_prefix@
+bindir			= @bindir@
+mandir			= @mandir@
+sysconfdir		= @sysconfdir@
+
+VERSION			= @PACKAGE_VERSION@
+APPNAME			= @PACKAGE_TARNAME@
+program_transform_name	= @program_transform_name@
+
+CFLAGS			= @CFLAGS@
+LDFLAGS			= @LDFLAGS@
+LIBS			= @LIBS@
+
+INSTALL			= @INSTALL@
+INSTALL_PROGRAM		= @INSTALL_PROGRAM@
+INSTALL_DATA		= @INSTALL_DATA@
+
+RM			= rm -f
+SED			= sed
+PERL			= @PERL@
+
+o			= @OBJEXT@
+e			= @EXEEXT@
+
+#############################################################################
+
+FILEIO			= io-unix
+
+BINARIES		= xcfinfo$e xcf2pnm$e xcf2png$e
+MANPAGES		= $(patsubst %$e,%.1,$(BINARIES))
+
+%.$o: %.c
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+all: $(BINARIES) $(MANPAGES)
+
+xcfinfo$e: xcfinfo.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o
+	$(CC) $(LDFLAGS) $(LIBS) $^ -o $@
+
+xcf2pnm$e: xcf2pnm.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o \
+	   pixels.$o flatten.$o flatspec.$o table.$o 
+	$(CC) $(LDFLAGS) $(LIBS) $^ -o $@
+
+xcf2png$e: xcf2png.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o \
+	   pixels.$o flatten.$o flatspec.$o table.$o palette.$o
+	$(CC) $(LDFLAGS) $(LIBS) -lpng $^ -o $@
+
+testscale$e: testscale.$o
+	$(CC) $(LDFLAGS) $(LIBS) $^ -o $@
+
+install: all
+	for p in $(BINARIES) ; do \
+	  $(INSTALL_PROGRAM) -s $$p \
+		$(bindir)/`echo $$p | $(SED) $(program_transform_name)` ; \
+        done
+	for m in $(MANPAGES) ; do \
+	  $(INSTALL_DATA) $$m \
+	       $(mandir)/man1/`echo $$m | $(SED) $(program_transform_name)` ; \
+	done
+
+ENUMSOURCES = gimp/base-enums.h gimp/gimpbaseenums.h gimp/xcf-private.h
+enums.h: mkenumsh.pl $(ENUMSOURCES)
+	$(PERL) $< $(ENUMSOURCES) > $@
+enums.c: mkenumsc.pl enums.h
+	$(PERL) $< enums.h > $@
+table.c: mktablec.pl
+	$(PERL) $< > $@
+
+%.oi: options.i mkopti.pl config.h
+	$(PERL) mkopti.pl $*
+
+%.1: %.oi %.10 config.h mancombine.pl
+	$(PERL) mancombine.pl $*.10 > $@
+
+#############################################################################
+#
+#  Dependency tracking, by hand
+
+COMMON_HEADERS = xcftools.h config.h enums.h
+enums.$o:	enums.h
+table.$o:	$(COMMON_HEADERS) pixels.h
+io-unix.$o:     $(COMMON_HEADERS)
+xcf-general.$o: $(COMMON_HEADERS)
+utils.$o:	$(COMMON_HEADERS)
+pixels.$o:	$(COMMON_HEADERS) pixels.h
+palette.$o:	$(COMMON_HEADERS) pixels.h flatten.h     palette.h
+flatten.$o:	$(COMMON_HEADERS) pixels.h flatten.h
+flatspec.$o:	$(COMMON_HEADERS) pixels.h flatten.h
+xcfinfo.$o:     $(COMMON_HEADERS)                    xcfinfo.oi
+xcf2pnm.$o:	$(COMMON_HEADERS) pixels.h flatten.h xcf2pnm.oi
+xcf2png.$o:	$(COMMON_HEADERS) pixels.h flatten.h xcf2png.oi palette.h
+
+#############################################################################
+#
+#  Standard cleaning and other metarules
+
+check: $(BINARIES)
+	cd test && $(MAKE) check
+
+clean:
+	$(RM) *.$o *~ .*~ *.1i *.1il *.1 *.oi 
+	$(RM) enums.h enums.c table.c $(BINARIES)
+	cd test && $(MAKE) clean
+
+distclean: clean
+	$(RM) Makefile config.log config.cache config.status config.h
+	$(RM) -r autom4te.cache
+
+realclean: distclean
+	$(RM) configure config.hin aclocal.m4
+
+.SUFFIXES: .c .$o
+
+.PHONY: clean distclean realclean dist all
+
+#############################################################################
+#
+#  Tarball-making rule
+
+dist: ajour distclean
+	noncvs > notcvsfiles || cp dist-generated notcvsfiles
+	diff -u dist-generated notcvsfiles
+	$(RM) notcvsfiles
+	find . -type f -print | grep -v CVS | \
+		sed 's!^\./!$(APPNAME)-$(VERSION)/!' | sort -o tar-manifest
+	ln -s . $(APPNAME)-$(VERSION)
+	tar cvzf $(APPNAME)-$(VERSION).tar.gz `cat tar-manifest`
+	rm tar-manifest
+	rm $(APPNAME)-$(VERSION)
+
+#############################################################################
+#
+#  Autofoo rules:
+
+aclocal.m4: configure.ac
+	aclocal
+
+$(srcdir)/configure: configure.ac aclocal.m4
+	cd $(srcdir) && autoconf
+
+$(srcdir)/config.hin: configure.ac aclocal.m4
+	cd $(srcdir) && autoheader
+	touch $@
+
+config.status: $(srcdir)/configure
+	./config.status --recheck
+
+Makefile: Makefile.in config.status
+	./config.status $@
+
+config.h: config.hin config.status
+	./config.status $@
+	touch $@
+
+ajour: Makefile config.h config.sub config.guess
+
+config.sub config.guess:
+	-test -r /usr/share/misc/$@ && cp /usr/share/misc/$@ .

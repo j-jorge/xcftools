@@ -1,0 +1,115 @@
+\." Manual page for xcfinfo
+\." Copyright (C) 2006  Henning Makholm
+\."
+\." This program is free software; you can redistribute it and/or modify
+\." it under the terms of version 2 of the GNU General Public License as
+\." published by the Free Software Foundation.
+\."
+\." This program is distributed in the hope that it will be useful,
+\." but WITHOUT ANY WARRANTY; without even the implied warranty of
+\." MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+\." GNU General Public License for more details.
+\."
+\." You should have received a copy of the GNU General Public License
+\." along with this program; if not, write to the Free Software
+\." Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+.TH xcfinfo 1 2006-01-22 "Xcftools" ""
+.SH NAME
+xcf2pnm \- display information about GIMP xcf files
+.SH SYNOPSIS
+.B info
+[
+.I options
+]
+.I filename
+.SH DESCRIPTION
+.B xcfinfo
+is a command-line tool that displays information about the contents of
+image files in the XCF format used by
+.BR gimp (1),
+particularly about the layers in the image.
+.SH OPTIONS
+.so xcfinfo.1i
+.SH OUTPUT
+Information about the image is displayed on standard output in a fixed format.
+The first line contains general information about the XCF file
+.TP 3
+\-
+The file format version
+.TP
+\-
+The canvas size
+.TP
+\-
+The image mode (color, grayscale or indexed)
+.TP
+\-
+The numer of layers
+.TP
+\-
+The internal compression algorithm
+.P
+Following this line there is a line for each layer:
+.TP 3
+1)
+The character
+.B +
+if the layer is visible and
+.B \-
+if it is not
+.TP
+2)
+The size and offset of the layer
+.TP
+3)
+The pixel format of the layer, including whether the
+layer has an alpha channel.
+.TP
+4)
+The layer mode, as well as the opacity of not 100%, and
+.B /mask
+if the layer has an active layer mask.
+.TP
+5)
+The name of the layer.
+.SH EXIT STATUS
+The exit status of
+.B xcfinfo
+is
+.TP 5
+0
+Success
+.TP
+20
+Problems parsing the command line.
+.TP
+21
+The specified XCF file does not exist or cannot be read.
+.TP
+123
+The XCF file contains presumably valid features that
+.B xcftools
+does not support.
+.TP
+125
+The XCF file is malformed.
+.TP
+126
+An uncompression program could not be executed or terminated
+abnormally.
+.TP
+127
+Unexpected I/O error, internal errors, or other "this can't happen"
+situations.
+.P
+If an uncompression program returns an error exit status, this will
+be returned from
+.B xcfinfo
+too.
+.SH AUTHOR
+.B xcf2pnm
+was written by Henning Makholm <henning@makholm.net>
+.P
+.SH SEE ALSO
+.BR xcf2pnm (1),
+.BR xcf2png (1)

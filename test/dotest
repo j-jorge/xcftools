@@ -1,0 +1,506 @@
+#! /bin/bash
+
+# Regression test for Xcftools
+# Copyright (C) 2006  Henning Makholm
+#
+# This test script is free software; you can redistribute it and/or
+# modify it under the terms of version 2 of the GNU General Public
+# License as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+export LC_CTYPE=C
+export LC_MESSAGES=C
+
+TESTFROM=..
+
+totaltests=0
+failedtests=0
+lastfailed=0
+keepgoing=0
+if [ x"$1" = x"-k" ]
+then
+    keepgoing=1
+fi
+
+failed() {
+    if (( lastfailed != totaltests ))
+    then
+        echo FAILED
+        (( lastfailed = totaltests ))
+        (( failedtests++ ))
+    fi
+    (( keepgoing )) || exit 1
+}
+    
+
+testrun() {
+    if [ x$1 == x--exit ]
+    then
+        want=$2 ;
+        shift ;
+        shift ;
+    else
+        want=0 ;
+    fi
+    (( totaltests++ ))
+    echo "===>" "$@"
+    "$@" > stdout.txt 2> stderr.txt
+    got=$?
+    if [ $want = $got ]
+    then
+        diff -u expected.stdout stdout.txt || failed
+        diff -u expected.stderr stderr.txt || failed
+    else
+        echo ===STDOUT===
+        cat stdout.txt
+        echo ===STDERR===
+        cat stderr.txt
+        echo ===EXIT STATUS===
+        echo $got
+        failed
+    fi
+}
+
+testinfo() {
+    testrun $TESTFROM/xcfinfo "$@"
+}
+
+testpnm() {
+    oanswer=''
+    aanswer=''
+    ofilter=cat
+    afilter=cat
+    oext=pnm
+    while true
+    do
+      arg="`echo $1 | cut -c 3-`"
+      case $arg in
+          -pgm) arg="pnmdepth 255" ;;
+          -ppm) arg="pgmtoppm 1,1,1" ;;
+      esac
+      case $1 in
+          o:*) oanswer="$arg" ;;
+          a:*) aanswer="$arg" ;;
+          O:*) ofilter="$arg" ;;
+          A:*) afilter="$arg" ;;
+          x:*) oext="$arg" ;;
+          *) break ;;
+      esac
+      shift
+    done
+    rm -f o.* a.*
+    [ "$oanswer" ] && pngtopnm        answer/$oanswer.png | $ofilter > o.want
+    [ "$aanswer" ] && pngtopnm -alpha answer/$aanswer.png | $afilter > a.want
+    aopt=
+    if [ -n "$aanswer" ] ; then
+        aopt="-aa.pnm"
+    fi
+    source="$1"
+    shift
+    testrun $TESTFROM/xcf2pnm -@ -oo.$oext $aopt source/$source.xcf.gz "$@"
+    [ -z "$oanswer" ] || cmp o.want o.$oext || failed
+    [ -z "$aanswer" ] || cmp a.want a.pnm || failed
+}
+
+testpng() {
+    ofilter=cat
+    afilter=cat
+    oargs=""
+    aargs=""
+    while true
+    do
+      arg="`echo $1 | cut -c 3-`"
+      case $arg in
+          -pgm) arg="pnmdepth 255" ;;
+          -ppm) arg="pgmtoppm 1,1,1" ;;
+      esac
+      case $1 in
+          O:*) ofilter="$arg" ;;
+          A:*) afilter="$arg" ;;
+          b:*) oargs="-background $arg -mix" ;;
+          B:*) aargs="-background $arg -mix" ;;
+          *) answer="$1" ; shift ; break ;;
+      esac
+      shift
+    done
+    rm -f o.* a.*
+    [ -s pngtype.want ] || perl pngtype.pl < answer/$answer.png > pngtype.want
+    pngtopnm $aargs answer/$answer.png | $ofilter > o.want
+    pngtopnm -alpha answer/$answer.png | $afilter > a.want
+    source="$1"
+    shift
+    testrun $TESTFROM/xcf2png -oo.png source/$source.xcf.gz "$@"
+    perl pngtype.pl < o.png > pngtype
+    diff -u pngtype.want pngtype || failed
+    pngtopnm $oargs o.png > o.pnm
+    cmp o.want o.pnm || failed
+    if [ "$afilter" != : ] ; then
+        pngtopnm -alpha o.png > a.pnm
+        cmp a.want a.pnm || failed
+    fi
+    rm pngtype.want
+}
+rm -f pngtype.want
+
+S=source
+
+cp /dev/null expected.stderr
+
+#############################################################################
+#
+#  Use all of the example XCF inputs as checks of xcfinfo
+#
+
+cat <<EOF > expected.stdout
+Version 0, 256x256 Grayscale, 2 layers, compressed RLE
++ 256x256+0+0 Grayscale-alpha Normal Partially transparent
++ 256x256+0+0 Grayscale Normal Background
+EOF
+testinfo $S/comptest.xcf.gz
+
+cat <<EOF > expected.stdout
+Version 0, 64x64 RGB color, 4 layers, compressed RLE
+- 10x10+27+27 RGB-alpha Normal AE=AE
++ 64x64+0+0 RGB-alpha Subtract B
++ 64x64+0+0 RGB-alpha Addition A
+- 64x64+0+0 RGB Normal Background
+EOF
+testinfo $S/modetest.xcf.gz
+
+cat <<EOF > expected.stdout
+Version 1, 64x64 Indexed color, 3 layers, compressed RLE
++ 64x64+0+0 Indexed-alpha Subtract/mask B
++ 64x64+0+0 Indexed-alpha Addition/mask A
+- 64x64+0+0 Indexed Normal Background
+EOF
+testinfo $S/indextest.xcf.gz
+
+cat <<EOF > expected.stdout
+Version 0, 161x161 RGB color, 10 layers, compressed RLE
++ 122x13+19+74 RGB-alpha Normal Long and low
++ 13x122+74+19 RGB-alpha Difference Tall and narrow
++ 118x118+38+47 RGB-alpha Normal/65% Displaced loop
+- 161x161+0+0 RGB-alpha Normal Doodle
++ 161x161+0+0 RGB-alpha Normal Straight loop
++ 50x50+100+105 RGB-alpha Normal/mask Crossed
++ 50x50+8+8 RGB-alpha Normal Mid
++ 50x50+8+102 RGB-alpha Normal/83%/mask Horiz
++ 50x50+101+7 RGB-alpha Normal Vert
++ 161x161+0+0 RGB Normal Background
+EOF
+testinfo $S/tiletest.xcf.gz
+
+cat <<EOF > expected.stdout
+Version 1, 64x64 Indexed color, 1 layers, compressed RLE
++ 64x64+0+0 Indexed Normal Background
+EOF
+testinfo $S/i256.xcf.gz
+testinfo $S/i255.xcf.gz
+
+cp /dev/null expected.stdout
+
+#############################################################################
+#############################################################################
+
+
+#############################################################################
+#
+#   comptest.xcf.gz tests primarily that the scaling tables used during
+#   flattening are internally consistent, such that two pixels of the
+#   same color always composite to that color no matter what the
+#   alpha of the upper one is.
+
+testpnm o:comptest comptest
+testpnm o:comptest comptest Background
+
+#############################################################################
+#
+#   modetest.xcf.gz is the primary test of the various compositing modes.
+#
+
+testpnm o:Subtract a:modeA modetest
+testpnm o:Addition a:modeB modetest B A -f
+for mode in Multiply Screen Overlay Difference DarkenOnly \
+            LightenOnly Divide Dodge Burn GrainExtract GrainMerge \
+            Hardlight
+do
+  testpnm o:$mode a:modeA modetest A B --mode $mode
+done
+testpnm o:Overlay a:modeA modetest AE=AE A --mode Normal B --mode Softlight
+
+
+#############################################################################
+#
+#   tiletest.xcf.gz tests various ways a layer can interact with the
+#   tile boundaries, as well as layer selection, masks, global opacity.
+#
+
+testpnm o:tiletest tiletest
+
+#############################################################################
+#
+#   Test output format selection for xcf2pnn with and without -f
+#
+
+testpnm o:mono O:-ppm tiletest Background 'Straight loop'
+testpnm o:mono O:-ppm tiletest Background 'Straight loop' -c
+testpnm o:mono O:-pgm tiletest Background 'Straight loop' -g
+testpnm o:mono        tiletest Background 'Straight loop' -m
+
+testpnm x:ppm o:mono O:-ppm tiletest Background 'Straight loop'
+testpnm x:pgm o:mono O:-pgm tiletest Background 'Straight loop'
+testpnm x:pbm o:mono        tiletest Background 'Straight loop'
+testpnm x:pbm o:mono O:-ppm tiletest Background 'Straight loop' -c
+testpnm o:gray O:-ppm tiletest Background 'Straight loop' 'Long and low'
+testpnm o:gray        tiletest Background 'Straight loop' 'Long and low' -g
+
+testpnm o:mono        tiletest Background 'Straight loop' -f
+testpnm o:mono O:-ppm tiletest Background 'Straight loop' -f -c
+testpnm o:gray        tiletest Background 'Straight loop' 'Long and low' -f
+
+#   Test -A flag
+
+testpnm o:mid              tiletest -O17,17 -S32x32 Mid
+testpnm o:mid a:mid A:-pgm tiletest -O17,17 -S32x32 Mid
+testpnm o:mid              tiletest -O17,17 -S32x32 Mid -f
+testpnm o:mid a:mid        tiletest -O17,17 -S32x32     -A
+testpnm o:mid a:mid A:-pgm tiletest -O17,17 -S32x32 Mid
+testpnm o:mid a:mid        tiletest -O17,17 -S32x32     -Af
+testpnm o:mid a:mid        tiletest -O17,17 -S32x32 Mid -Af
+
+#############################################################################
+#
+#   Test indexed images
+#
+
+testpnm o:indextest a:indextest indextest
+testpnm o:Subtract a:modeA indextest -T
+testpnm o:index4 indextest Background
+testpnm o:index256 i256
+
+#############################################################################
+#
+#   Various tests of xcf2pnm
+#
+
+testpnm o:burmid tiletest Mid -S 27x25 -O 5,5 -b '#963'
+
+#############################################################################
+#############################################################################
+#
+#   Tests of xcf2png
+#
+
+#############################################################################
+#
+#   Basic functionality
+#
+
+testpng tiletest tiletest
+testpng modeA modetest A
+
+#############################################################################
+#
+#   Output color-format selection
+#
+
+cat <<EOF > common
+161x161x8
+color
+z0 f0 i0
+EOF
+cp common pngtype.want
+testpng O:-ppm mono tiletest Background 'Straight loop'
+cp common pngtype.want
+testpng O:-ppm mono tiletest Background 'Straight loop' -c
+cp common pngtype.want
+testpng O:-ppm mono tiletest Background 'Straight loop' -f -c
+cp common pngtype.want
+testpng O:-ppm gray tiletest Background 'Straight loop' 'Long and low'
+
+cat <<EOF > common
+161x161x8
+gray
+z0 f0 i0
+EOF
+cp common pngtype.want
+testpng O:-pgm mono tiletest Background 'Straight loop' -g
+cp common pngtype.want
+testpng        gray tiletest Background 'Straight loop' 'Long and low' -g
+
+cat <<EOF > pngtype.want
+161x161x1
+gray
+z0 f0 i0
+EOF
+testpng mono tiletest Background 'Straight loop' -f
+
+cat <<EOF > pngtype.want
+161x161x8
+color+index
+z0 f0 i0
+PLTE(60)
+ FF FF FF  00 00 00  B6 B6 B6  A1 A1 A1  81 81 81  51 51 51  2E 2E 2E  80 80 80
+ E2 E2 E2  41 41 41  30 30 30  12 12 12  0E 0E 0E  0B 0B 0B  13 13 13  2D 2D 2D
+ 7F 7F 7F  40 40 40  50 50 50  6A 6A 6A
+EOF
+testpng        gray tiletest Background 'Straight loop' 'Long and low' -f
+
+#############################################################################
+#
+#  Try all combinations of alpha and color modes
+#
+
+# gray
+testpng gray tiletest Background 'Straight loop' 'Long and low' -g
+testpng comptest comptest
+
+# RGB: many of the layer mode tests test this
+
+# gray+alpha
+testpng comptestB comptest 'Partially transparent' -f
+
+# RGB+alpha
+cat <<EOF > pngtype.want
+16x20x8
+color+alpha
+z0 f0 i0
+EOF
+testpng A:-pgm b:0,0,0 crisp1 modetest -S16x20 -O48,46 -c
+
+# gray, one transparent color
+testpng crisp2 comptest -S25x250 -O235,0 -f -g 
+
+# RGB, one transparent color
+cat <<EOF > pngtype.want
+16x20x8
+color
+z0 f0 i0
+tRNS(6)
+ 00 01 00 01 00 01
+EOF
+testpng "b:0,0,0" crisp1 modetest -S16x20 -O48,46 -c -f
+
+# index, no transparency: palette selection tests test this
+
+# index, one transparent color
+testpng crisp1 modetest -S16x20 -O48,46 -f
+
+# index, various transparent colors
+testpng modeB modetest B -f
+
+#############################################################################
+#
+#   Special tests for palette selection
+#
+
+# monochrome
+testpng mono tiletest Background 'Straight loop' -f
+
+# monochrome with black and white first met in the opposite order.
+testpng mono1 tiletest Background -S65x64 -O63,64 -f
+
+# 1 color plus transparency
+testpng doodle tiletest Doodle -f
+
+# 2 colors
+cat <<EOF > pngtype.want
+161x161x1
+color+index
+z0 f0 i0
+PLTE(6)
+ FF 00 00  EE 6F 00
+EOF
+testpng A:: B:1,0,0 doodle tiletest Doodle -b '#f00' -f
+
+# 2 colors plus transparency
+testpng odoodle tiletest Doodle 'Straight loop' -f
+
+# 3 colors
+cat <<EOF > pngtype.want
+161x161x2
+color+index
+z0 f0 i0
+PLTE(9)
+ 00 00 FF  EE 6F 00  FF FF FF
+EOF
+testpng A:: B:0,0,1 odoodle tiletest Doodle 'Straight loop' -fb '#00F'
+
+# 4 colors
+cat <<EOF > pngtype.want
+64x64x2
+color+index
+z0 f0 i0
+PLTE(12)
+ DC 98 85  FF 00 77  10 36 38  FF B4 23
+EOF
+testpng index4 indextest Background -f
+
+# 16 colors, no transparency
+testpng mid tiletest -O17,17 -S32x32 -f
+
+# 17 colors, including a background
+testpng burmid tiletest Mid -O5,5 -S27x25 -b '#963' -f
+
+# 38 colors, original colormap
+testpng index4 indextest Background
+
+# 255 colors, original colormap
+testpng index255 i255
+
+# 255 colors plus transparency
+testpng i255t i255 -O0,2
+testpng i255t i255 -O0,2 -f
+testpng i255tt i255 -O2,0 -f
+perl pngtype.pl < answer/index256.png > pngtype.want
+testpng A:"tr '\377' '\0'" B:"#F4F4F4" i255t i255 -O0,2 -b "#F4F4F4"
+# 255 colors, background already in palette
+perl pngtype.pl < answer/index255.png > pngtype.want
+testpng A:"tr '\3' '\0'" B:"#66CC33" i255tt i255 -O2,0 -b "#6c3"
+
+# 256 colors, original colormap
+testpng index256 i256
+
+# 256 colors, no room for transparency
+cat <<EOF > pngtype.want
+64x64x8
+color+alpha
+z0 f0 i0
+EOF
+testpng A:-pgm index256 i256 -A
+
+#############################################################################
+#
+#   Various tests for regression of bugs that slipped through the
+#   systematic testing.
+#
+
+# Exotic modes with an opaque layer
+testpnm o:misc1 a:misc1 tiletest Mid Crossed \
+          Background --mode LightenOnly 'Straight loop' -f
+
+#############################################################################
+#
+#  Report the final status
+
+echo =======================================================
+if (( failedtests ))
+then
+    echo $failedtests of $totaltests tests FAILED
+    echo =======================================================
+    exit 1
+else
+    echo All $totaltests tests PASSED
+    echo =======================================================
+    exit 0
+fi
+
+# End

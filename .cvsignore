@@ -1,0 +1,17 @@
+Makefile
+autom4te.cache
+config.h
+config.hin
+config.log
+config.status
+aclocal.m4
+configure
+enums.[ch]
+table.c
+xcfinfo
+xcf2pnm
+xcf2png
+*.1i
+*.1il
+*.1
+*.oi

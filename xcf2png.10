@@ -1,0 +1,161 @@
+\." Manual page for xcf2png
+\." Copyright (C) 2006  Henning Makholm
+\."
+\." This program is free software; you can redistribute it and/or modify
+\." it under the terms of version 2 of the GNU General Public License as
+\." published by the Free Software Foundation.
+\."
+\." This program is distributed in the hope that it will be useful,
+\." but WITHOUT ANY WARRANTY; without even the implied warranty of
+\." MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+\." GNU General Public License for more details.
+\."
+\." You should have received a copy of the GNU General Public License
+\." along with this program; if not, write to the Free Software
+\." Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+.TH xcf2png 1 2006-01-25 "Xcftools" ""
+.SH NAME
+xcf2png \- convert from GIMP xcf files to png format
+.SH SYNOPSIS
+.B xcf2png
+[
+.I options
+]
+.I filename
+[
+.I layer names
+]
+.SH DESCRIPTION
+.B xcf2png
+is a command-line tool that converts image files in the XCF format used by
+.BR gimp (1)
+to the generic image format
+.BR png ,
+.BR ppm (5),
+flattening layers if necessary. It does not need to have
+the Gimp engine itself available.
+.SH GENERAL OPTIONS
+.so xcf2png.1i
+.P
+Several groups of options are mutually incompatible; in each group the
+one given last will win:
+.TP 4
+1)
+.B \-A
+and
+.BR \-b .
+.TP
+2)
+.BR \-g and
+.BR \-m .
+.TP
+3)
+.B \-D
+and
+.BR \-G .
+.TP
+4)
+.BR \-j ,
+.BR \-z ,
+and
+.BR \-Z .
+.SH LAYER SPECIFICATIONS
+If no
+.I layer name
+is given on the command line, all of the visible layers in
+the XCF file are merged to produce the output image.
+It is also possible to specify the layers to merge explicitly,
+by giving their names as separate arguments after the
+input filename. In that case, the output will contain
+.I only
+the named layers. The layers will be merged in the order
+they appear on the command line, with the leftmost being
+"at the bottom" \- that is, the layer ordering in the XCF file
+will be ignored.
+.P
+The following options can be given
+.I after
+a layer name to override the global properties of the layer:
+.so xcf2png.1il
+.SH EXIT STATUS
+The exit status of
+.B xcf2png
+is
+.TP 5
+0
+Success
+.TP
+20
+Problems parsing the command line, including unknown color names
+(or missing color name directory) for
+.BR \-b .
+.TP
+21
+The specified XCF file does not exist or cannot be read.
+.TP
+22
+A layer named on the command line was not found, or the
+.B --mask
+option was used for a layer that has no layer mask.
+.TP
+102
+The
+.B \-G
+option was given, yet partial transparency was found.
+.TP
+103
+.B \-g
+was given, yet colored
+pixels were found.
+.TP
+123
+The XCF file contains presumably valid features that
+.B xcftools
+does not support. (Certain layer modes, for example, cause
+this return).
+.TP
+125
+The XCF file is malformed.
+.TP
+126
+An uncompression program could not be executed or terminated
+abnormally.
+.TP
+127
+Unexpected I/O error, internal errors, or other "this can't happen"
+situations.
+.P
+If an uncompression program returns an error exit status, this will
+be returned from
+.B xcf2png
+too.
+.SH BUGS AND LIMITATIONS
+.P
+When several partially transparent layers are merged, the pixel
+values are interpolated without gamma correction. (The Gimp also
+does it this way). Some slight rounding errors in the interpolation
+are inevitable;
+.B xcf2png
+sometimes have different rounding errors than the Gimp itself,
+especially when more than two layers are involved, or in case of
+some of the more exotic layer modes.
+These differences are usually not visible to the eye.
+.P
+A few particularly exotic layer modes (which work in HSV space rather
+than RGB space) are not currently implemented.
+.P
+There are probably other bugs lurking in corner cases. If you discover
+one, please notify the author.
+
+.SH FILES
+.TP 8
+.B /usr/lib/X11/rgb.txt
+Color name database for
+.BR \-b .
+.SH AUTHOR
+.B xcf2pnm
+was written by Henning Makholm <henning@makholm.net>
+.P
+.SH SEE ALSO
+.BR xcfinfo (1),
+.BR xcf2pnm (1)

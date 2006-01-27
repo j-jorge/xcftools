@@ -1,0 +1,2 @@
+# I don't think this is actually used, but the configure script
+# bitches if it is not found. Sigh.
