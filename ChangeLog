@@ -1,3 +1,12 @@
+2006-01-29  Henning Makholm  <henning@makholm.net>
+
+	* Version 0.7.1
+	* A few cosmetic changes done during debianization
+	* The code now passes the testsuite on several Debian
+	  architectures (powerpc, alpha, ia64, amd64, hppa,
+	  sparc, mipsel, m68k). Unfortunately I lack the
+	  access to test on non-Debian platforms.
+
 2006-01-28  Henning Makholm  <henning@makholm.net>
 
 	* Version 0.7

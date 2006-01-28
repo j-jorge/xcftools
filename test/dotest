@@ -19,7 +19,7 @@
 export LC_CTYPE=C
 export LC_MESSAGES=C
 
-TESTFROM=..
+: ${XCFTOOLS_PREFIX=../}
 
 totaltests=0
 failedtests=0
@@ -70,7 +70,7 @@ testrun() {
 }
 
 testinfo() {
-    testrun $TESTFROM/xcfinfo "$@"
+    testrun ${XCFTOOLS_PREFIX}xcfinfo "$@"
 }
 
 testpnm() {
@@ -105,7 +105,8 @@ testpnm() {
     fi
     source="$1"
     shift
-    testrun $TESTFROM/xcf2pnm -@ -oo.$oext $aopt source/$source.xcf.gz "$@"
+    testrun ${XCFTOOLS_PREFIX}xcf2pnm \
+        -@ -oo.$oext $aopt source/$source.xcf.gz "$@"
     [ -z "$oanswer" ] || cmp o.want o.$oext || failed
     [ -z "$aanswer" ] || cmp a.want a.pnm || failed
 }
@@ -137,7 +138,7 @@ testpng() {
     pngtopnm -alpha answer/$answer.png | $afilter > a.want
     source="$1"
     shift
-    testrun $TESTFROM/xcf2png -oo.png source/$source.xcf.gz "$@"
+    testrun ${XCFTOOLS_PREFIX}xcf2png -oo.png source/$source.xcf.gz "$@"
     perl pngtype.pl < o.png > pngtype
     diff -u pngtype.want pngtype || failed
     pngtopnm $oargs o.png > o.pnm

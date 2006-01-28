@@ -28,7 +28,7 @@ layers named on the command line.
 Portability
 ===========
 
-The software was developed on an Intel-based pc running Debian
+The software was developed on an Intel-based PC running Debian
 GNU/Linux. It ought to work on other Linux variants also. I would
 not be surprised if it ran on other unix systems too, but porting
 to non-unix platforms will require some work. Most of the code

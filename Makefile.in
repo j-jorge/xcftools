@@ -73,11 +73,13 @@ testscale$e: testscale.$o
 install: all
 	for p in $(BINARIES) ; do \
 	  $(INSTALL_PROGRAM) -s $$p \
-		$(bindir)/`echo $$p | $(SED) $(program_transform_name)` ; \
+	    $(bindir)/`echo $$p | $(SED) $(program_transform_name)` \
+	    || exit 1 ;\
         done
 	for m in $(MANPAGES) ; do \
 	  $(INSTALL_DATA) $$m \
-	       $(mandir)/man1/`echo $$m | $(SED) $(program_transform_name)` ; \
+	    $(mandir)/man1/`echo $$m | $(SED) $(program_transform_name)` \
+	    || exit 1 ; \
 	done
 
 ENUMSOURCES = gimp/base-enums.h gimp/gimpbaseenums.h gimp/xcf-private.h
@@ -120,7 +122,7 @@ check: $(BINARIES)
 	cd test && $(MAKE) check
 
 clean:
-	$(RM) *.$o *~ .*~ *.1i *.1il *.1 *.oi 
+	$(RM) *.$o */*~ *~ .*~ *.1i *.1il *.1 *.oi 
 	$(RM) enums.h enums.c table.c $(BINARIES)
 	cd test && $(MAKE) clean
 
@@ -143,7 +145,7 @@ dist: ajour distclean
 	noncvs > notcvsfiles || cp dist-generated notcvsfiles
 	diff -u dist-generated notcvsfiles
 	$(RM) notcvsfiles
-	find . -type f -print | grep -v CVS | \
+	find . -type f -print | grep -v CVS | grep -v debian | \
 		sed 's!^\./!$(APPNAME)-$(VERSION)/!' | sort -o tar-manifest
 	ln -s . $(APPNAME)-$(VERSION)
 	tar cvzf $(APPNAME)-$(VERSION).tar.gz `cat tar-manifest`

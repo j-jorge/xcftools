@@ -31,7 +31,6 @@ is a command-line tool that converts image files in the XCF format used by
 .BR gimp (1)
 to the generic image format
 .BR png ,
-.BR ppm (5),
 flattening layers if necessary. It does not need to have
 the Gimp engine itself available.
 .SH GENERAL OPTIONS

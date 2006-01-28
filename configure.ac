@@ -17,11 +17,10 @@ dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 dnl
 dnl ------------------------
 dnl The following line is the MASTER SOURCE for the version number
-AC_INIT(Xcftools,0.7,henning@makholm.net,xcftools)
+AC_INIT(Xcftools,0.7.1,henning@makholm.net,xcftools)
 AC_COPYRIGHT(General copyright notice for AC_PACKAGE_NAME:
    [@COPYRIGHT@  Henning Makholm]
 )
-AC_REVISION($Id: configure.ac,v 1.6 2006/01/28 21:02:16 makholm Exp $)
 AC_CONFIG_SRCDIR(xcfinfo.c)
         
 AC_PROG_MAKE_SET

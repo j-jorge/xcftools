@@ -17,6 +17,13 @@ implementation of -@ and/or insert filters in the test driver
 routines.
 
 
+The test asssumes that xcftools has been compiled with an
+iconv() library that can expand non-ASCII characters to
+approximating ASCII sequenced, possibly triggered by the
+'//TRANSLIT' convention of glibc. If this is not the case
+you have to do appropriate corrections when the 'AE=AE' layer
+is mentioned by the test script.
+
 
 There are yet no tests for correct reporting of errors.
 
