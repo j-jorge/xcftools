@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #define DEBUG
@@ -438,6 +438,7 @@ applyMask(struct Tile *tile, struct Tile *mask)
   unsigned i ;
   assertTileCompatibility(tile,mask);
   assert( tile->count == mask->count );
+  INIT_SCALETABLE_IF(1);
   invalidateSummary(tile,0);
   for( i=0; i < tile->count ;i++ )
     tile->pixels[i] = NEWALPHA(tile->pixels[i],
@@ -471,9 +472,11 @@ getLayerTile(struct xcfLayer *layer,const struct rect *where)
     applyMask(data,mask);
   }
   if( layer->opacity < 255 ) {
-    const uint8_t *ourtable = scaletable[layer->opacity] ;
+    const uint8_t *ourtable ;
     int i ;
     invalidateSummary(data,~(TILESUMMARY_CRISP | TILESUMMARY_ALLFULL));
+    INIT_SCALETABLE_IF(1);
+    ourtable = scaletable[layer->opacity] ;
     for( i=0; i < data->count; i++ )
       data->pixels[i]
         = NEWALPHA(data->pixels[i],ourtable[ALPHA(data->pixels[i])]) ;

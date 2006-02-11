@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 export LC_CTYPE=C
 export LC_MESSAGES=C
@@ -67,6 +67,16 @@ testrun() {
         echo $got
         failed
     fi
+}
+
+errtest() {
+    expect=$1
+    shift
+    program=${XCFTOOLS_PREFIX}$1
+    shift
+    [ -f expected:stderr ] && \
+        (sed "1s!^!$program: !" expected:stderr > expected.stderr)
+    testrun --exit $expect $program "$@"
 }
 
 testinfo() {
@@ -153,13 +163,160 @@ rm -f pngtype.want
 
 S=source
 
+cp /dev/null expected.stdout
+
+#############################################################################
+#
+#  Test for discovery of error conditions.
+#
+
+echo > expected:stderr  \
+    "The --mode option must follow a layer name on the command line"
+errtest 20 xcf2pnm $S/modetest.xcf.gz --mode Addition A B
+
+echo > expected:stderr \
+    "The --percent option must follow a layer name on the command line"
+errtest 20 xcf2png $S/tiletest.xcf.gz --percent 33 Mid
+
+echo > expected:stderr \
+    "The image has no layer called 'MID'"
+errtest 22 xcf2pnm $S/tiletest.xcf.gz Background MID -o foo.pnm
+
+echo > expected:stderr \
+    "Layer 'Vert' has no layer mask to enable"
+errtest 22 xcf2pnm $S/tiletest.xcf.gz Background Vert --mask Horiz --nomask
+
+echo > expected:stderr \
+    "Grayscale output selected, but colored pixel(s) found"
+errtest 103 xcf2pnm -o o.pgm $S/tiletest.xcf.gz Background
+errtest 103 xcf2png -o o.png -g $S/tiletest.xcf.gz Background
+rm -rf o.pgm o.png
+errtest 103 xcf2pnm -o o.pgm $S/tiletest.xcf.gz Background -f
+if [ -f o.pgm ] ; then echo o.pgm exists ; failed ; fi
+errtest 103 xcf2png -o o.png -g $S/tiletest.xcf.gz Background -f
+if [ -f o.png ] ; then echo o.png exists ; failed ; fi
+
+echo > expected:stderr \
+    "Monochrome output selected, but not all pixels are black or white"
+errtest 103 xcf2pnm -o o.pbm $S/tiletest.xcf.gz Background
+errtest 103 xcf2pnm -o o.pbm $S/tiletest.xcf.gz Background \
+    'Straight loop' 'Long and low'
+rm -rf o.pbm
+errtest 103 xcf2pnm -o o.pbm $S/tiletest.xcf.gz Background -f
+if [ -f o.pbm ] ; then echo o.pbm exists ; failed ; fi
+errtest 103 xcf2pnm -o o.pbm $S/tiletest.xcf.gz Background -f \
+    'Straight loop' 'Long and low'
+if [ -f o.pbm ] ; then echo o.pbm exists ; failed ; fi
+
+cat > expected:stderr <<EOF
+The image contains features not understood by this program:
+ 'AntiErase' layer mode
+EOF
+errtest 123 xcf2pnm $S/modetest.xcf.gz A B --mode AntiErase
+
+echo > expected:stderr \
+    "Flattened image has partially transparent pixels"
+errtest 102 xcf2pnm $S/modetest.xcf.gz -G
+
+cat > expected:stderr <<EOF
+Corrupted or malformed XCF file:
+ Not an XCF file at all (magic not recognized)
+EOF
+errtest 125 xcfinfo answer/modeA.png
+
+rm expected:stderr
+cat > expected.stderr <<EOF
+Warning: XCF version 345 not supported (trying anyway...)
+${XCFTOOLS_PREFIX}xcf2png: Corrupted or truncated XCF file
+ (0x1C7 bytes): Overlong property at 82
+EOF
+errtest 125 xcf2png $S/truncated.xcf
+
+echo > expected:stderr \
+    "Transparency found, but -a option not given"
+errtest 100 xcf2pnm $S/modetest.xcf.gz -o o.pnm
+
+echo > expected:stderr \
+    "The -a option was given, but the image has no transparency"
+errtest 101 xcf2pnm $S/modetest.xcf.gz -b white -a a.pgm
+errtest 101 xcf2pnm $S/tiletest.xcf.gz -a a.pgm
+
+echo > expected:stderr \
+    "Only one XCF file per command line, please"
+errtest 20 xcfinfo $S/tiletest.xcf.gz Background 'Long and low'
+
+rm expected:stderr
+rgbfile=/usr/lib/X11/rgb.txt
+( [ -f $rgbfile ] || echo "Could not open color database file $rgbfile" ) \
+    > expected.stderr
+echo "${XCFTOOLS_PREFIX}xcf2pnm: Unknown background color 'Plaid'" \
+    >> expected.stderr
+errtest 20 xcf2pnm $S/tiletext.xcf.gz -b Plaid
+
+echo > expected:stderr \
+    "-S option must have an argument of the form wxh"
+errtest 20 xcf2pnm $S/tiletext.xcf.gz -S 10x
+errtest 20 xcf2pnm $S/tiletext.xcf.gz -S 10x20x30
+
+echo > expected:stderr \
+    "-O option must have an argument of the form x,y"
+errtest 20 xcf2pnm $S/tiletest.xcf.gz -S 10x10 -O 2x4
+
+echo > expected:stderr \
+    "Layer mode 'GammaShift' is unknown"
+errtest 20 xcf2png $S/modetest.xcf.gz B A --mode GammaShift
+
+echo > expected:stderr \
+    "The argument to --percent is not a percentage"
+errtest 20 xcf2pnm $S/tiletest.xcf.gz Background Mid --percent -3
+errtest 20 xcf2pnm $S/tiletest.xcf.gz Background Mid --percent 20.2
+errtest 20 xcf2pnm $S/tiletest.xcf.gz Background Mid --percent 101
+
+echo > expected:stderr \
+    "The argument to --opacity is not a number between 0 and 255"
+errtest 20 xcf2pnm $S/tiletest.xcf.gz Background Mid --opacity -3
+errtest 20 xcf2pnm $S/tiletest.xcf.gz Background Mid --opacity 220.2
+errtest 20 xcf2pnm $S/tiletest.xcf.gz Background Mid --opacity 256
+
+#######################################################
+#
+#   Error tests for io-unix.c
+#
+# XXX: if another I/O module is added later, these tests should
+# be conditionally enabled
+#
+
+cat <<EOF > enoent.c
+#include <errno.h>
+#include <stdio.h>
+int main(int argc,char **argv) { errno = ENOENT;
+    if( argv[1][0] == '!' ) { errno = EACCES; argv++; }
+    perror(argv[1]); return 0; }
+EOF
 cp /dev/null expected.stderr
+testrun cc enoent.c
+./a.out $S/nonexist.xcf 2> expected:stderr
+errtest 21 xcfinfo $S/nonexist.xcf
+
+rm expected:stderr
+./a.out "Cannot execute source/nonexist.xcf" 2> expected.stderr
+errtest 126 xcf2png -Z $S/nonexist.xcf $S/tiletest.xcf.gz
+
+cp /dev/null expected.stderr
+command false
+errtest $? xcf2png -Z false $S/tiletest.xcf.gz
+
+./a.out ! "Cannot execute answer/modeA.png" 2> expected.stderr
+errtest 126 xcf2pnm -Z answer/modeA.png $S/comptest.xcf.gz
+
+rm -f expected:stderr
 
 #############################################################################
 #
 #  Use all of the example XCF inputs as checks of xcfinfo
 #
 
+cp /dev/null expected.stderr
 cat <<EOF > expected.stdout
 Version 0, 256x256 Grayscale, 2 layers, compressed RLE
 + 256x256+0+0 Grayscale-alpha Normal Partially transparent
@@ -206,6 +363,13 @@ EOF
 testinfo $S/i256.xcf.gz
 testinfo $S/i255.xcf.gz
 
+cat <<EOF > expected.stdout
+Version 0, 32x40 RGB color, 2 layers, compressed RLE
++ 32x40+0+0 RGB-alpha Hue Hue
++ 32x40+0+0 RGB Normal Background
+EOF
+testinfo $S/huetest.xcf.gz
+
 cp /dev/null expected.stdout
 
 #############################################################################
@@ -231,12 +395,16 @@ testpnm o:Subtract a:modeA modetest
 testpnm o:Addition a:modeB modetest B A -f
 for mode in Multiply Screen Overlay Difference DarkenOnly \
             LightenOnly Divide Dodge Burn GrainExtract GrainMerge \
-            Hardlight
+            Hardlight Hue Saturation Value Color
 do
   testpnm o:$mode a:modeA modetest A B --mode $mode
 done
 testpnm o:Overlay a:modeA modetest AE=AE A --mode Normal B --mode Softlight
 
+# huetest.xcf.gz is an auxiliary test that makes sure that all of the
+# six hue hexants have matching implementations in RGB->HSV and HSV->RGB
+
+testpnm o:huetest huetest
 
 #############################################################################
 #
@@ -300,12 +468,16 @@ testpnm o:burmid tiletest Mid -S 27x25 -O 5,5 -b '#963'
 #   Tests of xcf2png
 #
 
-#############################################################################
 #
 #   Basic functionality
 #
 
 testpng tiletest tiletest
+cat <<EOF > pngtype.want
+64x64x8
+color+alpha
+z0 f0 i0
+EOF
 testpng modeA modetest A
 
 #############################################################################
@@ -364,10 +536,28 @@ testpng        gray tiletest Background 'Straight loop' 'Long and low' -f
 testpng gray tiletest Background 'Straight loop' 'Long and low' -g
 testpng comptest comptest
 
-# RGB: many of the layer mode tests test this
+# RGB: The tiletest runs above test this
 
 # gray+alpha
 testpng comptestB comptest 'Partially transparent' -f
+
+# RGB+artificial alpha
+cat <<EOF > pngtype.want
+161x161x8
+color+alpha
+z0 f0 i0
+EOF
+testpng A:-pgm tiletest tiletest -A
+
+# RGS+artificial alpha, compressed
+cat <<EOF > pngtype.want
+161x161x8
+color
+z0 f0 i0
+tRNS(6)
+ 00 06 00 06 00 06
+EOF
+testpng tiletest tiletest -A -f
 
 # RGB+alpha
 cat <<EOF > pngtype.want
@@ -396,7 +586,7 @@ testpng "b:0,0,0" crisp1 modetest -S16x20 -O48,46 -c -f
 testpng crisp1 modetest -S16x20 -O48,46 -f
 
 # index, various transparent colors
-testpng modeB modetest B -f
+testpng modeA modetest A -f
 
 #############################################################################
 #
@@ -444,6 +634,18 @@ PLTE(12)
  DC 98 85  FF 00 77  10 36 38  FF B4 23
 EOF
 testpng index4 indextest Background -f
+
+# 4 colors, artificial transparency
+cat <<EOF > pngtype.want
+64x64x2
+color+index
+z0 f0 i0
+PLTE(12)
+ DC 98 85  FF 00 77  10 36 38  FF B4 23
+tRNS(4)
+ FF FF FF FF
+EOF
+testpng index4 indextest Background -f -A
 
 # 16 colors, no transparency
 testpng mid tiletest -O17,17 -S32x32 -f

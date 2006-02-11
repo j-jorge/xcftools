@@ -1,4 +1,6 @@
 aclocal.m4
+config.guess
 config.hin
+config.sub
 configure
 notcvsfiles

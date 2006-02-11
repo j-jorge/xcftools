@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #ifndef PIXELS_H
@@ -53,7 +53,17 @@ typedef uint32_t rgba ;
 #define NULLALPHA(rgba) ((uint8_t)(rgba) == 0)
 #define NEWALPHA(rgb,a) (((rgba)(rgb) & 0xFFFFFF00) + (a))
 
+#ifdef PRECOMPUTED_SCALETABLE
 extern const uint8_t scaletable[256][256] ;
+#define INIT_SCALETABLE_IF(foo) ((void)0)
+#else
+extern uint8_t scaletable[256][256] ;
+extern int ok_scaletable ;
+void mk_scaletable(void);
+#define INIT_SCALETABLE_IF(foo) \
+             (ok_scaletable || !(foo) || (mk_scaletable(),0) )
+#endif
+
 extern const rgba graytable[256] ;
 extern rgba colormap[256] ;
 extern unsigned colormapLength ;

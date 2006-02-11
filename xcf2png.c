@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include "xcftools.h"
@@ -113,7 +113,7 @@ init_output(void)
       invert_mono = 1 ;
     } else {
       unsigned i ;
-      int need_trans = 0 ;
+      int need_trans = flatspec.default_pixel == FORCE_ALPHA_CHANNEL ;
       color_type = PNG_COLOR_TYPE_PALETTE ;
       pngpalette = xcfmalloc(paletteSize*sizeof(png_color)) ;
       ptrans = xcfmalloc(paletteSize);

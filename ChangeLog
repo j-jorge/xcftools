@@ -1,4 +1,35 @@
+2006-02-12  Henning Makholm  <henning@makholm.net>
+
+	* Version 0.9
+	* Add layer mode Color. Now all of the Gimp's layer modes are
+	  supported. :-)
+	* Revamp the test suite inputs once again (they did not cover all
+	  combinations of colored pixels vs fully white or blacK).
+	
+	* Version 0.8.1
+	* Add layer modes Hue, Value, Saturation and tests for same.
+
+2006-02-11  Henning Makholm  <henning@makholm.net>
+
+	* Version 0.8
+	* Add tests of various error diagnostics to the test suite
+	* Revamp some of the test suite inputs such that HSV space
+	  layer modes can be tested with the same files.
+
+	* Version 0.7.2
+	* Do not precompute the big multiplication table by default,
+	  it is quick enough to do it at run-time as needed (which
+	  lets the binaries shrink significantly).
+
+2006-02-07  Henning Makholm  <henning@makholm.net>
+
+	* Respect -A option when generating indexed PNG (that is,
+	  create a tRNS chunk even if it's trivial); add test of
+	  -A in xcf2png to the test suite.
+
 2006-01-29  Henning Makholm  <henning@makholm.net>
+
+	* Update FSF address in GPL blurbs
 
 	* Version 0.7.1
 	* A few cosmetic changes done during debianization

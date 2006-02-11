@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 OPTIONGROUP(1i,General options);
@@ -345,7 +345,7 @@ OPTION(301,--percent,(n) set opacity in percent,
   int n ;
   sscanf(optarg,"%u%n",&pct,&n) ;
   if( n != strlen(optarg) || pct > 100 )
-    FatalGeneric(20,_("The argument to --pct is not a percentage"));
+    FatalGeneric(20,_("The argument to --percent is not a percentage"));
   lastlayerspec(&flatspec,"--percent")->opacity = pct * 255 / 100 ;
   break ;
 }

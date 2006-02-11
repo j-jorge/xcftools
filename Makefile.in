@@ -12,11 +12,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 all:
-
-@SET_MAKE@
 
 srcdir			= @srcdir@
 prefix			= @prefix@
@@ -30,7 +28,7 @@ APPNAME			= @PACKAGE_TARNAME@
 program_transform_name	= @program_transform_name@
 
 CFLAGS			= @CFLAGS@
-LDFLAGS			= @LDFLAGS@
+LDFLAGS			= @LDFLAGS@ @LIBICONV@
 LIBS			= @LIBS@
 
 INSTALL			= @INSTALL@
@@ -43,6 +41,12 @@ PERL			= @PERL@
 
 o			= @OBJEXT@
 e			= @EXEEXT@
+
+# Allow using Makefile.in directly for cleaning and distmaking purposes
+ifneq (,$(findstring @,$o))
+e 			=
+srcdir			= .
+endif
 
 #############################################################################
 
@@ -60,11 +64,11 @@ xcfinfo$e: xcfinfo.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o
 	$(CC) $(LDFLAGS) $(LIBS) $^ -o $@
 
 xcf2pnm$e: xcf2pnm.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o \
-	   pixels.$o flatten.$o flatspec.$o table.$o 
+	   pixels.$o flatten.$o flatspec.$o scaletab.$o table.$o 
 	$(CC) $(LDFLAGS) $(LIBS) $^ -o $@
 
 xcf2png$e: xcf2png.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o \
-	   pixels.$o flatten.$o flatspec.$o table.$o palette.$o
+	   pixels.$o flatten.$o flatspec.$o scaletab.$o table.$o palette.$o
 	$(CC) $(LDFLAGS) $(LIBS) -lpng $^ -o $@
 
 testscale$e: testscale.$o
@@ -87,7 +91,7 @@ enums.h: mkenumsh.pl $(ENUMSOURCES)
 	$(PERL) $< $(ENUMSOURCES) > $@
 enums.c: mkenumsc.pl enums.h
 	$(PERL) $< enums.h > $@
-table.c: mktablec.pl
+table.c: mktablec.pl config.h
 	$(PERL) $< > $@
 
 %.oi: options.i mkopti.pl config.h
@@ -103,6 +107,7 @@ table.c: mktablec.pl
 COMMON_HEADERS = xcftools.h config.h enums.h
 enums.$o:	enums.h
 table.$o:	$(COMMON_HEADERS) pixels.h
+scaletab.$o:	$(COMMON_HEADERS) pixels.h
 io-unix.$o:     $(COMMON_HEADERS)
 xcf-general.$o: $(COMMON_HEADERS)
 utils.$o:	$(COMMON_HEADERS)
@@ -141,6 +146,7 @@ realclean: distclean
 #
 #  Tarball-making rule
 
+ifeq (,$(findstring @,$o))
 dist: ajour distclean
 	noncvs > notcvsfiles || cp dist-generated notcvsfiles
 	diff -u dist-generated notcvsfiles
@@ -148,35 +154,44 @@ dist: ajour distclean
 	find . -type f -print | grep -v CVS | grep -v debian | \
 		sed 's!^\./!$(APPNAME)-$(VERSION)/!' | sort -o tar-manifest
 	ln -s . $(APPNAME)-$(VERSION)
-	tar cvzf $(APPNAME)-$(VERSION).tar.gz `cat tar-manifest`
+	GZIP=-9 tar cvzf $(APPNAME)-$(VERSION).tar.gz `cat tar-manifest`
 	rm tar-manifest
 	rm $(APPNAME)-$(VERSION)
+else
+dist: ajour
+	$(MAKE) dist
+endif
+
 
 #############################################################################
 #
 #  Autofoo rules:
 
-aclocal.m4: configure.ac
+aclocal.m4$(SUPPRESS_AUTOFOO): configure.ac
 	aclocal
 
-$(srcdir)/configure: configure.ac aclocal.m4
+$(srcdir)/configure$(SUPPRESS_AUTOFOO): configure.ac aclocal.m4
 	cd $(srcdir) && autoconf
 
-$(srcdir)/config.hin: configure.ac aclocal.m4
+$(srcdir)/config.hin$(SUPPRESS_AUTOFOO): configure.ac aclocal.m4
 	cd $(srcdir) && autoheader
 	touch $@
 
-config.status: $(srcdir)/configure
-	./config.status --recheck
+config.status: $(srcdir)/configure config.sub config.guess
+	if [ -f config.status ] ; \
+	then ./config.status --recheck ; \
+	else ./configure ; fi
 
-Makefile: Makefile.in config.status
+Makefile$(SUPPRESS_AUTOFOO): Makefile.in config.status
 	./config.status $@
 
 config.h: config.hin config.status
 	./config.status $@
 	touch $@
 
-ajour: Makefile config.h config.sub config.guess
+ajour: Makefile config.h
 
 config.sub config.guess:
 	-test -r /usr/share/misc/$@ && cp /usr/share/misc/$@ .
+
+.PHONY: ajour dist

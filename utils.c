@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include "xcftools.h"
@@ -45,7 +45,7 @@ void
 FatalGeneric(int status,const char* format,...)
 {
   va_list v; va_start(v,format);
-  fprintf(stderr,"%s: ",progname);
+  if( format ) fprintf(stderr,"%s: ",progname);
   vFatalGeneric(status,format,v);
 }
 
@@ -71,7 +71,7 @@ xcfCheckspace(uint32_t addr,int spaceafter,const char *format,...)
   if( xcf_length < spaceafter || addr > xcf_length - spaceafter ) {
     va_list v; va_start(v,format);
     fprintf(stderr,"%s: %s\n ",progname,_("Corrupted or truncated XCF file"));
-    fprintf(stderr,"(%" PRIXPTR " bytes): ",(uintptr_t)xcf_length);
+    fprintf(stderr,"(0x%" PRIXPTR " bytes): ",(uintptr_t)xcf_length);
     vFatalGeneric(125,format,v) ;
   }
 }

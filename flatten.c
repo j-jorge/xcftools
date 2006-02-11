@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include "xcftools.h"
@@ -96,6 +96,8 @@ merge_normal(struct Tile *bot, struct Tile *top)
       break ;
   }
 
+  INIT_SCALETABLE_IF( !(top->summary & TILESUMMARY_CRISP) );
+  
   /* Otherwise bot wins, but is forever changed ... */
   if( (top->summary & TILESUMMARY_ALLNULL) == 0 ) {
     unsigned i ;
@@ -220,10 +222,39 @@ ucombine_GRAIN_MERGE(uint8_t bot,uint8_t top)
   return temp < 0 ? 0 : temp >= 256 ? 255 : temp ;
 }
 
+struct HSV {
+  enum { HUE_RED_GREEN_BLUE,HUE_RED_BLUE_GREEN,HUE_BLUE_RED_GREEN,
+         HUE_BLUE_GREEN_RED,HUE_GREEN_BLUE_RED,HUE_GREEN_RED_BLUE } hue;
+  unsigned ch1, ch2, ch3 ;
+};
 
+static void
+RGBtoHSV(rgba rgb,struct HSV *hsv)
+{
+  unsigned RED = (uint8_t)(rgb >> RED_SHIFT);
+  unsigned GREEN = (uint8_t)(rgb >> GREEN_SHIFT);
+  unsigned BLUE = (uint8_t)(rgb >> BLUE_SHIFT) ;
+  #define HEXTANT(b,m,t) hsv->ch1 = b, hsv->ch2 = m, hsv->ch3 = t, \
+                         hsv->hue = HUE_ ## b ## _ ## m ## _ ## t
+  if( GREEN <= RED )
+    if( BLUE <= RED )
+      if( GREEN <= BLUE )
+        HEXTANT(GREEN,BLUE,RED);
+      else
+        HEXTANT(BLUE,GREEN,RED);
+    else
+      HEXTANT(GREEN,RED,BLUE);
+  else if( BLUE <= RED )
+    HEXTANT(BLUE,RED,GREEN);
+  else if( BLUE <= GREEN )
+    HEXTANT(RED,BLUE,GREEN);
+  else
+    HEXTANT(RED,GREEN,BLUE);
+  #undef HEXTANT
+}
 
 /* merge_exotic() destructively updates bot.
- * merge_exotoc() reads but does not free top.
+ * merge_exotic() reads but does not free top.
  */
 static void __ATTRIBUTE__((noinline))
 merge_exotic(struct Tile *bot, const struct Tile *top,
@@ -236,16 +267,18 @@ merge_exotic(struct Tile *bot, const struct Tile *top,
   assert( bot->refcount == 1 );
   /* The transparency status of bot never changes */
 
+  INIT_SCALETABLE_IF(1);
+  
   for( i=0; i < top->count ; i++ ) {
-    uint32_t red, green, blue ;
+    uint32_t RED, GREEN, BLUE ;
     if( NULLALPHA(bot->pixels[i]) || NULLALPHA(top->pixels[i]) )
       continue ;
 #define UNIFORM(mode) case GIMP_ ## mode ## _MODE: \
-      red   = ucombine_ ## mode (bot->pixels[i]>>RED_SHIFT  ,  \
+      RED   = ucombine_ ## mode (bot->pixels[i]>>RED_SHIFT  ,  \
                                  top->pixels[i]>>RED_SHIFT  ); \
-      green = ucombine_ ## mode (bot->pixels[i]>>GREEN_SHIFT,  \
+      GREEN = ucombine_ ## mode (bot->pixels[i]>>GREEN_SHIFT,  \
                                  top->pixels[i]>>GREEN_SHIFT); \
-      blue  = ucombine_ ## mode (bot->pixels[i]>>BLUE_SHIFT ,  \
+      BLUE  = ucombine_ ## mode (bot->pixels[i]>>BLUE_SHIFT ,  \
                                  top->pixels[i]>>BLUE_SHIFT ); \
       break ;
     switch( mode ) {
@@ -267,14 +300,92 @@ merge_exotic(struct Tile *bot, const struct Tile *top,
       UNIFORM(HARDLIGHT);
       UNIFORM(GRAIN_EXTRACT);
       UNIFORM(GRAIN_MERGE);
+    case GIMP_HUE_MODE:
+    case GIMP_SATURATION_MODE:
+    case GIMP_VALUE_MODE:
+    case GIMP_COLOR_MODE:
+      {
+        static struct HSV hsvTop, hsvBot ;
+        RGBtoHSV(top->pixels[i],&hsvTop);
+        if( mode == GIMP_HUE_MODE && hsvTop.ch1 == hsvTop.ch3 )
+          continue ;
+        RGBtoHSV(bot->pixels[i],&hsvBot);
+        if( mode == GIMP_VALUE_MODE ) {
+          if( hsvBot.ch3 ) {
+            hsvBot.ch1 = (hsvBot.ch1*hsvTop.ch3 + hsvBot.ch3/2) / hsvBot.ch3;
+            hsvBot.ch2 = (hsvBot.ch2*hsvTop.ch3 + hsvBot.ch3/2) / hsvBot.ch3;
+            hsvBot.ch3 = hsvTop.ch3 ;
+          } else {
+            hsvBot.ch1 = hsvBot.ch2 = hsvBot.ch3 = hsvTop.ch3 ;
+          }
+        } else {
+          unsigned mfNum, mfDenom ;
+          if( mode == GIMP_HUE_MODE || mode == GIMP_COLOR_MODE ) {
+            mfNum   = hsvTop.ch2-hsvTop.ch1 ;
+            mfDenom = hsvTop.ch3-hsvTop.ch1 ;
+            hsvBot.hue = hsvTop.hue ;
+          } else {
+            mfNum   = hsvBot.ch2-hsvBot.ch1 ;
+            mfDenom = hsvBot.ch3-hsvBot.ch1 ;
+          }
+          if( mode == GIMP_SATURATION_MODE ) {
+            if( hsvTop.ch3 == 0 )
+              hsvBot.ch1 = hsvBot.ch3 ; /* Black has no saturation */
+            else
+              hsvBot.ch1 = (hsvTop.ch1*hsvBot.ch3 + hsvTop.ch3/2) / hsvTop.ch3;
+          } else if( mode == GIMP_COLOR_MODE ) {
+            /* GIMP_COLOR_MODE works in HSL space instead of HSV. We must
+             * transfer H and S, keeping the L = ch1+ch3 of the bottom pixel,
+             * but the S we transfer works differently from the S in HSV.
+             */
+            unsigned L = hsvTop.ch1 + hsvTop.ch3 ;
+            unsigned sNum = hsvTop.ch3 - hsvTop.ch1 ;
+            unsigned sDenom = L < 256 ? L : 510-L ;
+            if( sDenom == 0 ) sDenom = 1 ; /* sNum will be 0 */
+            L = hsvBot.ch1 + hsvBot.ch3 ;
+            if( L < 256 ) {
+              /* Ideally we want to compute L/2 * (1-sNum/sDenom)
+               * But shuffle this a bit so we can use integer arithmetic.
+               * The "-1" in the rounding prevents us from ending up with
+               * ch1 > ch3.
+               */
+              hsvBot.ch1 = (L*(sDenom-sNum)+sDenom-1)/(2*sDenom);
+              hsvBot.ch3 = L - hsvBot.ch1 ;
+            } else {
+              /* Here our goal is 255 - (510-L)/2 * (1-sNum/sDenom) */
+              hsvBot.ch3 = 255 - ((510-L)*(sDenom-sNum)+sDenom-1)/(2*sDenom);
+              hsvBot.ch1 = L - hsvBot.ch3 ;
+            }
+            assert(hsvBot.ch3 <= 255);
+            assert(hsvBot.ch3 >= hsvBot.ch1);
+          }
+          if( mfDenom == 0 )
+            hsvBot.ch2 = hsvBot.ch1 ;
+          else
+            hsvBot.ch2 = hsvBot.ch1 +
+              (mfNum*(hsvBot.ch3-hsvBot.ch1) + mfDenom/2) / mfDenom ;
+        }
+        switch( hsvBot.hue ) {
+          #define HEXTANT(b,m,t) case HUE_ ## b ## _ ## m ## _ ## t : \
+               b = hsvBot.ch1; m = hsvBot.ch2; t = hsvBot.ch3; break;
+          HEXTANT(RED,GREEN,BLUE);
+          HEXTANT(RED,BLUE,GREEN);
+          HEXTANT(BLUE,RED,GREEN);
+          HEXTANT(BLUE,GREEN,RED);
+          HEXTANT(GREEN,BLUE,RED);
+          HEXTANT(GREEN,RED,BLUE);
+          #undef HEXTANT
+          }
+        break ;
+      }
     default:
       FatalUnsupportedXCF(_("'%s' layer mode"),showGimpLayerModeEffects(mode));
     }
     if( FULLALPHA(bot->pixels[i] & top->pixels[i]) )
       bot->pixels[i] = (bot->pixels[i] & (255 << ALPHA_SHIFT)) +
-        (red << RED_SHIFT) +
-        (green << GREEN_SHIFT) +
-        (blue << BLUE_SHIFT) ;
+        (RED << RED_SHIFT) +
+        (GREEN << GREEN_SHIFT) +
+        (BLUE << BLUE_SHIFT) ;
     else {
       rgba bp = bot->pixels[i] ;
       /* In a sane world, the alpha of the top pixel would simply be
@@ -291,9 +402,9 @@ merge_exotic(struct Tile *bot, const struct Tile *top,
         tfrac = (256*pseudotop - 1) / alpha ;
       }
       bot->pixels[i] = (bp & (255 << ALPHA_SHIFT)) +
-        ((rgba)scaletable[  tfrac  ][  red                ] << RED_SHIFT  ) +
-        ((rgba)scaletable[  tfrac  ][  green              ] << GREEN_SHIFT) +
-        ((rgba)scaletable[  tfrac  ][  blue               ] << BLUE_SHIFT ) +
+        ((rgba)scaletable[  tfrac  ][  RED                ] << RED_SHIFT  ) +
+        ((rgba)scaletable[  tfrac  ][  GREEN              ] << GREEN_SHIFT) +
+        ((rgba)scaletable[  tfrac  ][  BLUE               ] << BLUE_SHIFT ) +
         ((rgba)scaletable[255^tfrac][255&(bp>>RED_SHIFT  )] << RED_SHIFT  ) +
         ((rgba)scaletable[255^tfrac][255&(bp>>GREEN_SHIFT)] << GREEN_SHIFT) +
         ((rgba)scaletable[255^tfrac][255&(bp>>BLUE_SHIFT )] << BLUE_SHIFT ) ;
@@ -461,6 +572,7 @@ addBackground(struct FlattenSpec *spec, struct Tile *tile)
   if( tileSummary(tile) & TILESUMMARY_ALLNULL ) {
     fillTile(tile,spec->default_pixel);
   } else {
+    INIT_SCALETABLE_IF( !(tile->summary & TILESUMMARY_CRISP) );
     for( i=0; i<tile->count; i++ )
       if( NULLALPHA(tile->pixels[i]) )
         tile->pixels[i] = spec->default_pixel ;

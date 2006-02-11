@@ -7,17 +7,14 @@
 
 void
 makepixel(int x,int y,int *r,int *g,int *b,int *a) {
-  if( y < 3 || y >= 61 ) {
+  if( x < 3 || x >= 61 ) {
     *a = 0 ;
     return ;
   }
-  if( x < 3 || x >= 61 ||
-      y < 6 || y >= 58 ) {
-    *r=*g=*b=*a=255 ;
-    return ;
-  }
-  if( x < 6 || x >= 58 )  {
-    *a=0 ;
+  if( y < 3 || y >= 61 ||
+      x < 6 || x >= 58 ) {
+    *a = 255 ;
+    *r=*g=*b= 255*(x>=32) ;
     return ;
   }
   x -= 6 ;
@@ -39,8 +36,8 @@ makepixel(int x,int y,int *r,int *g,int *b,int *a) {
   x -= 17 ;
   if( x <= 17 ) {
     *r = (17-x)*15 ;
-    *g = 255 ;
-    *b = x*15 ;
+    *g = (17-x)*15 ;
+    *b = (x-1)*15 ;
     return ;
   }
   *r=255 ;

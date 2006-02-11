@@ -12,8 +12,8 @@
 \."
 \." You should have received a copy of the GNU General Public License
 \." along with this program; if not, write to the Free Software
-\." Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-.TH xcf2png 1 2006-01-25 "Xcftools" ""
+\." Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+.TH xcf2png 1 2006-02-12 "Xcftools" ""
 .SH NAME
 xcf2png \- convert from GIMP xcf files to png format
 .SH SYNOPSIS
@@ -110,8 +110,10 @@ pixels were found.
 123
 The XCF file contains presumably valid features that
 .B xcftools
-does not support. (Certain layer modes, for example, cause
-this return).
+does not support.
+(As of this writing there is no known way of getting the Gimp to produce
+an XCF file that will provoke this return. Please notify the author if you
+discover one).
 .TP
 125
 The XCF file is malformed.
@@ -139,9 +141,6 @@ sometimes have different rounding errors than the Gimp itself,
 especially when more than two layers are involved, or in case of
 some of the more exotic layer modes.
 These differences are usually not visible to the eye.
-.P
-A few particularly exotic layer modes (which work in HSV space rather
-than RGB space) are not currently implemented.
 .P
 There are probably other bugs lurking in corner cases. If you discover
 one, please notify the author.

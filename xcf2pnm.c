@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include "xcftools.h"
@@ -155,7 +155,7 @@ pgm_callback(unsigned num,rgba *pixels)
     int gray = degrayPixel(pixels[i]) ;
     if( gray == -1 )
       FatalGeneric(103,
-                   _("Grayscale output selected, but colored pixel(s) found %d=%x"),i,pixels[i] /*XXX*/);
+                   _("Grayscale output selected, but colored pixel(s) found"));
     putc( gray, outfile );
   }
   callback_common(num,pixels);
