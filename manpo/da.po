@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Xcftools 0.9.1a\n"
 "Report-Msgid-Bugs-To: henning@makholm.net\n"
-"POT-Creation-Date: 2006-02-20 01:59+0100\n"
+"POT-Creation-Date: 2006-02-20 04:06+0100\n"
 "PO-Revision-Date: 2006-02-20 02:01+0100\n"
 "Last-Translator: Henning Makholm <henning@makholm.net>\n"
 "Language-Team: None; proof-of-concept translation by upstream author\n"
@@ -129,7 +129,7 @@ msgstr ""
 "B{#rgb}, eller med et X11-farvenavn som slås op i\n"
 "B{/usr/lib/X11/rgb.txt}."
 
-#: options.i:168
+#: options.i:169
 msgid ""
 "Invent a trivial alpha channel even if the flattened image is\n"
 "completely opaque."
@@ -137,7 +137,7 @@ msgstr ""
 "Konstruér en triviel gennemsigtighedskanal selvom billedet er\n"
 "fuldstændig ugennemsigtigt."
 
-#: options.i:175
+#: options.i:176
 msgid ""
 "Force the output to use RGB color space even if it there are more\n"
 "compact alternatives."
@@ -145,7 +145,7 @@ msgstr ""
 "Brug RGB-format for uddata selvom der er mere kompakte\n"
 "alternative formater."
 
-#: options.i:178
+#: options.i:179
 msgid ""
 "This will be selected automatically if the output file's name\n"
 "ends with B{.ppm}."
@@ -153,27 +153,27 @@ msgstr ""
 "Dette bliver valgt automatisk hvis uddatafilens navn ender\n"
 "på B{.ppm}."
 
-#: options.i:187
+#: options.i:188
 msgid ""
 "Force the output to be a grayscale image even if it may be\n"
 "monochrome."
 msgstr "Repræsentér uddata som gråtoner selv hvis det er rent sort/hvidt."
 
-#: options.i:188
+#: options.i:189
 msgid "If any colored pixels are encountered, exit with status 103."
 msgstr "Stop med afslutningskode 103 hvis der mødes nogen farvede pixels."
 
-#: options.i:189
+#: options.i:190
 msgid ""
 "This will be selected automatically if the output file's name\n"
 "ends with B{.pgm}."
 msgstr "Dette bliver valgt automatisk hvis uddatafilens navn ender på B{.pgm}."
 
-#: options.i:198
+#: options.i:199
 msgid "Force the output to be a monochrome image."
 msgstr "Repræsentér uddata som et rent sort/hvidt billede."
 
-#: options.i:199
+#: options.i:200
 msgid ""
 "If any colors except black and white are encountered, exit with\n"
 "status 103."
@@ -181,13 +181,13 @@ msgstr ""
 "Stop med afslutningskode 103 hvis ikke alle pixels er enten sorte\n"
 "eller hvide."
 
-#: options.i:201
+#: options.i:202
 msgid ""
 "This will be selected automatically if the output file's name\n"
 "ends with B{.pbm}."
 msgstr "Dette bliver valgt automatisk hvis uddatafilens navn ender på B{.pbm}."
 
-#: options.i:211
+#: options.i:212
 msgid ""
 "Suppress the automatic choice of B{-c}, B{-g}, or B{-m} based on\n"
 "output filename, and instead select the output format based on\n"
@@ -197,7 +197,7 @@ msgstr ""
 "B{-c}, B{-g} og B{-m}, og vælg i stedet et uddataformat på\n"
 "grundlag af billedets indhold."
 
-#: options.i:218
+#: options.i:219
 msgid ""
 "This is the default if the filename is not recognized, and when\n"
 "writing to stdout."
@@ -205,11 +205,11 @@ msgstr ""
 "Dette er standardfremgangsmåden hvis filnavnet ikke kan genkendes,\n"
 "og når billedet bliver skrevet til standarduddata."
 
-#: options.i:226
+#: options.i:227
 msgid "Use standard RGB compositing for flattening indexed layers."
 msgstr "Brug fuldt RGB-farverum til at fladgøre indekserede billeder."
 
-#: options.i:227
+#: options.i:228
 msgid ""
 "Without this option, B{%s} will mimic the Gimp's current strategy\n"
 "of rounding each alpha value to either full transparency or full\n"
@@ -220,7 +220,7 @@ msgstr ""
 "\"helt gennemsigtig\" eller \"helt ugennemsigtig\", og fortolke alle\n"
 "lagtilstande som B{Normal}."
 
-#: options.i:238
+#: options.i:239
 msgid ""
 "Assert that the flattened image will have no partial transparency\n"
 "(allowing a more compact representation of the alpha output)."
@@ -229,7 +229,7 @@ msgstr ""
 "(hvilket muliggør en effektivere repræsentation af gennemsigtighed\n"
 "i uddata)."
 
-#: options.i:240
+#: options.i:241
 msgid ""
 "Exit with status 102 if the flattened image has any partial\n"
 "transparency."
@@ -237,7 +237,7 @@ msgstr ""
 "Stop med afslutningskode 102 hvis der alligevel findes nogen\n"
 "delvist gennemsigtige pixels."
 
-#: options.i:242
+#: options.i:243
 msgid ""
 "If B{-b} is also given, this tests whether there there is partial\n"
 "transparency before applying the background color."
@@ -245,7 +245,7 @@ msgstr ""
 "Hvis B{-b}-flaget også gives, handler denne test om om der er\n"
 "delvist gennemsigtige pixels I{over} den angivne baggrund."
 
-#: options.i:251
+#: options.i:252
 msgid ""
 "Do a \"dissolve\" step to eliminate partial transparency after\n"
 "flattening."
@@ -253,13 +253,13 @@ msgstr ""
 "Foretag et \"opløs\"-skridt for at udrydde delvis gennemsigtighed\n"
 "i det fladgjorte billede."
 
-#: options.i:253
+#: options.i:254
 msgid ""
 "If B{-b} is also given, this happens before the background color\n"
 "is applied."
 msgstr "Hvis B{-b}-flaget også gives, sker dette før baggrundsfarven påføres."
 
-#: options.i:261
+#: options.i:262
 msgid ""
 "First flatten the entire image to a memory buffer before writing\n"
 "output. Then analyse the image to decide on the details of the\n"
@@ -269,7 +269,7 @@ msgstr ""
 "før detaljerne i uddataformatet bliver besluttet (fx om gråtoner\n"
 "er tilstrækkeligt til at repræsentere billeder)."
 
-#: options.i:264
+#: options.i:265
 msgid ""
 "Without this option, the program flattens only a singe row of\n"
 "\"tiles\" (height 64) at a time."
@@ -277,19 +277,19 @@ msgstr ""
 "Hvis dette flag ikke gives, vil programmet nøjes med at fladgøre\n"
 "en enkelt række \"fliser\" (af højden 64 pixels) ad gangen."
 
-#: options.i:271
+#: options.i:272
 msgid "wB{x}h"
 msgstr "bB{x}h"
 
-#: options.i:271
+#: options.i:272
 msgid "Crop the converted image to width I{w} and height I{h}."
 msgstr "Beskær det konverterede billede til bredde I{b} og højde I{b}."
 
-#: options.i:286
+#: options.i:287
 msgid "xB{,}y"
 msgstr "xB{,}y"
 
-#: options.i:286
+#: options.i:287
 msgid ""
 "Offset the converted part of the image from the top-left corner\n"
 "of the XCF canvas. Usually used with B{-S}."
@@ -297,19 +297,19 @@ msgstr ""
 "Forskyd det konverterede billede fra det øverste venstre\n"
 "hjørne af XCF-lærredet. Bruges normalt sammen med B{-S}."
 
-#: options.i:307
+#: options.i:308
 msgid "mode"
 msgstr "tilstand"
 
-#: options.i:307
+#: options.i:308
 msgid "Set the layer mode (e.g., B{Normal} or B{Multiply})."
 msgstr "Vælg lagtilstanden (fx B{Normal} eller B{LægTil})."
 
-#: options.i:330 options.i:344
+#: options.i:331 options.i:345
 msgid "n"
 msgstr "n"
 
-#: options.i:330
+#: options.i:331
 msgid ""
 "Set the opacity on a scale from 0 to 100 (as in the Gimp user\n"
 "interface)."
@@ -317,21 +317,21 @@ msgstr ""
 "Vælg gennemsigtighed på en skala fra 0 (helt gennemsigtigt)\n"
 "til 100 (helt ugennemsigtig)."
 
-#: options.i:344
+#: options.i:345
 msgid "Set the opacity on a scale from 0 to 255 (as used internally)"
 msgstr ""
 "Vælg gennemsigtighed på en skala fra 0 (helt gennemsigtigt)\n"
 "til 255 (helt ugennemsigtig)."
 
-#: options.i:358
+#: options.i:359
 msgid "Enable the layer mask."
 msgstr "Aktivér lagmasken."
 
-#: options.i:364
+#: options.i:365
 msgid "Disable the layer mask."
 msgstr "Deaktivér lagmasken."
 
-#: options.i:374
+#: options.i:375
 msgid ""
 "Use the raw UTF-8 representation from the XCF file to compare and\n"
 "display layer names."
@@ -339,7 +339,7 @@ msgstr ""
 "Brug den rå UTF-8-repræsentation fra XCF-filen til at sammenligne\n"
 "og vise lagnavne."
 
-#: options.i:376
+#: options.i:377
 msgid ""
 "Ordinarily, layer names will be converted to the character set of\n"
 "the current locale."

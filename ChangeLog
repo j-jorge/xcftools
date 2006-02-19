@@ -1,5 +1,9 @@
 2006-02-20  Henning Makholm  <henning@makholm.net>
 
+	* Version 1.0.1
+	* Make sure that -b with an unknown color actually leads to
+	  a fatal error when the X11 color name database is not found.
+
 	* Version 1.0
 	* xcfview added
 	* Support for translated manpages added

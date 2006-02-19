@@ -153,6 +153,7 @@ OPTION('b',--background,(color) select background color,
       } while( clen == 0 || strcasecmp(colorbuf+clen,optarg) != 0 );
     } else {
       fprintf(stderr,_("Could not open color database file %s\n"),filename);
+      r = (unsigned)-1 ;
     }
   }
   if( r == (unsigned)-1 )

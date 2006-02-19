@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: henning@makholm.net\n"
-"POT-Creation-Date: 2006-02-20 00:27+0100\n"
+"POT-Creation-Date: 2006-02-20 04:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -163,32 +163,32 @@ msgstr ""
 msgid "Could not open color database file %s\n"
 msgstr ""
 
-#: options.i:159
+#: options.i:160
 #, c-format
 msgid "Unknown background color '%s'"
 msgstr ""
 
-#: options.i:281
+#: options.i:282
 #, c-format
 msgid "-S option must have an argument of the form wxh"
 msgstr ""
 
-#: options.i:298
+#: options.i:299
 #, c-format
 msgid "-O option must have an argument of the form x,y"
 msgstr ""
 
-#: options.i:322
+#: options.i:323
 #, c-format
 msgid "Layer mode '%s' is unknown"
 msgstr ""
 
-#: options.i:338
+#: options.i:339
 #, c-format
 msgid "The argument to --percent is not a percentage"
 msgstr ""
 
-#: options.i:351
+#: options.i:352
 #, c-format
 msgid "The argument to --opacity is not a number between 0 and 255"
 msgstr ""

@@ -262,12 +262,12 @@ rgbfile=/usr/lib/X11/rgb.txt
     > expected.stderr
 echo "${XCFTOOLS_PREFIX}xcf2pnm: Unknown background color 'Plaid'" \
     >> expected.stderr
-errtest 20 xcf2pnm $S/tiletext.xcf.gz -b Plaid
+errtest 20 xcf2pnm $S/tiletest.xcf.gz -b Plaid
 
 echo > expected:stderr \
     "-S option must have an argument of the form wxh"
-errtest 20 xcf2pnm $S/tiletext.xcf.gz -S 10x
-errtest 20 xcf2pnm $S/tiletext.xcf.gz -S 10x20x30
+errtest 20 xcf2pnm $S/tiletest.xcf.gz -S 10x
+errtest 20 xcf2pnm $S/tiletest.xcf.gz -S 10x20x30
 
 echo > expected:stderr \
     "-O option must have an argument of the form x,y"
