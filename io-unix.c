@@ -80,16 +80,16 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
 #else
     int fh[2] ;
     if( pipe(fh) < 0 )
-      FatalUnexpected(_("!Cannot create pipe for %s"),unzipper);
+      FatalUnexpected("!Cannot create pipe for %s",unzipper);
     xcfstream = fdopen(fh[1],"rb") ;
     if( !xcfstream )
-      FatalUnexpected(_("!Cannot fdopen() unzipper pipe"));
+      FatalUnexpected("!Cannot fdopen() unzipper pipe");
     outfd = fh[0] ;
 #endif
     if( (pid = fork()) == 0 ) {
       /* We're the child */
       if( dup2(outfd,1) < 0 ) {
-        perror(_("Cannot dup2 in unzip process"));
+        perror("Cannot dup2 in unzip process");
         exit(127) ;
       }
       fclose(xcfstream) ;
@@ -119,7 +119,7 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
   } else if( strcmp(filename,"-") == 0 ) {
     xcfstream = fdopen(dup(0),"rb") ;
     if( !xcfstream )
-      FatalUnexpected(_("!Cannot dup stdin for input")) ;
+      FatalUnexpected("!Cannot dup stdin for input") ;
   } else {
     xcfstream = fopen(filename,"rb") ;
     if( !xcfstream )
@@ -138,7 +138,7 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
       fclose(xcfstream) ;
       xcf_file = 0 ;
       errno = saved ;
-      FatalUnexpected(_("!Could not mmap input"));
+      FatalUnexpected("!Could not mmap input");
     }
 #endif
     xcf_file = malloc(xcf_length);
@@ -166,7 +166,7 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
       if( feof(xcfstream) )
         break ;
       if( xcf_length < blocksize ) {
-        FatalUnexpected(_("Could not read xcf data")) ;
+        FatalUnexpected(_("!Could not read xcf data")) ;
       }
       blocksize += (blocksize >> 1) & ~(size_t)0x3FFF ; /* 16 KB granularity */
     }

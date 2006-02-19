@@ -30,7 +30,7 @@ OPTION('V',--version,show version,
         .B xcftools
         to standard output and exit with a return code of 0.
         ));
-printf(PACKAGE_STRING "\n");
+printf(OPTI_TARGET " - " PACKAGE_STRING "\n");
 exit(0);
 
 OPTION('v',--verbose,show progress messages,
@@ -50,14 +50,14 @@ break ;
      
 OPTION('z',--gzip,input is gzip compressed,
        (Equivalent to
-        .BR "\-Z gzcat" .
+        .BR "\-Z zcat" .
         Default if the filename ends with
         .BR gz .
         ));
-unzipper = "gzcat" ;
+unzipper = "zcat" ;
 break ;
 
-OPTION('Z',--unpack,(pgm) use 'pgm' to decompress input,
+OPTION('Z',--unpack,(cmd) use 'cmd' to decompress input,
        (Specify a command that the input file is filtered through
         before being interpreted as an XCF file. The command is invoked as
         .I command filename
@@ -96,8 +96,8 @@ OPTION('a',--alpha,(filename) write transparency map,
         .BR pgm (5)
         file, in addition to the ordinary output.
         If the flattened image is completely opaque, this will produce an
-        error message and exit status 101
-        (the alpha file may or may not be written); use
+        error message and exit status 101;
+        use
         .B \-A
         to suppress this.
         ));
@@ -172,8 +172,8 @@ flatspec.default_pixel = FORCE_ALPHA_CHANNEL ;
 break ;
 
 OPTION('c',--color --colour,select color output,
-       (Force the output to use RGB color space even if it could be
-        represented.
+       (Force the output to use RGB color space even if it there are
+        more compact alternatives.
 #ifdef XCF2PNM
         This will be selected automatically if the output file''s name
         ends with
@@ -182,26 +182,6 @@ OPTION('c',--color --colour,select color output,
        ));
 flatspec.out_color_mode = COLOR_RGB ;
 break ;
-
-#if 0
-OPTION('i',--indexed,select indexed output,
-       (Force the output to used indexed color
-        .I with the palette of the XCF file.
-        If colors outside of the XCF file''s palette are produced
-        during flattening, exit with status XXX.
-        Beware that in PNG (unlike XCF) palette entries include
-        transparency information, so if the flattened image contains
-        any partial transparency, an error with status XXX will
-        result. (On the other hand,
-        .B xcf2png
-        will artificially add a palette entry for fully transparent
-        pixels or the the background color specified by
-        .BR \-b ,
-        if there is room in the palette).
-        ));
-flatspec.out_color_mode = COLOR_INDEXED ;
-break ;
-#endif
 
 OPTION('g',--gray --grey,select grayscale output,
        (Force the output to be a grayscale image even if it may be monochrome.
@@ -234,8 +214,9 @@ OPTION('n',--pnm,select -c/-g/-m by image contents,
         or
         .BR \-m
         based on output filename, and instead select the output format
-        based on image contents. This is the default if the filename
-        is not recognized, and when writing to stdout.
+        based on image contents.
+        This is the default if the filename is not recognized, and
+        when writing to stdout.
         ));
 flatspec.out_color_mode = COLOR_BY_CONTENTS ;
 break ;
@@ -243,12 +224,12 @@ break ;
 
 OPTION('T',--truecolor,treat indexed images as RGB for flattening,
        (Use standard RGB compositing for flattening indexed layers.
-        Without this option
-        .B THISPROGRAM
+        Without this option,
+        .B \*p
         will mimic the Gimp''s current strategy of rounding each
         alpha value to either full transparency or full opacity,
         and interpret all layer modes as
-        .B Normal .
+        .BR Normal .
         ));
 flatspec.gimpish_indexed = 0 ;
 break ;
@@ -260,8 +241,8 @@ OPTION('G',--for-gif,disallow partial transparency,
         transparency.
         If
         .B \-b
-        is also given, exit with status 102 if there is partial transparency
-        before applying the background color.
+        is also given, this tests whether there there is partial
+        transparency before applying the background color.
         ));
 flatspec.partial_transparency_mode = FORBID_PARTIAL_TRANSPARENCY ;
 break ;
@@ -318,7 +299,9 @@ OPTION('O',--offset,(x","y) translate converted part of image,
   break ;
 }
 
+#ifndef XCFVIEW
 OPTIONGROUP(1il,Layer-selection options);
+#endif
 
 OPTION(300,--mode,(mode) set layer mode,
        (Set the layer mode (e.g.,
@@ -328,10 +311,17 @@ OPTION(300,--mode,(mode) set layer mode,
         ));
 {
   GimpLayerModeEffects m ;
+  #ifdef ENABLE_NLS
+  for( m = 0; m < GimpLayerModeEffects_LAST; m++ )
+    if( strcmp(optarg,_(showGimpLayerModeEffects(m))) == 0 )
+      goto found_localized ;
+  #endif
+    
   for( m = 0; strcmp(optarg,showGimpLayerModeEffects(m)) != 0 ; m++ ) {
     if( m > GimpLayerModeEffects_LAST )
       FatalGeneric(20,_("Layer mode '%s' is unknown"),optarg);
   }
+ found_localized:
   lastlayerspec(&flatspec,"--mode")->mode = m ;
   break ;
 }

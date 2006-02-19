@@ -1,0 +1,163 @@
+#! /usr/bin/perl
+#
+#  xcfview: a wrapper script that uses xcftools and an external viewer
+#  to display XCF images. The external viewer is found through the
+#  mailcap(5) database (q.v.).
+#
+#  Written by Henning Makholm <henning@makholm.net>
+#  Derived from the run-mailcap script by Brian White <bcwhite@pobox.com>
+#
+#  This script has been placed in the public domain (by both authors)
+#
+#  We cannot use run-mailcap as-is because we can supply the flattened
+#  image either as PNG and PPM, and we need to find the highest-ranked
+#  viewer that can handle _one_ of these two. If everything else is equal
+#  we try to prefer a PNG viewer such that transparency is handled properly.
+#
+
+use strict ;
+use warnings ;
+
+my $debug=0;
+my $quotedsemi = "\001" ;
+my $quotedprct = "\002" ;
+
+sub ReadMailcap {
+	my($file) = @_;
+	my $line = "";
+
+	return unless -r $file;
+
+	print STDERR " - Reading mailcap file \"$file\"...\n" if $debug;
+	open(MAILCAP,"<$file") || die "Error: could not read \"$file\" -- $!\n";
+        my @mailcap ;
+        
+	while (<MAILCAP>) {
+		chomp;
+		s/^\s+// if $line;
+		$line .= $_;
+		next unless $line;
+		if ($line =~ m/^\s*\#/) {
+			$line = "";
+			next;
+		}
+		if ($line =~ m/\\$/) {
+			$line =~ s/\\$//;
+		} else {
+			$line =~ s/\\;/$quotedsemi/go;
+			$line =~ s/\\%/$quotedprct/go;
+			push @mailcap,$line;
+			$line = "";
+		}
+	}
+	close MAILCAP;
+
+        return @mailcap ;
+}
+
+sub TempFile {
+	my($match) = @_;
+	my($cmd,$head,$tail,$tmpfile);
+
+        ($head,$tail) = split(/%s/,$1,2)
+            if ($match =~ m/nametemplate=(.*?)\s*($|;)/);
+
+	$cmd  = "tempfile --mode=600";
+	$cmd .= " --prefix $head" if $head;
+	$cmd .= " --suffix $tail" if $tail;
+
+	$tmpfile = `$cmd`;
+	chomp($tmpfile);
+
+	return $tmpfile;
+}
+
+my ($useline,$usecomm,$useprogram,$usetype,@converter) ;
+foreach my $mailcap ( $ENV{MAILCAPS} ? split(/:/,$ENV{MAILCAPS}) :
+                      ( "$ENV{HOME}/.mailcap",
+                        qw( /etc/mailcap
+                            /usr/local/etc/mailcap
+                            /usr/share/etc/mailcap
+                            /usr/etc/mailcap
+                            ) ) ) {
+    foreach ( ReadMailcap($mailcap) ) {
+        my ($type,$comm,$program,$rest)
+            = m"^image/(png|x-portable-pixmap)\s*;\s*((\S*).*?)\s*($|;.*)"
+            or next ;
+        print STDERR " - checking $mailcap entry \"$_\"\n" if $debug;
+        next if $rest =~ /;\s*needsterminal\s*($|;)/ ;
+        next if $rest =~ /;\s*copiousoutput\s*($|;)/ ;
+        if( $rest =~ m/;\s*test=(.*?)\s*($|;)/ ) {
+            my $test;
+            print STDERR " - running test: $1 " if $debug;
+            $test   = system "$1 >/dev/null 2>&1";
+            $test >>= 8;
+            print STDERR " (result=$test=",($test!=0?"false":"true"),")\n"
+                if $debug;
+            next if $test ;
+        }
+        # If we get down here, we have a possible hit.
+        if( $type ne 'png' ) {
+            # Save for later; if there is a PNG definition for the same
+            # command, we will prefer PNG
+            ($useline,$usecomm,$useprogram,$usetype,@converter)
+                = ($rest,$comm,$program,$type,"xcf2pnm","-c","'-#'")
+                unless @converter ;
+            next ;
+        } else {
+            # use this definition _unless_ we have already seen and saved
+            # a definition for a _different_ program (which must have been PPM)
+            ($useline,$usecomm,$useprogram,$usetype,@converter)
+                = ($rest,$comm,$program,$type,"xcf2png")
+                unless @converter && $comm eq $useprogram ;
+            last ;
+        }
+    }
+    last if @converter ;
+}
+
+unless( @converter ) {
+    print STDERR "$0: No appropriate way to display PPM or PNG images in mailcap\n" ;
+    exit 1 ;
+}
+
+sub finishcomm() {
+    $usecomm =~ s!([^%])%t!$1$usetype!g;
+    $usecomm =~ s!%{(.*?)}!$_="'$ENV{$1}'";s/\`//g;$_!ge;
+    $usecomm =~ s!\\(.)!$1!g;
+    $usecomm =~ s!\'\'!\'!g;
+    $usecomm =~ s!$quotedsemi!;!go;
+    $usecomm =~ s!$quotedprct!%!go;
+}
+
+# quote arguments for converter
+for( @ARGV ) {
+    next if m{^[-a-z0-9,.:/@%^+=_]+$}i ;
+    s/'/\\'/ ;
+    $_ = "'$_'" ;
+}
+
+if( $usecomm =~ /[^%]%s/ ) {
+    my $tempfile = TempFile($useline);
+    $usecomm =~ s/([^%])%s/$1$tempfile/g ;
+    finishcomm() ;
+    my $retcode = 0 ;
+    for my $comm ( join(" ",@converter,"-o",$tempfile,@ARGV),
+                   $usecomm ) {
+        print STDERR " - executing: $comm\n" if $debug ;
+        my $res = system $comm;
+        $res = int($res/256);
+        if ($res != 0) {
+            print STDERR "Warning: program returned non-zero exit code \#$res\n";
+            $retcode = $res;
+            last ;
+        }
+    }
+    unlink $tempfile ;
+    exit $retcode ;
+} else {
+    finishcomm() ;
+    exec( join(@converter," ",@ARGV) . " | " . $usecomm )
+        or print STDERR "Couldn't exec pipeline: $!\n" ;
+    exit 1 ;
+}

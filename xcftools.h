@@ -24,8 +24,14 @@
 #include <stddef.h>
 #include <stdio.h>
 
-/* Change to gettext for l10n */
+#if defined(HAVE_GETTEXT) && defined(ENABLE_NLS)
+#include <libintl.h>
+#define _(s) gettext(s)
+void nls_init(void);
+#else
 #define _(s) (s)
+#define nls_init() (void)0
+#endif
 #define N_(s) (s)
 
 #if HAVE_INTTYPES_H

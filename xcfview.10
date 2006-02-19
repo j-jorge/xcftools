@@ -1,0 +1,63 @@
+.\" Manual page for xcfview
+.\" Copyright (C) 2006  Henning Makholm
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of version 2 of the GNU General Public License as
+.\" published by the Free Software Foundation.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program; if not, write to the Free Software
+.\" Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+.TH xcf2pnm 1 2006-02-12 "Xcftools" ""
+.SH NAME
+xcfview \- display GIMP xcf files
+.ds p xcfview
+.SH SYNOPSIS
+.B \*p
+[
+.I options
+]
+.I filename
+[
+.I layer names
+]
+.SH DESCRIPTION
+.B xcfview
+is a wrapper script that uses
+.BR xcf2png (1)
+or
+.BR xcf2pnm (1)
+(q.v.) to flatten an XCF image and then displays the flattened
+image using a PNG or PPM viewer found using the
+.BR mailcap (5)
+database.
+.SH OPTIONS
+Every command-line parameter to
+.B xcfview
+will be passed through to the underlying
+.B xcf2png
+or
+.B xcf2pnm
+command.  Because it is not certain which converter will be used,
+the options given should be ones that make sense for both of these:
+.so xcfview.1i
+.SH EXIT STATUS
+The exit status is 0 in case of success. A nonzero exit status may
+either be that of the
+.BI xcf2 foo
+converter or that of the image viewer.
+.SH AUTHOR
+.B \*p
+was written by Henning Makholm <henning@makholm.net>.
+.P
+Parts of the script originate from the
+.BR run-mailcap (1)
+script by Brian White <bcwhite@pobox.com>.
+.SH SEE ALSO
+.BR xcf2pnm (1),
+.BR xcf2png (1)

@@ -52,6 +52,7 @@ main(int argc,char **argv)
 
   setlocale(LC_ALL,"");
   progname = argv[0] ;
+  nls_init();
 
   if( argc <= 1 ) gpl_blurb() ;
 
@@ -80,16 +81,16 @@ main(int argc,char **argv)
   getBasicXcfInfo() ;
   printf(_("Version %d, %dx%d %s, %d layers, compressed %s\n"),
          XCF.version,XCF.width,XCF.height,
-         showGimpImageBaseType(XCF.type),
+         _(showGimpImageBaseType(XCF.type)),
          XCF.numLayers,
-         showXcfCompressionType(XCF.compression));
+         _(showXcfCompressionType(XCF.compression)));
   for( i = XCF.numLayers ; i-- ; ) {
     printf("%c %dx%d%+d%+d %s %s",
            XCF.layers[i].isVisible ? '+' : '-',
            XCF.layers[i].dim.width, XCF.layers[i].dim.height,
            XCF.layers[i].dim.c.l, XCF.layers[i].dim.c.t,
-           showGimpImageType(XCF.layers[i].type),
-           showGimpLayerModeEffects(XCF.layers[i].mode));
+           _(showGimpImageType(XCF.layers[i].type)),
+           _(showGimpLayerModeEffects(XCF.layers[i].mode)));
     if( XCF.layers[i].opacity < 255 )
       printf("/%02d%%",XCF.layers[i].opacity * 100 / 255);
     if( XCF.layers[i].hasMask )

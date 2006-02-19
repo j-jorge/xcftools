@@ -124,7 +124,7 @@ callback_common(unsigned num,rgba *pixels)
        */
       put_pbm_row(transfile,num,pixels,(rgba)1 << ALPHA_SHIFT);
     }
-  } else if( !FULLALPHA(flatspec.default_pixel) ) {
+  } else if( ALPHA(flatspec.default_pixel) < 128 ) {
     unsigned i ;
     for( i=0; i < num; i++ )
       if( !FULLALPHA(pixels[i]) )
@@ -189,7 +189,7 @@ guess_color_mode(const char *string)
 static lineCallback
 selectCallback(void)
 {
-  if( flatspec.transmap_filename && FULLALPHA(flatspec.default_pixel) )
+  if( flatspec.transmap_filename && ALPHA(flatspec.default_pixel) >= 128 )
     FatalGeneric(101,_("The -a option was given, "
                        "but the image has no transparency"));
   
@@ -210,12 +210,13 @@ main(int argc,char **argv)
 
   setlocale(LC_ALL,"");
   progname = argv[0] ;
+  nls_init();
 
   if( argc <= 1 ) gpl_blurb() ;
   
   init_flatspec(&flatspec) ;
   flatspec.out_color_mode = COLOR_BY_FILENAME ;
-  while( (option=getopt_long(argc,argv,"-@"OPTSTRING,longopts,NULL)) >= 0 )
+  while( (option=getopt_long(argc,argv,"-@#"OPTSTRING,longopts,NULL)) >= 0 )
     switch(option) {
       #define OPTION(char,long,desc,man) case char:
       #include "options.i"
@@ -230,6 +231,10 @@ main(int argc,char **argv)
     case '@':
       /* Non-documented option for build-time test */
       suppress_byline = 1 ;
+      break ;
+    case '#':
+      /* Non-documented option for xcfview */
+      flatspec.default_pixel = CHECKERED_BACKGROUND ;
       break ;
     default:
       FatalUnexpected("Getopt(_long) unexpectedly returned '%c'",option);

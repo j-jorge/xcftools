@@ -1,0 +1,596 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: henning@makholm.net\n"
+"POT-Creation-Date: 2006-02-20 00:27+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: xcfinfo.oi:24 xcfinfo.oi:35 xcf2pnm.oi:46 xcf2pnm.oi:63 xcf2png.oi:43
+#: xcf2png.oi:60 xcfview.oi:43 xcfview.oi:60
+msgid "cmd"
+msgstr ""
+
+#: xcfinfo.oi:26 xcf2pnm.oi:54 xcf2png.oi:51 xcfview.oi:51
+msgid "show this message"
+msgstr ""
+
+#: xcfinfo.oi:28 xcf2pnm.oi:56 xcf2png.oi:53 xcfview.oi:53
+msgid "show version"
+msgstr ""
+
+#: xcfinfo.oi:30 xcf2pnm.oi:58 xcf2png.oi:55 xcfview.oi:55
+msgid "show progress messages"
+msgstr ""
+
+#: xcfinfo.oi:32 xcf2pnm.oi:60 xcf2png.oi:57 xcfview.oi:57
+msgid "input is bzip2 compressed"
+msgstr ""
+
+#: xcfinfo.oi:34 xcf2pnm.oi:62 xcf2png.oi:59 xcfview.oi:59
+msgid "input is gzip compressed"
+msgstr ""
+
+#: xcfinfo.oi:36 xcf2pnm.oi:64 xcf2png.oi:61 xcfview.oi:61
+msgid "use 'cmd' to decompress input"
+msgstr ""
+
+#: xcfinfo.oi:38 xcf2pnm.oi:105 xcf2png.oi:96 xcfview.oi:95
+msgid "use UTF-8 for layer names"
+msgstr ""
+
+#: xcf2pnm.oi:47 xcf2pnm.oi:69 xcf2png.oi:44 xcf2png.oi:64 xcfview.oi:44
+#: xcfview.oi:64 xcf2png.c:147
+msgid "color"
+msgstr ""
+
+#: xcf2pnm.oi:48 xcf2pnm.oi:65 xcf2pnm.oi:67 xcf2png.oi:45 xcf2png.oi:62
+#: xcfview.oi:45 xcfview.oi:62
+msgid "filename"
+msgstr ""
+
+#: xcf2pnm.oi:49 xcf2pnm.oi:94 xcf2png.oi:46 xcf2png.oi:85 xcfview.oi:46
+#: xcfview.oi:84
+msgid "mode"
+msgstr ""
+
+#: xcf2pnm.oi:50 xcf2pnm.oi:96 xcf2pnm.oi:98 xcf2png.oi:47 xcf2png.oi:87
+#: xcf2png.oi:89 xcfview.oi:47 xcfview.oi:86 xcfview.oi:88
+msgid "n"
+msgstr ""
+
+#: xcf2pnm.oi:51 xcf2pnm.oi:89 xcf2png.oi:48 xcf2png.oi:80 xcfview.oi:48
+#: xcfview.oi:80
+msgid "wxh"
+msgstr ""
+
+#: xcf2pnm.oi:52 xcf2pnm.oi:91 xcf2png.oi:49 xcf2png.oi:82 xcfview.oi:49
+#: xcfview.oi:82
+msgid "x,y"
+msgstr ""
+
+#: xcf2pnm.oi:66 xcf2png.oi:63 xcfview.oi:63
+msgid "name output file"
+msgstr ""
+
+#: xcf2pnm.oi:68
+msgid "write transparency map"
+msgstr ""
+
+#: xcf2pnm.oi:70 xcf2png.oi:65 xcfview.oi:65
+msgid "select background color"
+msgstr ""
+
+#: xcf2pnm.oi:72 xcf2png.oi:67 xcfview.oi:67
+msgid "force alpha channel in output"
+msgstr ""
+
+#: xcf2pnm.oi:74 xcf2png.oi:69 xcfview.oi:69
+msgid "select color output"
+msgstr ""
+
+#: xcf2pnm.oi:76 xcf2png.oi:71 xcfview.oi:71
+msgid "select grayscale output"
+msgstr ""
+
+#: xcf2pnm.oi:78
+msgid "select monochrome output"
+msgstr ""
+
+#: xcf2pnm.oi:80
+msgid "select -c/-g/-m by image contents"
+msgstr ""
+
+#: xcf2pnm.oi:82 xcf2png.oi:73 xcfview.oi:73
+msgid "treat indexed images as RGB for flattening"
+msgstr ""
+
+#: xcf2pnm.oi:84 xcf2png.oi:75 xcfview.oi:75
+msgid "disallow partial transparency"
+msgstr ""
+
+#: xcf2pnm.oi:86 xcf2png.oi:77 xcfview.oi:77
+msgid "dissolve partial transparency"
+msgstr ""
+
+#: xcf2pnm.oi:88 xcf2png.oi:79 xcfview.oi:79
+msgid "flatten to memory; then analyse"
+msgstr ""
+
+#: xcf2pnm.oi:90 xcf2png.oi:81 xcfview.oi:81
+msgid "crop image while converting"
+msgstr ""
+
+#: xcf2pnm.oi:92 xcf2png.oi:83 xcfview.oi:83
+msgid "translate converted part of image"
+msgstr ""
+
+#: xcf2pnm.oi:93 xcf2png.oi:84
+msgid "Layer-selection options"
+msgstr ""
+
+#: xcf2pnm.oi:95 xcf2png.oi:86 xcfview.oi:85
+msgid "set layer mode"
+msgstr ""
+
+#: xcf2pnm.oi:97 xcf2png.oi:88 xcfview.oi:87
+msgid "set opacity in percent"
+msgstr ""
+
+#: xcf2pnm.oi:99 xcf2png.oi:90 xcfview.oi:89
+msgid "set opacity in 1/255 units"
+msgstr ""
+
+#: xcf2pnm.oi:101 xcf2png.oi:92 xcfview.oi:91
+msgid "enable layer mask"
+msgstr ""
+
+#: xcf2pnm.oi:103 xcf2png.oi:94 xcfview.oi:93
+msgid "disable layer mask"
+msgstr ""
+
+#: options.i:155
+#, c-format
+msgid "Could not open color database file %s\n"
+msgstr ""
+
+#: options.i:159
+#, c-format
+msgid "Unknown background color '%s'"
+msgstr ""
+
+#: options.i:281
+#, c-format
+msgid "-S option must have an argument of the form wxh"
+msgstr ""
+
+#: options.i:298
+#, c-format
+msgid "-O option must have an argument of the form x,y"
+msgstr ""
+
+#: options.i:322
+#, c-format
+msgid "Layer mode '%s' is unknown"
+msgstr ""
+
+#: options.i:338
+#, c-format
+msgid "The argument to --percent is not a percentage"
+msgstr ""
+
+#: options.i:351
+#, c-format
+msgid "The argument to --opacity is not a number between 0 and 255"
+msgstr ""
+
+#: enums.c:10
+msgid "Normal"
+msgstr ""
+
+#: enums.c:11
+msgid "Dissolve"
+msgstr ""
+
+#: enums.c:12
+msgid "Behind"
+msgstr ""
+
+#: enums.c:13
+msgid "Multiply"
+msgstr ""
+
+#: enums.c:14
+msgid "Screen"
+msgstr ""
+
+#: enums.c:15
+msgid "Overlay"
+msgstr ""
+
+#: enums.c:16
+msgid "Difference"
+msgstr ""
+
+#: enums.c:17
+msgid "Addition"
+msgstr ""
+
+#: enums.c:18
+msgid "Subtract"
+msgstr ""
+
+#: enums.c:19
+msgid "DarkenOnly"
+msgstr ""
+
+#: enums.c:20
+msgid "LightenOnly"
+msgstr ""
+
+#: enums.c:21
+msgid "Hue"
+msgstr ""
+
+#: enums.c:22
+msgid "Saturation"
+msgstr ""
+
+#: enums.c:23
+msgid "Color"
+msgstr ""
+
+#: enums.c:24
+msgid "Value"
+msgstr ""
+
+#: enums.c:25
+msgid "Divide"
+msgstr ""
+
+#: enums.c:26
+msgid "Dodge"
+msgstr ""
+
+#: enums.c:27
+msgid "Burn"
+msgstr ""
+
+#: enums.c:28
+msgid "Hardlight"
+msgstr ""
+
+#: enums.c:29
+msgid "Softlight"
+msgstr ""
+
+#: enums.c:30
+msgid "GrainExtract"
+msgstr ""
+
+#: enums.c:31
+msgid "GrainMerge"
+msgstr ""
+
+#: enums.c:32
+msgid "ColorErase"
+msgstr ""
+
+#: enums.c:33
+msgid "Erase"
+msgstr ""
+
+#: enums.c:34
+msgid "Replace"
+msgstr ""
+
+#: enums.c:35
+msgid "AntiErase"
+msgstr ""
+
+#: enums.c:36
+msgid "NormalNopartial"
+msgstr ""
+
+#: enums.c:46
+msgid "RGB color"
+msgstr ""
+
+#: enums.c:47 enums.c:60
+msgid "Grayscale"
+msgstr ""
+
+#: enums.c:48
+msgid "Indexed color"
+msgstr ""
+
+#: enums.c:58
+msgid "RGB"
+msgstr ""
+
+#: enums.c:59
+msgid "RGB-alpha"
+msgstr ""
+
+#: enums.c:61
+msgid "Grayscale-alpha"
+msgstr ""
+
+#: enums.c:62
+msgid "Indexed"
+msgstr ""
+
+#: enums.c:63
+msgid "Indexed-alpha"
+msgstr ""
+
+#: enums.c:109
+msgid "None"
+msgstr ""
+
+#: enums.c:110
+msgid "RLE"
+msgstr ""
+
+#: enums.c:111
+msgid "Zlib"
+msgstr ""
+
+#: enums.c:112
+msgid "Fractal"
+msgstr ""
+
+#: flatspec.c:47 utils.c:110
+#, c-format
+msgid "Out of memory"
+msgstr ""
+
+#: flatspec.c:59
+#, c-format
+msgid "The %s option must follow a layer name on the command line"
+msgstr ""
+
+#: flatspec.c:143
+#, c-format
+msgid "The image has no layer called '%s'"
+msgstr ""
+
+#: flatspec.c:156
+#, c-format
+msgid "Layer '%s' has no layer mask to enable"
+msgstr ""
+
+#: flatspec.c:233 xcfinfo.c:97
+#, c-format
+msgid "/mask"
+msgstr ""
+
+#: flatspec.c:319 xcf2png.c:233 xcf2pnm.c:158
+#, c-format
+msgid "Grayscale output selected, but colored pixel(s) found"
+msgstr ""
+
+#: flatspec.c:323 xcf2pnm.c:172
+#, c-format
+msgid "Monochrome output selected, but not all pixels are black or white"
+msgstr ""
+
+#: flatten.c:382
+#, c-format
+msgid "'%s' layer mode"
+msgstr ""
+
+#: flatten.c:562
+#, c-format
+msgid "Flattened image has partially transparent pixels"
+msgstr ""
+
+#: flatten.c:668
+#, c-format
+msgid "Flattening image ..."
+msgstr ""
+
+#: io-unix.c:78
+#, c-format
+msgid "!Cannot create temporary unzipped file"
+msgstr ""
+
+#: io-unix.c:97
+#, c-format
+msgid "Cannot execute "
+msgstr ""
+
+#: io-unix.c:114
+#, c-format
+msgid "%s terminated abnormally"
+msgstr ""
+
+#: io-unix.c:126
+#, c-format
+msgid "!Cannot open %s"
+msgstr ""
+
+#: io-unix.c:146 io-unix.c:162
+#, c-format
+msgid "Out of memory for xcf data"
+msgstr ""
+
+#: io-unix.c:149
+#, c-format
+msgid "XCF file shrunk while reading it"
+msgstr ""
+
+#: io-unix.c:151 io-unix.c:169
+#, c-format
+msgid "!Could not read xcf data"
+msgstr ""
+
+#: pixels.c:134
+#, c-format
+msgid "Layer type %s"
+msgstr ""
+
+#: pixels.c:152
+#, c-format
+msgid "Color map has more than 256 entries"
+msgstr ""
+
+#: pixels.c:187
+#, c-format
+msgid ""
+"Unbelievably many layers?\n"
+"More likely to be a bug in %s"
+msgstr ""
+
+#: pixels.c:340
+#, c-format
+msgid "%s compression"
+msgstr ""
+
+#: utils.c:64
+msgid "Corrupted or malformed XCF file"
+msgstr ""
+
+#: utils.c:73
+msgid "Corrupted or truncated XCF file"
+msgstr ""
+
+#: utils.c:85
+msgid "The image contains features not understood by this program:"
+msgstr ""
+
+#: utils.c:94
+#, c-format
+msgid ""
+"This program is free software; you can modify and distribute it\n"
+"under the terms of the GNU General Public License, version 2.\n"
+"There is no warranty for %s.\n"
+"\n"
+msgstr ""
+
+#: utils.c:99
+#, c-format
+msgid "Type \"%s -h\" to get an option summary.\n"
+msgstr ""
+
+#: utils.c:135
+#, c-format
+msgid "!Cannot create file %s"
+msgstr ""
+
+#: utils.c:159
+#, c-format
+msgid "!Error writing file %s"
+msgstr ""
+
+#: xcf-general.c:158
+#, c-format
+msgid ""
+"Warning: one or more layer names could not be\n"
+"         translated to the local character set.\n"
+msgstr ""
+
+#: xcf-general.c:194
+#, c-format
+msgid "Not an XCF file at all (magic not recognized)"
+msgstr ""
+
+#: xcf-general.c:198
+#, c-format
+msgid "Warning: XCF version %d not supported (trying anyway...)\n"
+msgstr ""
+
+#: xcf2png.c:41 xcf2pnm.c:39
+#, c-format
+msgid "Usage: %s [options] filename.xcf[.gz] [layers]\n"
+msgstr ""
+
+#: xcf2png.c:43 xcf2pnm.c:41 xcfinfo.c:38
+#, c-format
+msgid "Options:\n"
+msgstr ""
+
+#: xcf2png.c:59
+#, c-format
+msgid "Libpng error '%s'"
+msgstr ""
+
+#: xcf2png.c:78
+#, c-format
+msgid "Couldn't initialize libpng library"
+msgstr ""
+
+#: xcf2png.c:147
+msgid "grayscale"
+msgstr ""
+
+#: xcf2png.c:148
+msgid "+palette"
+msgstr ""
+
+#: xcf2png.c:149
+msgid "+alpha"
+msgstr ""
+
+#: xcf2png.c:151
+msgid "+transparency"
+msgstr ""
+
+#: xcf2png.c:154
+#, c-format
+msgid " (%d colors)"
+msgstr ""
+
+#: xcf2pnm.c:65
+#, c-format
+msgid "Writing converted image as %s\n"
+msgstr ""
+
+#: xcf2pnm.c:66
+#, c-format
+msgid "Writing transparency map as %s\n"
+msgstr ""
+
+#: xcf2pnm.c:75
+#, c-format
+msgid " # Converted by xcf2pnm %s"
+msgstr ""
+
+#: xcf2pnm.c:77
+#, c-format
+msgid " # Transparency map by xcf2pnm %s"
+msgstr ""
+
+#: xcf2pnm.c:131
+#, c-format
+msgid "Transparency found, but -a option not given"
+msgstr ""
+
+#: xcf2pnm.c:193
+#, c-format
+msgid "The -a option was given, but the image has no transparency"
+msgstr ""
+
+#: xcfinfo.c:37
+#, c-format
+msgid "Usage: %s [options] filename.xcf[.gz]\n"
+msgstr ""
+
+#: xcfinfo.c:66
+#, c-format
+msgid "Only one XCF file per command line, please"
+msgstr ""
+
+#: xcfinfo.c:82
+#, c-format
+msgid "Version %d, %dx%d %s, %d layers, compressed %s\n"
+msgstr ""

@@ -24,6 +24,7 @@
 
 #define PERHAPS_ALPHA_CHANNEL (NEWALPHA(0,1))
 #define FORCE_ALPHA_CHANNEL (NEWALPHA(0,2))
+#define CHECKERED_BACKGROUND (NEWALPHA(0,200))
 struct FlattenSpec {
   struct tileDimensions dim ;
   rgba default_pixel ;

@@ -21,7 +21,9 @@ prefix			= @prefix@
 exec_prefix		= @exec_prefix@
 bindir			= @bindir@
 mandir			= @mandir@
+datadir			= @datadir@
 sysconfdir		= @sysconfdir@
+localedir		= $(datadir)/locale
 
 VERSION			= @PACKAGE_VERSION@
 APPNAME			= @PACKAGE_TARNAME@
@@ -52,31 +54,42 @@ endif
 
 FILEIO			= io-unix
 
-BINARIES		= xcfinfo$e xcf2pnm$e xcf2png$e
-MANPAGES		= $(patsubst %$e,%.1,$(BINARIES))
+BINARIES		= xcfinfo$e xcf2pnm$e xcf2png$e xcfview
+COMMANDS		= $(patsubst %$e,%,$(BINARIES))
+MANPAGES		= $(patsubst %,%.1,$(COMMANDS))
+
+ifeq (@USE_NLS@,yes)
+LINGUAS			= da
+MANLINGUAS		= da
+endif
 
 %.$o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
-all: $(BINARIES) $(MANPAGES)
 
-xcfinfo$e: xcfinfo.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o
+all: $(BINARIES) $(SCRIPTS) $(MANPAGES) po/stamp manpo/stamp
+
+xcfinfo$e: xcfinfo.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o nlsini.$o
 	$(CC) $(LDFLAGS) $(LIBS) $^ -o $@
 
-xcf2pnm$e: xcf2pnm.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o \
-	   pixels.$o flatten.$o flatspec.$o scaletab.$o table.$o 
+xcf2pnm$e: xcf2pnm.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o nlsini.$o \
+	   pixels.$o flatten.$o flatspec.$o scaletab.$o table.$o
 	$(CC) $(LDFLAGS) $(LIBS) $^ -o $@
 
-xcf2png$e: xcf2png.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o \
+xcf2png$e: xcf2png.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o nlsini.$o \
 	   pixels.$o flatten.$o flatspec.$o scaletab.$o table.$o palette.$o
 	$(CC) $(LDFLAGS) $(LIBS) -lpng $^ -o $@
+
+xcfview: xcfview.in Makefile
+	sed '1s,/usr/bin/perl,@PERL@,' < $< > $@
 
 testscale$e: testscale.$o
 	$(CC) $(LDFLAGS) $(LIBS) $^ -o $@
 
 install: all
 	for p in $(BINARIES) ; do \
-	  $(INSTALL_PROGRAM) -s $$p \
+	  case $$p in xcfview) strip= ;; *) strip=-s ;; esac ; \
+	  $(INSTALL_PROGRAM) $$strip $$p \
 	    $(bindir)/`echo $$p | $(SED) $(program_transform_name)` \
 	    || exit 1 ;\
         done
@@ -85,6 +98,19 @@ install: all
 	    $(mandir)/man1/`echo $$m | $(SED) $(program_transform_name)` \
 	    || exit 1 ; \
 	done
+	for lang in $(LINGUAS) ; do \
+	  $(srcdir)/install-sh -d $(localedir)/$$lang/LC_MESSAGES ; \
+	  $(INSTALL_DATA) po/$$lang.mo \
+		$(localedir)/$$lang/LC_MESSAGES/$(APPNAME).mo \
+	  || exit 1 ; \
+	done
+	for L in $(MANLINGUAS) ; do \
+	   $(srcdir)/install-sh -d $(mandir)/$$L/man1 || exit 1 ; \
+	   for P in $(patsubst %.1,%,$(MANPAGES)) ; do \
+		$(INSTALL_DATA) manpo/$$P.$$L.1 $(mandir)/$$L/man1/$$P.1 \
+		|| exit 1; done ; done ;
+
+C_GENERATED = enums.c table.c nlsini.c
 
 ENUMSOURCES = gimp/base-enums.h gimp/gimpbaseenums.h gimp/xcf-private.h
 enums.h: mkenumsh.pl $(ENUMSOURCES)
@@ -93,6 +119,13 @@ enums.c: mkenumsc.pl enums.h
 	$(PERL) $< enums.h > $@
 table.c: mktablec.pl config.h
 	$(PERL) $< > $@
+nlsini.c: Makefile
+	echo >$@ "#include \"xcftools.h\""
+	echo >>$@ "#ifndef nls_init"
+	echo >>$@ "void nls_init(void) {"
+	echo >>$@ "  bindtextdomain(\"$(APPNAME)\",\"$(localedir)\");"
+	echo >>$@ "  textdomain(\"$(APPNAME)\"); }"
+	echo >>$@ "#endif"
 
 %.oi: options.i mkopti.pl config.h
 	$(PERL) mkopti.pl $*
@@ -102,10 +135,73 @@ table.c: mktablec.pl config.h
 
 #############################################################################
 #
+#  Localization stuff
+
+POTFILES_NONC = $(patsubst %$e,%.oi,$(BINARIES)) options.i
+
+po/$(APPNAME).pot$(SUPPRESS_AUTOFOO): $(POTFILES_NONC) \
+		$(filter-out table.c nlsini.c, $(C_GENERATED) $(wildcard *.c))
+	xgettext -o $@.tmp -C -k_ -kN_ \
+		--foreign-user --msgid-bugs-address=henning@makholm.net \
+		--flag=FatalGeneric:2:c-format \
+		--flag=FatalUnexpected:1:c-format \
+		--flag=FatalBadXCF:1:c-format \
+		--flag=FatalUnsupportedXCF:1:c-format \
+		$^
+	if diff $@ $@.tmp | \
+		grep -v '^\([^<>]\|. \?"POT-Creation-Date:\)' > /dev/null; \
+	then mv -f $@.tmp $@ ; \
+	else echo OK, $@ is unchanged ; rm $@.tmp ; fi
+
+po/%.po: po/$(APPNAME).pot
+	test -f $@
+	msgmerge -U $@ $<
+	touch $@
+
+po/%.mo: po/%.po
+	msgfmt -c -o$@ $<
+
+po/stamp: $(patsubst %,po/%.mo,$(LINGUAS))
+	if ! make -q po/$(APPNAME).pot ; then \
+	touch po/$(APPNAME).pot ; touch po/*.po ; touch po/*.mo ; fi
+	touch $@
+
+# Manpage localization stuff
+
+POTFILES_MAN = options.mi $(patsubst %.1,%.10,$(MANPAGES)) \
+		exit.1i
+
+manpo/%.po: manpo/manpages.pot
+	test -f $@
+	msgmerge -U $@ $<
+	touch $@
+
+manpo/stamp: $(patsubst %,manpo/%.po,$(MANLINGUAS)) $(MANPAGES)
+	touch manpo/manpages.pot
+	touch $^
+	for L in $(MANLINGUAS) ; do \
+	   for P in $(patsubst %.1,%,$(MANPAGES)) ; do \
+	      $(PERL) manpo/mantranslate.pl manpo/$$L.po $$P.1 \
+		> manpo/$$P.$$L.1 || exit 1; done ; done ;
+	touch $@
+	  
+
+options.mi: manpo/optipot.pl options.i
+	$(PERL) manpo/optipot.pl > $@
+manpo/manpages.pot$(SUPPORESS_AUTOFOO): manpo/mantranslate.pl $(POTFILES_MAN)
+	$(PERL) manpo/mantranslate.pl -x $(POTFILES_MAN) > $@.tmp
+	if diff $@ $@.tmp | \
+		grep -v '^\([^<>]\|. \?"POT-Creation-Date:\)' > /dev/null; \
+	then mv -f $@.tmp $@ ; \
+	else echo OK, $@ is unchanged ; rm $@.tmp ; fi
+
+#############################################################################
+#
 #  Dependency tracking, by hand
 
 COMMON_HEADERS = xcftools.h config.h enums.h
 enums.$o:	enums.h
+nlsini.$o:	$(COMMON_HEADERS)
 table.$o:	$(COMMON_HEADERS) pixels.h
 scaletab.$o:	$(COMMON_HEADERS) pixels.h
 io-unix.$o:     $(COMMON_HEADERS)
@@ -127,8 +223,9 @@ check: $(BINARIES)
 	cd test && $(MAKE) check
 
 clean:
-	$(RM) *.$o */*~ *~ .*~ *.1i *.1il *.1 *.oi 
-	$(RM) enums.h enums.c table.c $(BINARIES)
+	$(RM) *.$o */*~ *~ .*~ xcf*.1i xcf*.1il *.1 *.oi *.mi
+	$(RM) enums.h $(C_GENERATED) $(BINARIES)
+	$(RM) po/*.mo */stamp manpo/*.1
 	cd test && $(MAKE) clean
 
 distclean: clean
@@ -147,7 +244,8 @@ realclean: distclean
 #  Tarball-making rule
 
 ifeq (,$(findstring @,$o))
-dist: ajour distclean
+dist: ajour $(patsubst %,po/%.po,$(LINGUAS))
+	$(MAKE) distclean
 	noncvs > notcvsfiles || cp dist-generated notcvsfiles
 	diff -u dist-generated notcvsfiles
 	$(RM) notcvsfiles

@@ -131,9 +131,10 @@ initLayer(struct xcfLayer *layer) {
     DEF(INDEXED);
     DEF(INDEXEDA);
   default:
-    FatalUnsupportedXCF(_("Layer type %s"),showGimpImageType(layer->type));
+    FatalUnsupportedXCF(_("Layer type %s"),_(showGimpImageType(layer->type)));
   }
-  initTileDirectory(&layer->dim,&layer->pixels,showGimpImageType(layer->type));
+  initTileDirectory(&layer->dim,&layer->pixels,
+                    _(showGimpImageType(layer->type)));
   layer->mask.params = &convertChannel ;
   initTileDirectory(&layer->dim,&layer->mask,"layer mask");
 }
@@ -183,7 +184,7 @@ struct Tile *
 forkTile(struct Tile* tile)
 {
   if( ++tile->refcount <= 0 )
-    FatalUnsupportedXCF(_("Unbelievably many layers?"
+    FatalUnsupportedXCF(_("Unbelievably many layers?\n"
                           "More likely to be a bug in %s"),progname);
   return tile ;
 }
@@ -337,7 +338,7 @@ copyTilePixels(struct Tile *dest, uint32_t ptr,convertParams *params)
     break ;
   default:
     FatalUnsupportedXCF(_("%s compression"),
-                        showXcfCompressionType(XCF.compression));
+                        _(showXcfCompressionType(XCF.compression)));
   }
 }
 

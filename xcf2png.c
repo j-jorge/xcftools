@@ -359,6 +359,7 @@ main(int argc,char **argv)
 
   setlocale(LC_ALL,"");
   progname = argv[0] ;
+  nls_init();
 
   if( argc <= 1 ) gpl_blurb() ;
   

@@ -1,23 +1,24 @@
-\." Manual page for xcf2png
-\." Copyright (C) 2006  Henning Makholm
-\."
-\." This program is free software; you can redistribute it and/or modify
-\." it under the terms of version 2 of the GNU General Public License as
-\." published by the Free Software Foundation.
-\."
-\." This program is distributed in the hope that it will be useful,
-\." but WITHOUT ANY WARRANTY; without even the implied warranty of
-\." MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-\." GNU General Public License for more details.
-\."
-\." You should have received a copy of the GNU General Public License
-\." along with this program; if not, write to the Free Software
-\." Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+.\" Manual page for xcf2png
+.\" Copyright (C) 2006  Henning Makholm
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of version 2 of the GNU General Public License as
+.\" published by the Free Software Foundation.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program; if not, write to the Free Software
+.\" Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 .TH xcf2png 1 2006-02-12 "Xcftools" ""
 .SH NAME
 xcf2png \- convert from GIMP xcf files to png format
+.ds p xcf2png
 .SH SYNOPSIS
-.B xcf2png
+.B \*p
 [
 .I options
 ]
@@ -46,7 +47,7 @@ and
 .TP
 2)
 .BR \-g and
-.BR \-m .
+.BR \-c .
 .TP
 3)
 .B \-D
@@ -76,68 +77,15 @@ The following options can be given
 .I after
 a layer name to override the global properties of the layer:
 .so xcf2png.1il
-.SH EXIT STATUS
-The exit status of
-.B xcf2png
-is
-.TP 5
-0
-Success
-.TP
-20
-Problems parsing the command line, including unknown color names
-(or missing color name directory) for
-.BR \-b .
-.TP
-21
-The specified XCF file does not exist or cannot be read.
-.TP
-22
-A layer named on the command line was not found, or the
-.B --mask
-option was used for a layer that has no layer mask.
-.TP
-102
-The
-.B \-G
-option was given, yet partial transparency was found.
-.TP
-103
-.B \-g
-was given, yet colored
-pixels were found.
-.TP
-123
-The XCF file contains presumably valid features that
-.B xcftools
-does not support.
-(As of this writing there is no known way of getting the Gimp to produce
-an XCF file that will provoke this return. Please notify the author if you
-discover one).
-.TP
-125
-The XCF file is malformed.
-.TP
-126
-An uncompression program could not be executed or terminated
-abnormally.
-.TP
-127
-Unexpected I/O error, internal errors, or other "this can't happen"
-situations.
-.P
-If an uncompression program returns an error exit status, this will
-be returned from
-.B xcf2png
-too.
+.so exit.1i
 .SH BUGS AND LIMITATIONS
 .P
 When several partially transparent layers are merged, the pixel
 values are interpolated without gamma correction. (The Gimp also
 does it this way). Some slight rounding errors in the interpolation
 are inevitable;
-.B xcf2png
-sometimes have different rounding errors than the Gimp itself,
+.B \*p
+sometimes has different rounding errors than the Gimp itself,
 especially when more than two layers are involved, or in case of
 some of the more exotic layer modes.
 These differences are usually not visible to the eye.
@@ -151,8 +99,8 @@ one, please notify the author.
 Color name database for
 .BR \-b .
 .SH AUTHOR
-.B xcf2pnm
-was written by Henning Makholm <henning@makholm.net>
+.B \*p
+was written by Henning Makholm <henning@makholm.net>.
 .P
 .SH SEE ALSO
 .BR xcfinfo (1),

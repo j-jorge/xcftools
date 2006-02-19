@@ -1,0 +1,606 @@
+# Another descriptive title
+# This file is put in the public domain.
+# Fee fie foe fum.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xcftools 0.9\n"
+"Report-Msgid-Bugs-To: henning@makholm.net\n"
+"POT-Creation-Date: 2006-02-20 00:27+0100\n"
+"PO-Revision-Date: 2006-02-15 18:32+0100\n"
+"Last-Translator: Henning Makholm <henning@makholm.net>\n"
+"Language-Team: Til test af l10n-faciliteter; ikke vedligeholdt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: xcfinfo.oi:24 xcfinfo.oi:35 xcf2pnm.oi:46 xcf2pnm.oi:63 xcf2png.oi:43
+#: xcf2png.oi:60 xcfview.oi:43 xcfview.oi:60
+msgid "cmd"
+msgstr "kommando"
+
+#: xcfinfo.oi:26 xcf2pnm.oi:54 xcf2png.oi:51 xcfview.oi:51
+msgid "show this message"
+msgstr "vis denne tekst"
+
+#: xcfinfo.oi:28 xcf2pnm.oi:56 xcf2png.oi:53 xcfview.oi:53
+msgid "show version"
+msgstr "vis versionsnummer"
+
+#: xcfinfo.oi:30 xcf2pnm.oi:58 xcf2png.oi:55 xcfview.oi:55
+msgid "show progress messages"
+msgstr "giv fremgangsbeskeder"
+
+#: xcfinfo.oi:32 xcf2pnm.oi:60 xcf2png.oi:57 xcfview.oi:57
+msgid "input is bzip2 compressed"
+msgstr "inddata er pakket med bzip2"
+
+#: xcfinfo.oi:34 xcf2pnm.oi:62 xcf2png.oi:59 xcfview.oi:59
+msgid "input is gzip compressed"
+msgstr "inddata er pakket med gzip"
+
+#: xcfinfo.oi:36 xcf2pnm.oi:64 xcf2png.oi:61 xcfview.oi:61
+msgid "use 'cmd' to decompress input"
+msgstr "brug »kommando« til at pakke inddata ud"
+
+#: xcfinfo.oi:38 xcf2pnm.oi:105 xcf2png.oi:96 xcfview.oi:95
+msgid "use UTF-8 for layer names"
+msgstr "brug UTF-8 til lagnavne"
+
+#: xcf2pnm.oi:47 xcf2pnm.oi:69 xcf2png.oi:44 xcf2png.oi:64 xcfview.oi:44
+#: xcfview.oi:64 xcf2png.c:147
+msgid "color"
+msgstr "farve"
+
+#: xcf2pnm.oi:48 xcf2pnm.oi:65 xcf2pnm.oi:67 xcf2png.oi:45 xcf2png.oi:62
+#: xcfview.oi:45 xcfview.oi:62
+msgid "filename"
+msgstr "filnavn"
+
+#: xcf2pnm.oi:49 xcf2pnm.oi:94 xcf2png.oi:46 xcf2png.oi:85 xcfview.oi:46
+#: xcfview.oi:84
+msgid "mode"
+msgstr "tilstand"
+
+#: xcf2pnm.oi:50 xcf2pnm.oi:96 xcf2pnm.oi:98 xcf2png.oi:47 xcf2png.oi:87
+#: xcf2png.oi:89 xcfview.oi:47 xcfview.oi:86 xcfview.oi:88
+msgid "n"
+msgstr "n"
+
+#: xcf2pnm.oi:51 xcf2pnm.oi:89 xcf2png.oi:48 xcf2png.oi:80 xcfview.oi:48
+#: xcfview.oi:80
+msgid "wxh"
+msgstr "bxh"
+
+#: xcf2pnm.oi:52 xcf2pnm.oi:91 xcf2png.oi:49 xcf2png.oi:82 xcfview.oi:49
+#: xcfview.oi:82
+msgid "x,y"
+msgstr "x,y"
+
+#: xcf2pnm.oi:66 xcf2png.oi:63 xcfview.oi:63
+msgid "name output file"
+msgstr "angiv navn på uddatafil"
+
+#: xcf2pnm.oi:68
+msgid "write transparency map"
+msgstr "skriv gennemsigtighedsmaske"
+
+#: xcf2pnm.oi:70 xcf2png.oi:65 xcfview.oi:65
+msgid "select background color"
+msgstr "vælg baggrundsfarve"
+
+#: xcf2pnm.oi:72 xcf2png.oi:67 xcfview.oi:67
+msgid "force alpha channel in output"
+msgstr "insistér på alfakanal i uddata"
+
+#: xcf2pnm.oi:74 xcf2png.oi:69 xcfview.oi:69
+msgid "select color output"
+msgstr "vælg uddata i farver"
+
+#: xcf2pnm.oi:76 xcf2png.oi:71 xcfview.oi:71
+msgid "select grayscale output"
+msgstr "vælg uddata i gråtoner"
+
+#: xcf2pnm.oi:78
+msgid "select monochrome output"
+msgstr "vælg uddata i sort/hvid"
+
+#: xcf2pnm.oi:80
+msgid "select -c/-g/-m by image contents"
+msgstr "vælg -c, -g eller -m alt efter billedet indhold"
+
+#: xcf2pnm.oi:82 xcf2png.oi:73 xcfview.oi:73
+msgid "treat indexed images as RGB for flattening"
+msgstr "fladgør indekserede billeder som om de var RGB"
+
+#: xcf2pnm.oi:84 xcf2png.oi:75 xcfview.oi:75
+msgid "disallow partial transparency"
+msgstr "forbyd delvis gennemsigtighed"
+
+#: xcf2pnm.oi:86 xcf2png.oi:77 xcfview.oi:77
+msgid "dissolve partial transparency"
+msgstr "opløs delvis gennemsigtighed"
+
+#: xcf2pnm.oi:88 xcf2png.oi:79 xcfview.oi:79
+msgid "flatten to memory; then analyse"
+msgstr "fladgør til arbejdslager; analysér bagefter"
+
+#: xcf2pnm.oi:90 xcf2png.oi:81 xcfview.oi:81
+msgid "crop image while converting"
+msgstr "tilskær billedet under konverteringen"
+
+#: xcf2pnm.oi:92 xcf2png.oi:83 xcfview.oi:83
+msgid "translate converted part of image"
+msgstr "forskyd den konverterede del af billedet"
+
+#: xcf2pnm.oi:93 xcf2png.oi:84
+msgid "Layer-selection options"
+msgstr "Flag vedr. valg af lag"
+
+#: xcf2pnm.oi:95 xcf2png.oi:86 xcfview.oi:85
+msgid "set layer mode"
+msgstr "ændr lagtilstand"
+
+#: xcf2pnm.oi:97 xcf2png.oi:88 xcfview.oi:87
+msgid "set opacity in percent"
+msgstr "ændr dækningsgrad i procent"
+
+#: xcf2pnm.oi:99 xcf2png.oi:90 xcfview.oi:89
+msgid "set opacity in 1/255 units"
+msgstr "ændr dækningsgrad i 255-dele"
+
+#: xcf2pnm.oi:101 xcf2png.oi:92 xcfview.oi:91
+msgid "enable layer mask"
+msgstr "aktivér lagmaske"
+
+#: xcf2pnm.oi:103 xcf2png.oi:94 xcfview.oi:93
+msgid "disable layer mask"
+msgstr "deaktivér lagmaske"
+
+#: options.i:155
+#, c-format
+msgid "Could not open color database file %s\n"
+msgstr "Kunne ikke åbne farvenavnsdatabasen %s\n"
+
+#: options.i:159
+#, c-format
+msgid "Unknown background color '%s'"
+msgstr "Ukendt baggrundsfarve »%s«"
+
+#: options.i:281
+#, c-format
+msgid "-S option must have an argument of the form wxh"
+msgstr "-S-flaget skal have et argument på formen bxh"
+
+#: options.i:298
+#, c-format
+msgid "-O option must have an argument of the form x,y"
+msgstr "-O-flaget skal have et argument på formen x,y"
+
+#: options.i:322
+#, c-format
+msgid "Layer mode '%s' is unknown"
+msgstr "Lagtilstanden »%s« er ukendt"
+
+#: options.i:338
+#, c-format
+msgid "The argument to --percent is not a percentage"
+msgstr "Argumentet til --percent er ikke et procenttal"
+
+#: options.i:351
+#, c-format
+msgid "The argument to --opacity is not a number between 0 and 255"
+msgstr "Argumentet til --opacity er ikke et tal mellem 0 og 255"
+
+#: enums.c:10
+msgid "Normal"
+msgstr "Normal"
+
+#: enums.c:11
+msgid "Dissolve"
+msgstr "Opløs"
+
+#: enums.c:12
+msgid "Behind"
+msgstr "Bagved"
+
+#: enums.c:13
+msgid "Multiply"
+msgstr "Gang"
+
+#: enums.c:14
+msgid "Screen"
+msgstr "Skærm"
+
+#: enums.c:15
+msgid "Overlay"
+msgstr "LægOver"
+
+#: enums.c:16
+msgid "Difference"
+msgstr "Forskel"
+
+#: enums.c:17
+msgid "Addition"
+msgstr "LægTil"
+
+#: enums.c:18
+msgid "Subtract"
+msgstr "TrækFra"
+
+#: enums.c:19
+msgid "DarkenOnly"
+msgstr "GørKunMørkere"
+
+#: enums.c:20
+msgid "LightenOnly"
+msgstr "GørKunLysere"
+
+#: enums.c:21
+msgid "Hue"
+msgstr "Farvetone"
+
+#: enums.c:22
+msgid "Saturation"
+msgstr "Mætning"
+
+#: enums.c:23
+msgid "Color"
+msgstr "Farve"
+
+#: enums.c:24
+msgid "Value"
+msgstr "Værdi"
+
+#: enums.c:25
+msgid "Divide"
+msgstr "Dividér"
+
+#: enums.c:26
+msgid "Dodge"
+msgstr "Blegning"
+
+#: enums.c:27
+msgid "Burn"
+msgstr "Sværtning"
+
+#: enums.c:28
+msgid "Hardlight"
+msgstr "HårdgørLys"
+
+#: enums.c:29
+msgid "Softlight"
+msgstr "BlødgørLys"
+
+#: enums.c:30
+msgid "GrainExtract"
+msgstr "UdtrækKorn"
+
+#: enums.c:31
+msgid "GrainMerge"
+msgstr "ForénKorn"
+
+#: enums.c:32
+msgid "ColorErase"
+msgstr "Farveslet"
+
+#: enums.c:33
+msgid "Erase"
+msgstr ""
+
+#: enums.c:34
+msgid "Replace"
+msgstr ""
+
+#: enums.c:35
+msgid "AntiErase"
+msgstr ""
+
+#: enums.c:36
+msgid "NormalNopartial"
+msgstr "Normal-uden-halvgennemsigtighed"
+
+#: enums.c:46
+msgid "RGB color"
+msgstr "RGB"
+
+#: enums.c:47 enums.c:60
+msgid "Grayscale"
+msgstr "Gråtoner"
+
+#: enums.c:48
+msgid "Indexed color"
+msgstr "Indekseret"
+
+#: enums.c:58
+msgid "RGB"
+msgstr ""
+
+#: enums.c:59
+msgid "RGB-alpha"
+msgstr "RGB-alfa"
+
+#: enums.c:61
+msgid "Grayscale-alpha"
+msgstr "Gråtoner-alfa"
+
+#: enums.c:62
+msgid "Indexed"
+msgstr "Indekseret"
+
+#: enums.c:63
+msgid "Indexed-alpha"
+msgstr "Indekseret-alfa"
+
+#: enums.c:109
+msgid "None"
+msgstr "Ingen"
+
+#: enums.c:110
+msgid "RLE"
+msgstr ""
+
+#: enums.c:111
+msgid "Zlib"
+msgstr ""
+
+#: enums.c:112
+msgid "Fractal"
+msgstr ""
+
+#: flatspec.c:47 utils.c:110
+#, c-format
+msgid "Out of memory"
+msgstr "Ikke mere lagerplads"
+
+#: flatspec.c:59
+#, c-format
+msgid "The %s option must follow a layer name on the command line"
+msgstr "%s-flaget skal komme efter navnet på et lag"
+
+#: flatspec.c:143
+#, c-format
+msgid "The image has no layer called '%s'"
+msgstr "Billedet har ikke noget lag der hedder »%s«"
+
+#: flatspec.c:156
+#, c-format
+msgid "Layer '%s' has no layer mask to enable"
+msgstr "Laget »%s« har ikke nogen lagmaske at tænde for"
+
+#: flatspec.c:233 xcfinfo.c:97
+#, c-format
+msgid "/mask"
+msgstr "/maske"
+
+#: flatspec.c:319 xcf2png.c:233 xcf2pnm.c:158
+#, c-format
+msgid "Grayscale output selected, but colored pixel(s) found"
+msgstr "Der er valgt gråtoneformat, men billedet indeholder farvede pixels"
+
+#: flatspec.c:323 xcf2pnm.c:172
+#, c-format
+msgid "Monochrome output selected, but not all pixels are black or white"
+msgstr ""
+"Der er valgt sort/hvid-format, men billedet indeholder farver eller gråtoner"
+
+#: flatten.c:382
+#, c-format
+msgid "'%s' layer mode"
+msgstr "Lagtilstanden »%s«"
+
+#: flatten.c:562
+#, c-format
+msgid "Flattened image has partially transparent pixels"
+msgstr "Der er halvgennemsigtige pixels i det fladgjorde billede"
+
+#: flatten.c:668
+#, c-format
+msgid "Flattening image ..."
+msgstr "Fladgør billede ..."
+
+#: io-unix.c:78
+#, c-format
+msgid "!Cannot create temporary unzipped file"
+msgstr "!Kan ikke oprette udpakket fil"
+
+#: io-unix.c:97
+#, c-format
+msgid "Cannot execute "
+msgstr "Kan ikke udføre "
+
+#: io-unix.c:114
+#, c-format
+msgid "%s terminated abnormally"
+msgstr "%s blev dræbt"
+
+#: io-unix.c:126
+#, c-format
+msgid "!Cannot open %s"
+msgstr "Kan ikke åbne %s"
+
+#: io-unix.c:146 io-unix.c:162
+#, c-format
+msgid "Out of memory for xcf data"
+msgstr "Ikke nok lagerplads til xcf-data"
+
+#: io-unix.c:149
+#, c-format
+msgid "XCF file shrunk while reading it"
+msgstr "XCF-filen skrumpede under læsning"
+
+#: io-unix.c:151 io-unix.c:169
+#, c-format
+msgid "!Could not read xcf data"
+msgstr "!Kunne ikke læse xcf-data"
+
+#: pixels.c:134
+#, c-format
+msgid "Layer type %s"
+msgstr "Lagtypen %s"
+
+#: pixels.c:152
+#, c-format
+msgid "Color map has more than 256 entries"
+msgstr "Farvekortet har mere end 256 felter"
+
+#: pixels.c:187
+#, c-format
+msgid ""
+"Unbelievably many layers?\n"
+"More likely to be a bug in %s"
+msgstr ""
+"Urealistisk mange lag?\n"
+"Sandsyligvis snarere en fejl i %s"
+
+#: pixels.c:340
+#, c-format
+msgid "%s compression"
+msgstr "Kompressionsmetode »%s«"
+
+#: utils.c:64
+msgid "Corrupted or malformed XCF file"
+msgstr "Beskadiget eller ugyldig XCF-fil"
+
+#: utils.c:73
+msgid "Corrupted or truncated XCF file"
+msgstr "Beskadiget eller afkortet XCF-fil"
+
+#: utils.c:85
+msgid "The image contains features not understood by this program:"
+msgstr "Billedet indeholder egenskaber som dette program ikke forstår:"
+
+#: utils.c:94
+#, c-format
+msgid ""
+"This program is free software; you can modify and distribute it\n"
+"under the terms of the GNU General Public License, version 2.\n"
+"There is no warranty for %s.\n"
+"\n"
+msgstr ""
+"Dette program er fri software; du må ændre og sprede det under de\n"
+"betingelser der fremgår af version 2 af GNU General Public License.\n"
+"Bemærk at %s leveres uden garanti.\n"
+"\n"
+
+#: utils.c:99
+#, c-format
+msgid "Type \"%s -h\" to get an option summary.\n"
+msgstr "Kommandoen »%s -h« giver en oversigt over kommandolinjeflag.\n"
+
+#: utils.c:135
+#, c-format
+msgid "!Cannot create file %s"
+msgstr "!Kan ikke oprette filen %s"
+
+#: utils.c:159
+#, c-format
+msgid "!Error writing file %s"
+msgstr "!Fejl under skrivning til %s"
+
+#: xcf-general.c:158
+#, c-format
+msgid ""
+"Warning: one or more layer names could not be\n"
+"         translated to the local character set.\n"
+msgstr ""
+"Advarsel: et eller flere lagnavne kunne ikke transkriberes\n"
+"          til det p.t. valgte tegnsæt.\n"
+
+#: xcf-general.c:194
+#, c-format
+msgid "Not an XCF file at all (magic not recognized)"
+msgstr "Dette er slet ikke en XCF-fil (xcf-signaturen mangler)"
+
+#: xcf-general.c:198
+#, c-format
+msgid "Warning: XCF version %d not supported (trying anyway...)\n"
+msgstr ""
+"Advarsel: Version %d af XCF-formatet er ikke understøttet\n"
+"          (men vi prøver alligevel...)\n"
+
+#: xcf2png.c:41 xcf2pnm.c:39
+#, c-format
+msgid "Usage: %s [options] filename.xcf[.gz] [layers]\n"
+msgstr "Brug: %s [flag] filnavn.xcf[gz] [lagnavne]\n"
+
+#: xcf2png.c:43 xcf2pnm.c:41 xcfinfo.c:38
+#, c-format
+msgid "Options:\n"
+msgstr "Flag:\n"
+
+#: xcf2png.c:59
+#, c-format
+msgid "Libpng error '%s'"
+msgstr "Fejl fra libpng: »%s«"
+
+#: xcf2png.c:78
+#, c-format
+msgid "Couldn't initialize libpng library"
+msgstr "Kunne ikke starte libpng-hjælperutinerne"
+
+#: xcf2png.c:147
+msgid "grayscale"
+msgstr "gråtoner"
+
+#: xcf2png.c:148
+msgid "+palette"
+msgstr "+palet"
+
+#: xcf2png.c:149
+msgid "+alpha"
+msgstr "+alfa"
+
+#: xcf2png.c:151
+msgid "+transparency"
+msgstr "+gennemsigtighed"
+
+#: xcf2png.c:154
+#, c-format
+msgid " (%d colors)"
+msgstr " (%d farver)"
+
+#: xcf2pnm.c:65
+#, c-format
+msgid "Writing converted image as %s\n"
+msgstr "Skriver konverteret billede til %s\n"
+
+#: xcf2pnm.c:66
+#, c-format
+msgid "Writing transparency map as %s\n"
+msgstr "Skriver gennemsigtighedsmaske til %s\n"
+
+#: xcf2pnm.c:75
+#, c-format
+msgid " # Converted by xcf2pnm %s"
+msgstr " # Konverteret af xcf2pnm %s"
+
+#: xcf2pnm.c:77
+#, c-format
+msgid " # Transparency map by xcf2pnm %s"
+msgstr " # Gennemsigtighedsmaske fra xcf2pnm %s"
+
+#: xcf2pnm.c:131
+#, c-format
+msgid "Transparency found, but -a option not given"
+msgstr "Delvis gennemsigtige pixels kræver -a-flag"
+
+#: xcf2pnm.c:193
+#, c-format
+msgid "The -a option was given, but the image has no transparency"
+msgstr "-a-flaget er givet, men billedet er fuldstændig ugennemsigtigt"
+
+#: xcfinfo.c:37
+#, c-format
+msgid "Usage: %s [options] filename.xcf[.gz]\n"
+msgstr "Brug: %s [flag] filnavn.xcf[.gz]\n"
+
+#: xcfinfo.c:66
+#, c-format
+msgid "Only one XCF file per command line, please"
+msgstr "Kun én XCF-fil per kommandolinje, tak!"
+
+#: xcfinfo.c:82
+#, c-format
+msgid "Version %d, %dx%d %s, %d layers, compressed %s\n"
+msgstr "Version %d, %dx%d %s, %d lag, %s komprimering\n"

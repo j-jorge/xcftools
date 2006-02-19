@@ -83,8 +83,10 @@ color_by_layers(struct FlattenSpec *spec)
   int colormap_is_colored = 0 ;
   enum out_color_mode grayish = COLOR_MONO ;
   int i ;
-  
-  if( degrayPixel(spec->default_pixel) < 0 )
+
+  if( spec->default_pixel == CHECKERED_BACKGROUND )
+    grayish = COLOR_GRAY ;
+  else if( degrayPixel(spec->default_pixel) < 0 )
     return COLOR_RGB ;
   for( i=0; i<colormapLength; i++ ) {
     if( colormap[i] == NEWALPHA(0,0) || colormap[i] == NEWALPHA(-1,0) )
@@ -211,7 +213,7 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
     }
   }
   if( spec->partial_transparency_mode == ALLOW_PARTIAL_TRANSPARENCY &&
-      (!anyPartial || FULLALPHA(spec->default_pixel)) )
+      (!anyPartial || ALPHA(spec->default_pixel) >= 128) )
     spec->partial_transparency_mode = PARTIAL_TRANSPARENCY_IMPOSSIBLE ;
 
   /* Initialize layers and print overview if we're verbose */
@@ -223,8 +225,8 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
                 spec->layers[i].dim.width, spec->layers[i].dim.height,
                 spec->layers[i].dim.c.l - spec->dim.c.l,
                 spec->layers[i].dim.c.t - spec->dim.c.t,
-                showGimpImageType(spec->layers[i].type),
-                showGimpLayerModeEffects(spec->layers[i].mode));
+                _(showGimpImageType(spec->layers[i].type)),
+                _(showGimpLayerModeEffects(spec->layers[i].mode)));
         if( spec->layers[i].opacity < 255 )
           fprintf(stderr,"/%02d%%",spec->layers[i].opacity * 100 / 255);
         if( XCF.layers[i].hasMask )
@@ -271,7 +273,7 @@ analyse_colormode(struct FlattenSpec *spec,rgba **allPixels,
   if( spec->partial_transparency_mode == DISSOLVE_PARTIAL_TRANSPARENCY ||
       spec->partial_transparency_mode == PARTIAL_TRANSPARENCY_IMPOSSIBLE )
     known_absent |= 4 ;
-  if( FULLALPHA(spec->default_pixel) )                  known_absent |= 12 ;
+  if( ALPHA(spec->default_pixel) >= 128 )               known_absent |= 12 ;
   else if( spec->default_pixel == FORCE_ALPHA_CHANNEL ) assume_present |= 8 ;
 
   status = 15 - (known_absent | assume_present) ;

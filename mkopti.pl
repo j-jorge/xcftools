@@ -21,12 +21,13 @@ use strict ; use warnings ;
 my $mastersource = "options.i" ;
 
 my $target = shift ;
-my @defines = ( "\U$target" ) ;
+my @defines = ( "\U$target", "OPTI_TARGET \"$target\"" ) ;
 push @defines, "\U$1foo" if $target =~ /^(xcf(2|to))/ ;
+push @defines, "XCF2FOO" if $target eq "xcfview" ;
 
 open INFILE, "-|", join(" ","cpp -imacros config.h",
-                        (map "-D$_",@defines),
-                        "-DTHISPROGRAM=$target",$mastersource)
+                        (map {(my $a = "-D$_")=~s/ /=/; $a} @defines),
+                        $mastersource)
     or die "Cannot preprocess options." ;
 
 open OUTFILE, ">", "$target.oi"
@@ -73,7 +74,7 @@ while( <INFILE> ) {
             $long[0] =~ s/^(-[^-])/\\$1/ ;
             $$manref = "" ;
             my $next = ".TP 8\n" ;
-            $hasarg =~ s/"([^\"]*)"/\\fB$1\\fI/g ;
+            $hasarg =~ s/"([^\"]*)"/\\fB$1\\fP/g ;
             $hasarg = " \\fI$hasarg\\fR" if $hasarg ;
             for my $long ( @long ) {
                 $$manref .= $next . "\\fB$long\\fR$hasarg" ;

@@ -17,7 +17,44 @@
 
 use strict ; use warnings ;
 
+if( @ARGV != 1 ) {
+    print STDERR "Usage: $0 infile.10\n" ;
+    exit 1 ;
+}
+
 my %defs ;
+
+sub copyfile($);
+sub copyfile($) {
+    my ($fn) = @_ ;
+    local *FILE ;
+    open FILE, "<", $fn or die "Cannot read $fn" ;
+    my $ignore = 0 ;
+    while( <FILE> ) {
+        if( /^\#else/ ) {
+            if( $ignore ) {
+                $ignore-- ;
+            }  else {
+                $ignore = 1 ;
+            }
+        } elsif( /^\#endif/ ) {
+            $ignore-- if $ignore ;
+            print ".\\\"---\n" unless $ignore ;
+        } elsif( $ignore ) {
+            if( /^\#if/ ) {
+                $ignore++ ;
+            }
+        } elsif( /^\#ifdef\s+(\S+)/ ) {
+            print ".\\\"---\n" ;
+            $ignore = 1 unless $defs{$1} ;
+        } elsif( /^\s*.so\s*(.*)/ ) {
+            copyfile($1) ;
+        } else {
+            print ;
+        }
+    }
+}
+
 
 if( open CONFIG, "<", "config.h" ) {
     while( <CONFIG> ) {
@@ -28,29 +65,9 @@ if( open CONFIG, "<", "config.h" ) {
     close CONFIG ;
 }
 
-my $ignore = 0 ;
+my $fn0 = $ARGV[0] ;
+$fn0 =~ s/\.\d*$// ;
+$defs{"\U$fn0"} = 1 ;
+$defs{"XCF2FOO"} = 1 if $fn0 =~ /^xcf2/ ;
 
-while( <> ) {
-    if( /^\#else/ ) {
-        if( $ignore ) {
-            $ignore-- ;
-        }  else {
-            $ignore = 1 ;
-        }
-    } elsif( /^\#endif/ ) {
-        $ignore-- if $ignore ;
-    } elsif( $ignore ) {
-        if( /^\#if/ ) {
-            $ignore++ ;
-        }
-    } elsif( /^\#ifdef\s+(\S+)/ ) {
-        $ignore = 1 unless $defs{$1} ;
-    } elsif( /^\s*.so\s*(.*)/ ) {
-        my $filename = $1 ;
-        open IN, "<", $filename or die "Cannot read $filename" ;
-        print <IN> ;
-        close IN ;
-    } else {
-        print ;
-    }
-}
+copyfile($ARGV[0]) ;

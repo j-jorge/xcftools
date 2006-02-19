@@ -379,7 +379,8 @@ merge_exotic(struct Tile *bot, const struct Tile *top,
         break ;
       }
     default:
-      FatalUnsupportedXCF(_("'%s' layer mode"),showGimpLayerModeEffects(mode));
+      FatalUnsupportedXCF(_("'%s' layer mode"),
+                          _(showGimpLayerModeEffects(mode)));
     }
     if( FULLALPHA(bot->pixels[i] & top->pixels[i]) )
       bot->pixels[i] = (bot->pixels[i] & (255 << ALPHA_SHIFT)) +
@@ -548,7 +549,7 @@ flattenTopdown(struct FlattenSpec *spec, struct Tile *top,
 }
 
 static void
-addBackground(struct FlattenSpec *spec, struct Tile *tile)
+addBackground(struct FlattenSpec *spec, struct Tile *tile, unsigned ncols)
 {
   unsigned i ;
 
@@ -568,6 +569,21 @@ addBackground(struct FlattenSpec *spec, struct Tile *tile)
     break ;
   }
 
+  if( spec->default_pixel == CHECKERED_BACKGROUND ) {
+    INIT_SCALETABLE_IF( !(tile->summary & TILESUMMARY_CRISP ) );
+    for( i=0; i<tile->count; i++ )
+      if( !FULLALPHA(tile->pixels[i]) ) {
+        rgba fillwith = ((i/ncols)^(i%ncols))&8 ? 0x66 : 0x99 ;
+        fillwith = graytable[fillwith] + (255 << ALPHA_SHIFT) ;
+        if( NULLALPHA(tile->pixels[i]) )
+          tile->pixels[i] = fillwith ;
+        else
+          tile->pixels[i] = composite_one(fillwith,tile->pixels[i]);
+      }
+    tile->summary = TILESUMMARY_UPTODATE +
+      TILESUMMARY_ALLFULL + TILESUMMARY_CRISP ;
+    return ;
+  }
   if( !FULLALPHA(spec->default_pixel) )  return ;
   if( tileSummary(tile) & TILESUMMARY_ALLNULL ) {
     fillTile(tile,spec->default_pixel);
@@ -616,7 +632,7 @@ flattenIncrementally(struct FlattenSpec *spec,lineCallback callback)
               TILESUMMARY_ALLNULL + TILESUMMARY_CRISP );
       tile = flattenTopdown(spec,&toptile,spec->numLayers,&where) ;
       toptile.refcount-- ; /* addBackground may change destructively */
-      addBackground(spec,tile);
+      addBackground(spec,tile,ncols);
 
       for( i = 0 ; i < tile->count ; i++ )
         if( NULLALPHA(tile->pixels[i]) )

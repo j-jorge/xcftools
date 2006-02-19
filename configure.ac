@@ -17,10 +17,7 @@ dnl Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 dnl
 dnl ------------------------
 dnl The following line is the MASTER SOURCE for the version number
-AC_INIT(Xcftools,0.9,henning@makholm.net,xcftools)
-AC_COPYRIGHT(General copyright notice for AC_PACKAGE_NAME:
-   [@COPYRIGHT@  Henning Makholm]
-)
+AC_INIT(Xcftools,1.0,henning@makholm.net,xcftools)
 AC_CONFIG_SRCDIR(xcfinfo.c)
         
 AC_PROG_INSTALL
@@ -52,10 +49,10 @@ AC_CHECK_HEADERS(inttypes.h netinet/in.h arpa/inet.h getopt.h)
 
 AC_CHECK_FUNCS(getopt_long strcasecmp)
 AC_FUNC_MMAP
-dnl AM_GNU_GETTEXT(external)
+AM_GNU_GETTEXT(external)
 AM_ICONV
 
-AC_CHECK_PROG(PERL,perl,perl)
+AC_PATH_PROG(PERL,perl,perl)
                         
 AC_CONFIG_HEADERS(config.h:config.hin)
 AC_CONFIG_FILES(Makefile:Makefile.in)

@@ -1,0 +1,83 @@
+.SH EXIT STATUS
+The exit status of
+.B \*p
+is
+.TP 5
+0
+Success
+.TP
+20
+#ifdef XCF2FOO
+Problems parsing the command line, including unknown color names
+(or missing color name directory) for
+.BR \-b .
+#else
+Problems parsing the command line.
+#endif
+.TP
+21
+The specified XCF file does not exist or cannot be read.
+#ifdef XCF2FOO
+.TP
+22
+A layer named on the command line was not found, or the
+.B --mask
+option was used for a layer that has no layer mask.
+#ifdef XCF2PNM
+.TP
+100
+Transparent pixels were found, but neither
+.B \-a
+nor
+.B \-b
+was given.
+.TP
+101
+The
+.B \-a
+option was given yet the image has no transparency.
+(Use
+.B \-A
+to go on anyway).
+#endif
+.TP
+102
+The
+.B \-G
+option was given, yet partial transparency was found.
+.TP
+103
+#ifdef XCF2PNM
+.B \-g
+(or
+.BR \-m )
+was given, yet colored (or gray) pixels were found.
+#else
+.B \-g
+was given, yet colored pixels were found.
+#endif
+#endif
+.TP
+123
+The XCF file contains presumably valid features that
+.B xcftools
+does not support.
+(As of this writing there is no known way of getting the Gimp to write
+an XCF file that will provoke this return. Please notify the author if you
+discover one).
+.TP
+125
+The XCF file is malformed.
+.TP
+126
+An uncompression program could not be executed, or terminated
+abnormally.
+.TP
+127
+Unexpected I/O error, internal errors, or other "this can't happen"
+situations.
+.P
+If an uncompression program returns an error exit status, this will
+be returned from
+.B \*p
+too.

@@ -42,7 +42,7 @@ failed() {
     
 
 testrun() {
-    if [ x$1 == x--exit ]
+    if [ x$1 = x--exit ]
     then
         want=$2 ;
         shift ;
@@ -51,8 +51,17 @@ testrun() {
         want=0 ;
     fi
     (( totaltests++ ))
-    echo "===>" "$@"
-    "$@" > stdout.txt 2> stderr.txt
+    if [ x$2 = x--pipe ]
+    then
+        pgm="$1"
+        pipe="$3" ;
+        shift ; shift ; shift ;
+        echo "===>" $pipe "|" $pgm "$@"
+        $pipe | $pgm "$@" > stdout.txt 2> stderr.txt
+    else
+        echo "===>" "$@"
+        "$@" > stdout.txt 2> stderr.txt
+    fi
     got=$?
     if [ $want = $got ]
     then
@@ -180,11 +189,13 @@ errtest 20 xcf2png $S/tiletest.xcf.gz --percent 33 Mid
 
 echo > expected:stderr \
     "The image has no layer called 'MID'"
-errtest 22 xcf2pnm $S/tiletest.xcf.gz Background MID -o foo.pnm
+errtest 22 xcf2pnm $S/tiletest.xcf.gz -z Background MID -o foo.pnm
 
+# This also tests reading from stdin
 echo > expected:stderr \
     "Layer 'Vert' has no layer mask to enable"
-errtest 22 xcf2pnm $S/tiletest.xcf.gz Background Vert --mask Horiz --nomask
+errtest 22 xcf2pnm --pipe "zcat $S/tiletest.xcf.gz" \
+    - Background Vert --mask Horiz --nomask
 
 echo > expected:stderr \
     "Grayscale output selected, but colored pixel(s) found"

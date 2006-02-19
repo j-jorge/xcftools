@@ -1,0 +1,25 @@
+The run-time messages from the program can be localized using standard
+GNU gettext tools in the po/ directory. There is no Makefile in po/;
+the processing is governed by the main Makefile in the top
+directory. Simply use
+   make po/xcftools.pot
+to update the pot file if necessary.
+
+After creating a po file, add the language code to the definition of
+LINGUAS in the master Makefile.in.
+
+The manpo/ directory contains some experimental support for
+translating the manpages. Because much text is shared between the
+various manpages, the translation is done by po files, a few sentences
+at a time, and finished translated manpages are collected at build
+time.
+
+Note that the manpo/*.po files are parsed by a very ad-hoc parser in
+manpo/mantranslate.pl rather than by the standard gettext support
+programs. In particular, the "fuzzy" flag does not prevent an entry
+from being used. Also there is no charset handling, so the po files
+should be written with the same character set as should be used in the
+roff source of the combined man page.
+
+After writing a po file, add the language code to the definition
+of MANLINGUAS in the master Makefile.in.

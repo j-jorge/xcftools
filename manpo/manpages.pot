@@ -1,0 +1,654 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Xcftools-manpages VERSION\n"
+"Report-Msgid-Bugs-To: henning@makholm.net\n"
+"POT-Creation-Date: 2006-02-20 01:59+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: options.i:22
+msgid "Print an option summery to standard output and exit with a return\n"
+      "code of 0."
+msgstr ""
+
+#: options.i:29
+msgid "Print the version numer of B{xcftools} to standard output and\n"
+      "exit with a return code of 0."
+msgstr ""
+
+#: options.i:37
+msgid "Print progress messages about the conversion to standard error."
+msgstr ""
+
+#: options.i:43
+msgid "Equivalent to B{-Z bzcat}."
+msgstr ""
+
+#: options.i:45
+msgid "Default if the filename ends with B{bz2}."
+msgstr ""
+
+#: options.i:52
+msgid "Equivalent to B{-Z zcat}."
+msgstr ""
+
+#: options.i:54
+msgid "Default if the filename ends with B{gz}."
+msgstr ""
+
+#: options.i:61
+msgid "cmd"
+msgstr ""
+
+#: options.i:61
+msgid "Specify a command that the input file is filtered through before\n"
+      "being interpreted as an XCF file. The command is invoked as\n"
+      "I{command filename} and must produce output to its standard\n"
+      "output."
+msgstr ""
+
+#: options.i:65
+msgid "Note that it is not possible to specify arguments as part of\n"
+      "I{command}."
+msgstr ""
+
+#: options.i:67
+msgid "An uncompressor is selected automatically if the filename ends\n"
+      "with B{gz} or B{bz2}; to suppress this, use B{-Z cat} (which is\n"
+      "implemented without actually starting a B{cat}(1) process)."
+msgstr ""
+
+#: options.i:84 options.i:93
+msgid "filename"
+msgstr ""
+
+#: options.i:84
+msgid "Write the converted picture to I{filename} instead of to standard\n"
+      "output."
+msgstr ""
+
+#: options.i:93
+msgid "Output a transparency mask for the flattened image to I{filename}\n"
+      "as a B{pgm}(5) file, in addition to the ordinary output."
+msgstr ""
+
+#: options.i:98
+msgid "If the flattened image is completely opaque, this will produce an\n"
+      "error message and exit status 101; use B{-A} to suppress this."
+msgstr ""
+
+#: options.i:109
+msgid "color"
+msgstr ""
+
+#: options.i:109
+msgid "Use this color for transparent pixels in the image."
+msgstr ""
+
+#: options.i:110
+msgid "The color can be given as B{#rrggbb} or B{#rgb} hexadecimal\n"
+      "values, or as an X11 color name that will be looked up in\n"
+      "B{/usr/lib/X11/rgb.txt}."
+msgstr ""
+
+#: options.i:168
+msgid "Invent a trivial alpha channel even if the flattened image is\n"
+      "completely opaque."
+msgstr ""
+
+#: options.i:175
+msgid "Force the output to use RGB color space even if it there are more\n"
+      "compact alternatives."
+msgstr ""
+
+#: options.i:178
+msgid "This will be selected automatically if the output file's name\n"
+      "ends with B{.ppm}."
+msgstr ""
+
+#: options.i:187
+msgid "Force the output to be a grayscale image even if it may be\n"
+      "monochrome."
+msgstr ""
+
+#: options.i:188
+msgid "If any colored pixels are encountered, exit with status 103."
+msgstr ""
+
+#: options.i:189
+msgid "This will be selected automatically if the output file's name\n"
+      "ends with B{.pgm}."
+msgstr ""
+
+#: options.i:198
+msgid "Force the output to be a monochrome image."
+msgstr ""
+
+#: options.i:199
+msgid "If any colors except black and white are encountered, exit with\n"
+      "status 103."
+msgstr ""
+
+#: options.i:201
+msgid "This will be selected automatically if the output file's name\n"
+      "ends with B{.pbm}."
+msgstr ""
+
+#: options.i:211
+msgid "Suppress the automatic choice of B{-c}, B{-g}, or B{-m} based on\n"
+      "output filename, and instead select the output format based on\n"
+      "image contents."
+msgstr ""
+
+#: options.i:218
+msgid "This is the default if the filename is not recognized, and when\n"
+      "writing to stdout."
+msgstr ""
+
+#: options.i:226
+msgid "Use standard RGB compositing for flattening indexed layers."
+msgstr ""
+
+#: options.i:227
+msgid "Without this option, B{%s} will mimic the Gimp's current strategy\n"
+      "of rounding each alpha value to either full transparency or full\n"
+      "opacity, and interpret all layer modes as B{Normal}."
+msgstr ""
+
+#: options.i:238
+msgid "Assert that the flattened image will have no partial transparency\n"
+      "(allowing a more compact representation of the alpha output)."
+msgstr ""
+
+#: options.i:240
+msgid "Exit with status 102 if the flattened image has any partial\n"
+      "transparency."
+msgstr ""
+
+#: options.i:242
+msgid "If B{-b} is also given, this tests whether there there is partial\n"
+      "transparency before applying the background color."
+msgstr ""
+
+#: options.i:251
+msgid "Do a \"dissolve\" step to eliminate partial transparency after\n"
+      "flattening."
+msgstr ""
+
+#: options.i:253
+msgid "If B{-b} is also given, this happens before the background color\n"
+      "is applied."
+msgstr ""
+
+#: options.i:261
+msgid "First flatten the entire image to a memory buffer before writing\n"
+      "output. Then analyse the image to decide on the details of the\n"
+      "output format (e.g., whether a grayscale output is sufficient)."
+msgstr ""
+
+#: options.i:264
+msgid "Without this option, the program flattens only a singe row of\n"
+      "\"tiles\" (height 64) at a time."
+msgstr ""
+
+#: options.i:271
+msgid "wB{x}h"
+msgstr ""
+
+#: options.i:271
+msgid "Crop the converted image to width I{w} and height I{h}."
+msgstr ""
+
+#: options.i:286
+msgid "xB{,}y"
+msgstr ""
+
+#: options.i:286
+msgid "Offset the converted part of the image from the top-left corner\n"
+      "of the XCF canvas. Usually used with B{-S}."
+msgstr ""
+
+#: options.i:307
+msgid "mode"
+msgstr ""
+
+#: options.i:307
+msgid "Set the layer mode (e.g., B{Normal} or B{Multiply})."
+msgstr ""
+
+#: options.i:330 options.i:344
+msgid "n"
+msgstr ""
+
+#: options.i:330
+msgid "Set the opacity on a scale from 0 to 100 (as in the Gimp user\n"
+      "interface)."
+msgstr ""
+
+#: options.i:344
+msgid "Set the opacity on a scale from 0 to 255 (as used internally)"
+msgstr ""
+
+#: options.i:358
+msgid "Enable the layer mask."
+msgstr ""
+
+#: options.i:364
+msgid "Disable the layer mask."
+msgstr ""
+
+#: options.i:374
+msgid "Use the raw UTF-8 representation from the XCF file to compare and\n"
+      "display layer names."
+msgstr ""
+
+#: options.i:376
+msgid "Ordinarily, layer names will be converted to the character set of\n"
+      "the current locale."
+msgstr ""
+
+#: xcfinfo.10:17 xcf2pnm.10:17 xcf2png.10:17 xcfview.10:17
+msgid "NAME"
+msgstr ""
+
+#: xcfinfo.10:18
+msgid "xcfinfo \\- display information about GIMP xcf files"
+msgstr ""
+
+#: xcfinfo.10:20 xcf2pnm.10:20 xcf2png.10:20 xcfview.10:20
+msgid "SYNOPSIS"
+msgstr ""
+
+#: xcfinfo.10:21
+msgid "B{%s} [ I{options} ] I{filename}"
+msgstr ""
+
+#: xcfinfo.10:26 xcf2pnm.10:29 xcf2png.10:29 xcfview.10:29
+msgid "DESCRIPTION"
+msgstr ""
+
+#: xcfinfo.10:27
+msgid "B{xcfinfo} is a command-line tool that displays information about\n"
+      "the contents of image files in the XCF format used by B{gimp}(1),\n"
+      "particularly about the layers in the image."
+msgstr ""
+
+#: xcfinfo.10:32 xcfview.10:39
+msgid "OPTIONS"
+msgstr ""
+
+#: xcfinfo.10:34
+msgid "OUTPUT"
+msgstr ""
+
+#: xcfinfo.10:35
+msgid "Information about the image is displayed on standard output in a\n"
+      "fixed format."
+msgstr ""
+
+#: xcfinfo.10:36
+msgid "The first line contains general information about the XCF file:"
+msgstr ""
+
+#: xcfinfo.10:38 xcfinfo.10:41 xcfinfo.10:44 xcfinfo.10:47 xcfinfo.10:50
+msgid "\\-"
+msgstr ""
+
+#: xcfinfo.10:39
+msgid "The file format version"
+msgstr ""
+
+#: xcfinfo.10:42
+msgid "The canvas size"
+msgstr ""
+
+#: xcfinfo.10:45
+msgid "The image mode (color, grayscale, or indexed)"
+msgstr ""
+
+#: xcfinfo.10:48
+msgid "The numer of layers"
+msgstr ""
+
+#: xcfinfo.10:51
+msgid "The internal compression algorithm"
+msgstr ""
+
+#: xcfinfo.10:53
+msgid "Following this line there is a line for each layer:"
+msgstr ""
+
+#: xcfinfo.10:55 xcf2pnm.10:46 xcf2png.10:43
+msgid "1)"
+msgstr ""
+
+#: xcfinfo.10:56
+msgid "The character B{+} if the layer is visible and B{\\-} if it is not"
+msgstr ""
+
+#: xcfinfo.10:62 xcf2pnm.10:51 xcf2png.10:48
+msgid "2)"
+msgstr ""
+
+#: xcfinfo.10:63
+msgid "The size and offset of the layer"
+msgstr ""
+
+#: xcfinfo.10:65 xcf2pnm.10:58 xcf2png.10:52
+msgid "3)"
+msgstr ""
+
+#: xcfinfo.10:66
+msgid "The pixel format of the layer, including whether the layer has an\n"
+      "alpha channel."
+msgstr ""
+
+#: xcfinfo.10:69 xcf2pnm.10:63 xcf2png.10:57
+msgid "4)"
+msgstr ""
+
+#: xcfinfo.10:70
+msgid "The layer mode, as well as the opacity if not 100%, and B{/mask}\n"
+      "if the layer has an active layer mask."
+msgstr ""
+
+#: xcfinfo.10:74
+msgid "5)"
+msgstr ""
+
+#: xcfinfo.10:75
+msgid "The name of the layer."
+msgstr ""
+
+#: xcfinfo.10:77 xcf2pnm.10:122 xcf2png.10:101 xcfview.10:54
+msgid "AUTHOR"
+msgstr ""
+
+#: xcfinfo.10:78 xcf2pnm.10:123 xcf2png.10:102 xcfview.10:55
+msgid "B{%s} was written by Henning Makholm <henning@makholm.net>."
+msgstr ""
+
+#: xcfinfo.10:81 xcf2pnm.10:126 xcf2png.10:105 xcfview.10:61
+msgid "SEE ALSO"
+msgstr ""
+
+#: xcfinfo.10:81 xcfview.10:61
+msgid "B{xcf2pnm}(1), B{xcf2png}(1)"
+msgstr ""
+
+#: xcf2pnm.10:18
+msgid "xcf2pnm \\- convert from GIMP xcf files to ppm/pgm/pbm format"
+msgstr ""
+
+#: xcf2pnm.10:21 xcf2png.10:21 xcfview.10:21
+msgid "B{%s} [ I{options} ] I{filename} [ I{layer names} ]"
+msgstr ""
+
+#: xcf2pnm.10:30
+msgid "B{xcf2pnm} is a command-line tool that converts image files in\n"
+      "the XCF format used by B{gimp}(1) to the generic image formats\n"
+      "B{pbm}(5), B{pgm}(5), and B{ppm}(5), flattening layers if\n"
+      "necessary. It does not need to have the Gimp engine itself\n"
+      "available."
+msgstr ""
+
+#: xcf2pnm.10:40 xcf2png.10:37
+msgid "GENERAL OPTIONS"
+msgstr ""
+
+#: xcf2pnm.10:43 xcf2png.10:40
+msgid "Several groups of options are mutually incompatible; in each\n"
+      "group the one given last will win:"
+msgstr ""
+
+#: xcf2pnm.10:47 xcf2png.10:44
+msgid "B{-A} and B{-b}."
+msgstr ""
+
+#: xcf2pnm.10:52
+msgid "B{-c}, B{-g}, B{-m}, and B{-n}."
+msgstr ""
+
+#: xcf2pnm.10:59 xcf2png.10:53
+msgid "B{-D} and B{-G}."
+msgstr ""
+
+#: xcf2pnm.10:64 xcf2png.10:58
+msgid "B{-j}, B{-z}, and B{-Z}."
+msgstr ""
+
+#: xcf2pnm.10:68 xcf2png.10:62
+msgid "LAYER SPECIFICATIONS"
+msgstr ""
+
+#: xcf2pnm.10:69 xcf2png.10:63
+msgid "If no I{layer name} is given on the command line, all of the\n"
+      "visible layers in the XCF file are merged to produce the output\n"
+      "image."
+msgstr ""
+
+#: xcf2pnm.10:73 xcf2png.10:67
+msgid "It is also possible to specify the layers to merge explicitly, by\n"
+      "giving their names as separate arguments after the input\n"
+      "filename. In that case, the output will contain I{only} the named\n"
+      "layers. The layers will be merged in the order they appear on the\n"
+      "command line, with the leftmost being \"at the bottom\" \\- that is,\n"
+      "the layer ordering in the XCF file will be ignored."
+msgstr ""
+
+#: xcf2pnm.10:82 xcf2png.10:76
+msgid "The following options can be given I{after} a layer name to\n"
+      "override the global properties of the layer:"
+msgstr ""
+
+#: xcf2pnm.10:87
+msgid "EXAMPLES"
+msgstr ""
+
+#: xcf2pnm.10:89
+msgid "B{xcf2pnm -b white foo.xcf > foo.ppm}"
+msgstr ""
+
+#: xcf2pnm.10:91
+msgid "B{xcf2pnm -a footrans.pgm -o foo.ppm foo.xcf Layer1 Layer2}"
+msgstr ""
+
+#: xcf2pnm.10:93
+msgid "To test whether the flattened image has any transparency, use"
+msgstr ""
+
+#: xcf2pnm.10:95
+msgid "B{xcf2pnm foo.xcf > /dev/null}"
+msgstr ""
+
+#: xcf2pnm.10:97
+msgid "To test whether the flattened image has I{partially} transparent\n"
+      "pixels, use"
+msgstr ""
+
+#: xcf2pnm.10:101
+msgid "B{xcf2pnm -b white -G > /dev/null}"
+msgstr ""
+
+#: xcf2pnm.10:102 xcf2png.10:81
+msgid "BUGS AND LIMITATIONS"
+msgstr ""
+
+#: xcf2pnm.10:104 xcf2png.10:83
+msgid "When several partially transparent layers are merged, the pixel\n"
+      "values are interpolated without gamma correction. (The Gimp also\n"
+      "does it this way). Some slight rounding errors in the\n"
+      "interpolation are inevitable; B{%s} sometimes has different\n"
+      "rounding errors than the Gimp itself, especially when more than\n"
+      "two layers are involved, or in case of some of the more exotic\n"
+      "layer modes."
+msgstr ""
+
+#: xcf2pnm.10:112 xcf2png.10:91
+msgid "These differences are usually not visible to the eye."
+msgstr ""
+
+#: xcf2pnm.10:114 xcf2png.10:93
+msgid "There are probably other bugs lurking in corner cases. If you\n"
+      "discover one, please notify the author."
+msgstr ""
+
+#: xcf2pnm.10:117 xcf2png.10:96
+msgid "FILES"
+msgstr ""
+
+#: xcf2pnm.10:119 xcf2png.10:98
+msgid "B{/usr/lib/X11/rgb.txt}"
+msgstr ""
+
+#: xcf2pnm.10:120 xcf2png.10:99
+msgid "Color name database for B{-b}."
+msgstr ""
+
+#: xcf2pnm.10:126
+msgid "B{xcfinfo}(1), B{xcf2png}(1)"
+msgstr ""
+
+#: xcf2png.10:18
+msgid "xcf2png \\- convert from GIMP xcf files to png format"
+msgstr ""
+
+#: xcf2png.10:30
+msgid "B{xcf2png} is a command-line tool that converts image files in\n"
+      "the XCF format used by B{gimp}(1) to the generic image format\n"
+      "B{png}, flattening layers if necessary. It does not need to have\n"
+      "the Gimp engine itself available."
+msgstr ""
+
+#: xcf2png.10:49
+msgid "B{-g}and B{-c}."
+msgstr ""
+
+#: xcf2png.10:105
+msgid "B{xcfinfo}(1), B{xcf2pnm}(1)"
+msgstr ""
+
+#: xcfview.10:18
+msgid "xcfview \\- display GIMP xcf files"
+msgstr ""
+
+#: xcfview.10:30
+msgid "B{xcfview} is a wrapper script that uses B{xcf2png}(1) or\n"
+      "B{xcf2pnm}(1) (q.v.) to flatten an XCF image and then displays\n"
+      "the flattened image using a PNG or PPM viewer found using the\n"
+      "B{mailcap}(5) database."
+msgstr ""
+
+#: xcfview.10:40
+msgid "Every command-line parameter to B{xcfview} will be passed through\n"
+      "to the underlying B{xcf2png} or B{xcf2pnm} command. Because it is\n"
+      "not certain which converter will be used, the options given\n"
+      "should be ones that make sense for both of these:"
+msgstr ""
+
+#: xcfview.10:49 exit.1i:1
+msgid "EXIT STATUS"
+msgstr ""
+
+#: xcfview.10:50
+msgid "The exit status is 0 in case of success. A nonzero exit status\n"
+      "may either be that of the \\fBxcf2I{foo} converter or that of the\n"
+      "image viewer."
+msgstr ""
+
+#: xcfview.10:58
+msgid "Parts of the script originate from the B{run-mailcap}(1) script\n"
+      "by Brian White <bcwhite@pobox.com>."
+msgstr ""
+
+#: exit.1i:2
+msgid "The exit status of B{%s} is"
+msgstr ""
+
+#: exit.1i:7
+msgid "Success"
+msgstr ""
+
+#: exit.1i:11
+msgid "Problems parsing the command line, including unknown color names\n"
+      "(or missing color name directory) for B{-b}."
+msgstr ""
+
+#: exit.1i:15
+msgid "Problems parsing the command line."
+msgstr ""
+
+#: exit.1i:19
+msgid "The specified XCF file does not exist or cannot be read."
+msgstr ""
+
+#: exit.1i:23
+msgid "A layer named on the command line was not found, or the B{--mask}\n"
+      "option was used for a layer that has no layer mask."
+msgstr ""
+
+#: exit.1i:29
+msgid "Transparent pixels were found, but neither B{-a} nor B{-b} was\n"
+      "given."
+msgstr ""
+
+#: exit.1i:36
+msgid "The B{-a} option was given yet the image has no transparency."
+msgstr ""
+
+#: exit.1i:39
+msgid "(Use B{-A} to go on anyway)."
+msgstr ""
+
+#: exit.1i:45
+msgid "The B{-G} option was given, yet partial transparency was found."
+msgstr ""
+
+#: exit.1i:51
+msgid "B{-g} (or B{-m}) was given, yet colored (or gray) pixels were\n"
+      "found."
+msgstr ""
+
+#: exit.1i:56
+msgid "B{-g} was given, yet colored pixels were found."
+msgstr ""
+
+#: exit.1i:62
+msgid "The XCF file contains presumably valid features that B{xcftools}\n"
+      "does not support."
+msgstr ""
+
+#: exit.1i:65
+msgid "(As of this writing there is no known way of getting the Gimp to\n"
+      "write an XCF file that will provoke this return. Please notify\n"
+      "the author if you discover one)."
+msgstr ""
+
+#: exit.1i:70
+msgid "The XCF file is malformed."
+msgstr ""
+
+#: exit.1i:73
+msgid "An uncompression program could not be executed, or terminated\n"
+      "abnormally."
+msgstr ""
+
+#: exit.1i:77
+msgid "Unexpected I/O error, internal errors, or other \"this can't\n"
+      "happen\" situations."
+msgstr ""
+
+#: exit.1i:79
+msgid "If an uncompression program returns an error exit status, this\n"
+      "will be returned from B{%s} too."
+msgstr ""
+
