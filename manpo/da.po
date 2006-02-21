@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Xcftools 0.9.1a\n"
 "Report-Msgid-Bugs-To: henning@makholm.net\n"
-"POT-Creation-Date: 2006-02-20 04:06+0100\n"
-"PO-Revision-Date: 2006-02-20 02:01+0100\n"
+"POT-Creation-Date: 2006-02-22 01:46+0100\n"
+"PO-Revision-Date: 2006-02-22 01:48+0100\n"
 "Last-Translator: Henning Makholm <henning@makholm.net>\n"
 "Language-Team: None; proof-of-concept translation by upstream author\n"
 "MIME-Version: 1.0\n"
@@ -51,7 +51,7 @@ msgid "Default if the filename ends with B{gz}."
 msgstr "Vælges automatisk hvis filnavnet slutter med B{gz}."
 
 #: options.i:61
-msgid "cmd"
+msgid "command"
 msgstr "kommando"
 
 #: options.i:61
@@ -285,11 +285,11 @@ msgstr "bB{x}h"
 msgid "Crop the converted image to width I{w} and height I{h}."
 msgstr "Beskær det konverterede billede til bredde I{b} og højde I{b}."
 
-#: options.i:287
+#: options.i:289
 msgid "xB{,}y"
 msgstr "xB{,}y"
 
-#: options.i:287
+#: options.i:289
 msgid ""
 "Offset the converted part of the image from the top-left corner\n"
 "of the XCF canvas. Usually used with B{-S}."
@@ -298,18 +298,40 @@ msgstr ""
 "hjørne af XCF-lærredet. Bruges normalt sammen med B{-S}."
 
 #: options.i:308
+msgid ""
+"Crop and offset the converted part of the image to just include\n"
+"the boundaries of the visible (or selected) layers."
+msgstr ""
+"Skær det konvertede billede til så det netop dækker alle de synlige\n"
+"(eller valgte) lag."
+
+#: options.i:310
+msgid ""
+"(Note that the I{contents} of the layers is not taken into\n"
+"account when autocropping)."
+msgstr ""
+"(Bemærk at tilskæringen ikke tager hensyn til\n"
+"I{indholdet} af lagene)."
+
+#: options.i:314
+msgid ""
+"In the absence of options that specify otherwise, the converted\n"
+"image will cover the entire XCF canvas."
+msgstr "Normalt vil det konverterede område være det samme som XCF-lærredet."
+
+#: options.i:325
 msgid "mode"
 msgstr "tilstand"
 
-#: options.i:308
+#: options.i:325
 msgid "Set the layer mode (e.g., B{Normal} or B{Multiply})."
 msgstr "Vælg lagtilstanden (fx B{Normal} eller B{LægTil})."
 
-#: options.i:331 options.i:345
+#: options.i:348 options.i:362
 msgid "n"
 msgstr "n"
 
-#: options.i:331
+#: options.i:348
 msgid ""
 "Set the opacity on a scale from 0 to 100 (as in the Gimp user\n"
 "interface)."
@@ -317,21 +339,21 @@ msgstr ""
 "Vælg gennemsigtighed på en skala fra 0 (helt gennemsigtigt)\n"
 "til 100 (helt ugennemsigtig)."
 
-#: options.i:345
+#: options.i:362
 msgid "Set the opacity on a scale from 0 to 255 (as used internally)"
 msgstr ""
 "Vælg gennemsigtighed på en skala fra 0 (helt gennemsigtigt)\n"
 "til 255 (helt ugennemsigtig)."
 
-#: options.i:359
+#: options.i:376
 msgid "Enable the layer mask."
 msgstr "Aktivér lagmasken."
 
-#: options.i:365
+#: options.i:382
 msgid "Disable the layer mask."
 msgstr "Deaktivér lagmasken."
 
-#: options.i:375
+#: options.i:392
 msgid ""
 "Use the raw UTF-8 representation from the XCF file to compare and\n"
 "display layer names."
@@ -339,7 +361,7 @@ msgstr ""
 "Brug den rå UTF-8-repræsentation fra XCF-filen til at sammenligne\n"
 "og vise lagnavne."
 
-#: options.i:377
+#: options.i:394
 msgid ""
 "Ordinarily, layer names will be converted to the character set of\n"
 "the current locale."
@@ -463,7 +485,7 @@ msgstr ""
 "Lagtilstanden, samt ugennemsigtigheden (hvis den ikke er 100%), og\n"
 "B{/mask} hvis laget har en aktiv lagmaske."
 
-#: xcfinfo.10:74
+#: xcfinfo.10:74 xcf2pnm.10:69 xcf2png.10:63
 msgid "5)"
 msgstr "5)"
 
@@ -471,17 +493,17 @@ msgstr "5)"
 msgid "The name of the layer."
 msgstr "Lagets navn."
 
-#: xcfinfo.10:77 xcf2pnm.10:122 xcf2png.10:101 xcfview.10:54
+#: xcfinfo.10:77 xcf2pnm.10:127 xcf2png.10:106 xcfview.10:54
 msgid "AUTHOR"
 msgstr "FORFATTER"
 
-#: xcfinfo.10:78 xcf2pnm.10:123 xcf2png.10:102 xcfview.10:55
+#: xcfinfo.10:78 xcf2pnm.10:128 xcf2png.10:107 xcfview.10:55
 msgid "B{%s} was written by Henning Makholm <henning@makholm.net>."
 msgstr ""
 "B{%s} og denne manualside\n"
 "er skrevet af Henning Makholm <henning@makholm>."
 
-#: xcfinfo.10:81 xcf2pnm.10:126 xcf2png.10:105 xcfview.10:61
+#: xcfinfo.10:81 xcf2pnm.10:131 xcf2png.10:110 xcfview.10:61
 msgid "SEE ALSO"
 msgstr "SE OGSÅ"
 
@@ -538,11 +560,15 @@ msgstr "B{-D} og B{-G}."
 msgid "B{-j}, B{-z}, and B{-Z}."
 msgstr "B{-j}, B{-z} og B{-Z}."
 
-#: xcf2pnm.10:68 xcf2png.10:62
+#: xcf2pnm.10:70 xcf2png.10:64
+msgid "B{-C} and B{-O}/B{-S}."
+msgstr "B{-C} og B{-O}/B{-S}."
+
+#: xcf2pnm.10:73 xcf2png.10:67
 msgid "LAYER SPECIFICATIONS"
 msgstr "VALG AF LAG"
 
-#: xcf2pnm.10:69 xcf2png.10:63
+#: xcf2pnm.10:74 xcf2png.10:68
 msgid ""
 "If no I{layer name} is given on the command line, all of the\n"
 "visible layers in the XCF file are merged to produce the output\n"
@@ -552,7 +578,7 @@ msgstr ""
 "alle de synlige lag i XCF-filen fladgjort til et enkelt\n"
 "uddatabillede."
 
-#: xcf2pnm.10:73 xcf2png.10:67
+#: xcf2pnm.10:78 xcf2png.10:72
 msgid ""
 "It is also possible to specify the layers to merge explicitly, by\n"
 "giving their names as separate arguments after the input\n"
@@ -569,7 +595,7 @@ msgstr ""
 "til venstre, som det \"nederste\" \\- det vil sige at den indbyrdes\n"
 "position i XCF filen ikke betyder noget."
 
-#: xcf2pnm.10:82 xcf2png.10:76
+#: xcf2pnm.10:87 xcf2png.10:81
 msgid ""
 "The following options can be given I{after} a layer name to\n"
 "override the global properties of the layer:"
@@ -577,29 +603,29 @@ msgstr ""
 "De følgende flag kan gives I{efter} et lagnavn for at tilsidesætte\n"
 "lagets globale egenskaber:"
 
-#: xcf2pnm.10:87
+#: xcf2pnm.10:92
 msgid "EXAMPLES"
 msgstr "EKSEMPLER"
 
-#: xcf2pnm.10:89
+#: xcf2pnm.10:94
 msgid "B{xcf2pnm -b white foo.xcf > foo.ppm}"
 msgstr "B{xcf2pnm -b white noget.xcf > noget.ppm}"
 
-#: xcf2pnm.10:91
+#: xcf2pnm.10:96
 msgid "B{xcf2pnm -a footrans.pgm -o foo.ppm foo.xcf Layer1 Layer2}"
 msgstr "B{xcf2pnm -a noget-gnms.pgm -o noget.pgm noget.xcf Lag1 Lag2}"
 
-#: xcf2pnm.10:93
+#: xcf2pnm.10:98
 msgid "To test whether the flattened image has any transparency, use"
 msgstr ""
 "Følgende kommando tjekker om det fladgjorte billede indeholder\n"
 "nogen gennemsigtighed:"
 
-#: xcf2pnm.10:95
+#: xcf2pnm.10:100
 msgid "B{xcf2pnm foo.xcf > /dev/null}"
 msgstr "B{xcf2pnm noget.xcf /dev/null}"
 
-#: xcf2pnm.10:97
+#: xcf2pnm.10:102
 msgid ""
 "To test whether the flattened image has I{partially} transparent\n"
 "pixels, use"
@@ -607,15 +633,15 @@ msgstr ""
 "For at tjekke om det fladgjorte indeholder nogen\n"
 "I{delvis} gennemsigtighed kan man bruge"
 
-#: xcf2pnm.10:101
+#: xcf2pnm.10:106
 msgid "B{xcf2pnm -b white -G > /dev/null}"
 msgstr "B{xcf2pnm -b white -G > /dev/null}"
 
-#: xcf2pnm.10:102 xcf2png.10:81
+#: xcf2pnm.10:107 xcf2png.10:86
 msgid "BUGS AND LIMITATIONS"
 msgstr "FEJL OG BEGRÆNSNINGER"
 
-#: xcf2pnm.10:104 xcf2png.10:83
+#: xcf2pnm.10:109 xcf2png.10:88
 msgid ""
 "When several partially transparent layers are merged, the pixel\n"
 "values are interpolated without gamma correction. (The Gimp also\n"
@@ -632,11 +658,11 @@ msgstr ""
 "Gimp self, især når der er tale om mere end to lag, eller\n"
 "ved nogen af de mere eksotiske lagtilstande."
 
-#: xcf2pnm.10:112 xcf2png.10:91
+#: xcf2pnm.10:117 xcf2png.10:96
 msgid "These differences are usually not visible to the eye."
 msgstr "Disse forskelle er normalt ikke synlige."
 
-#: xcf2pnm.10:114 xcf2png.10:93
+#: xcf2pnm.10:119 xcf2png.10:98
 msgid ""
 "There are probably other bugs lurking in corner cases. If you\n"
 "discover one, please notify the author."
@@ -644,19 +670,19 @@ msgstr ""
 "Der er sikkert også andre fejl som viser sig i særlige situationer.\n"
 "Hvis du finder en, så vær rar at fortælle forfatteren om den."
 
-#: xcf2pnm.10:117 xcf2png.10:96
+#: xcf2pnm.10:122 xcf2png.10:101
 msgid "FILES"
 msgstr "FILER"
 
-#: xcf2pnm.10:119 xcf2png.10:98
+#: xcf2pnm.10:124 xcf2png.10:103
 msgid "B{/usr/lib/X11/rgb.txt}"
 msgstr "B{/usr/lib/X11/rgb.txt}"
 
-#: xcf2pnm.10:120 xcf2png.10:99
+#: xcf2pnm.10:125 xcf2png.10:104
 msgid "Color name database for B{-b}."
 msgstr "Database med farvenavne der forstås af B{-b}."
 
-#: xcf2pnm.10:126
+#: xcf2pnm.10:131
 msgid "B{xcfinfo}(1), B{xcf2png}(1)"
 msgstr "B{xcfinfo}(1), B{xcf2png}(1)"
 
@@ -680,7 +706,7 @@ msgstr ""
 msgid "B{-g}and B{-c}."
 msgstr "B{-g} og B{-c}."
 
-#: xcf2png.10:105
+#: xcf2png.10:110
 msgid "B{xcfinfo}(1), B{xcf2pnm}(1)"
 msgstr "B{xcfinfo}(1), B{xcf2pnm}(1)"
 

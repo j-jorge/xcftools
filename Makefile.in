@@ -67,7 +67,7 @@ endif
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 
-all: $(BINARIES) $(SCRIPTS) $(MANPAGES) po/stamp manpo/stamp
+all: $(BINARIES) $(SCRIPTS) $(MANPAGES) po/stamp manpo/all
 
 xcfinfo$e: xcfinfo.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o nlsini.$o
 	$(CC) $(LDFLAGS) $(LIBS) $^ -o $@
@@ -171,29 +171,31 @@ po/stamp: $(patsubst %,po/%.mo,$(LINGUAS))
 POTFILES_MAN = options.mi $(patsubst %.1,%.10,$(MANPAGES)) \
 		exit.1i
 
-manpo/%.po: manpo/manpages.pot
-	test -f $@
-	msgmerge -U $@ $<
-	touch $@
-
-manpo/stamp: $(patsubst %,manpo/%.po,$(MANLINGUAS)) $(MANPAGES)
-	touch manpo/manpages.pot
-	touch $^
-	for L in $(MANLINGUAS) ; do \
-	   for P in $(patsubst %.1,%,$(MANPAGES)) ; do \
-	      $(PERL) manpo/mantranslate.pl manpo/$$L.po $$P.1 \
-		> manpo/$$P.$$L.1 || exit 1; done ; done ;
-	touch $@
-	  
-
 options.mi: manpo/optipot.pl options.i
 	$(PERL) manpo/optipot.pl > $@
-manpo/manpages.pot$(SUPPORESS_AUTOFOO): manpo/mantranslate.pl $(POTFILES_MAN)
+manpo/manpages.pot$(SUPPRESS_AUTOFOO): manpo/mantranslate.pl $(POTFILES_MAN)
 	$(PERL) manpo/mantranslate.pl -x $(POTFILES_MAN) > $@.tmp
 	if diff $@ $@.tmp | \
 		grep -v '^\([^<>]\|. \?"POT-Creation-Date:\)' > /dev/null; \
 	then mv -f $@.tmp $@ ; \
 	else echo OK, $@ is unchanged ; rm $@.tmp ; fi
+
+manpo/%.po: manpo/manpages.pot
+	test -f $@
+	msgmerge -U $@ $<
+	touch $@
+
+manpo/stamp: $(patsubst %,manpo/%.po,$(MANLINGUAS))
+	if ! make -q manpo/manpages.pot ; then \
+	touch manpo/manpages.pot ; touch $^ ; fi
+	touch $@
+
+manpo/all: manpo/stamp $(MANPAGES)
+	for L in $(MANLINGUAS) ; do \
+	   for P in $(patsubst %.1,%,$(MANPAGES)) ; do \
+	      $(PERL) manpo/mantranslate.pl manpo/$$L.po $$P.1 \
+		> manpo/$$P.$$L.1 || exit 1; done ; done ;
+	touch $@
 
 #############################################################################
 #
@@ -225,15 +227,16 @@ check: $(BINARIES)
 clean:
 	$(RM) *.$o */*~ *~ .*~ xcf*.1i xcf*.1il *.1 *.oi *.mi
 	$(RM) enums.h $(C_GENERATED) $(BINARIES)
-	$(RM) po/*.mo */stamp manpo/*.1
+	$(RM) po/*.mo */stamp manpo/all manpo/*.1
 	cd test && $(MAKE) clean
 
 distclean: clean
 	$(RM) Makefile config.log config.cache config.status config.h
+	$(RM) aclocal.m4
 	$(RM) -r autom4te.cache
 
 realclean: distclean
-	$(RM) configure config.hin aclocal.m4
+	$(RM) configure config.hin
 
 .SUFFIXES: .c .$o
 
@@ -265,15 +268,12 @@ endif
 #
 #  Autofoo rules:
 
-aclocal.m4$(SUPPRESS_AUTOFOO): configure.ac
-	aclocal
-
-$(srcdir)/configure$(SUPPRESS_AUTOFOO): configure.ac aclocal.m4
+$(srcdir)/configure$(SUPPRESS_AUTOFOO): configure.ac
+	cd $(srcdir) && aclocal
 	cd $(srcdir) && autoconf
-
-$(srcdir)/config.hin$(SUPPRESS_AUTOFOO): configure.ac aclocal.m4
 	cd $(srcdir) && autoheader
-	touch $@
+
+$(srcdir)/config.hin$(SUPPRESS_AUTOFOO): $(srcdir)/configure
 
 config.status: $(srcdir)/configure config.sub config.guess
 	if [ -f config.status ] ; \

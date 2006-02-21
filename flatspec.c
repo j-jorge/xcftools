@@ -24,9 +24,7 @@
 void
 init_flatspec(struct FlattenSpec *spec)
 {
-  spec->dim.c.l = spec->dim.c.r = spec->dim.c.t = spec->dim.c.b = 0 ;
-  spec->dim.height = -1 ;
-  spec->dim.width = -1 ;
+  spec->window_mode = USE_CANVAS ;
   spec->default_pixel = PERHAPS_ALPHA_CHANNEL ;
   spec->numLayers = 0 ;
   spec->layers = NULL ;
@@ -120,12 +118,6 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
 {
   unsigned i ;
   int anyPartial ;
-  
-  if( spec->dim.height == -1 ) {
-    spec->dim.height = XCF.height ;
-    spec->dim.width = XCF.width ;
-  }
-  computeDimensions(&spec->dim);
 
   /* Find the layers to convert.
    */
@@ -182,6 +174,43 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
   } else
     spec->gimpish_indexed = 0 ;
 
+  /* compute dimensions of the window */
+  if( spec->window_mode == AUTOCROP ) {
+    int first = 1 ;
+    for( i=0; i<spec->numLayers; i++ )
+      if( spec->layers[i].isVisible ) {
+        computeDimensions(&spec->layers[i].dim) ;
+        if( first ) {
+          spec->dim = spec->layers[i].dim ;
+          first = 0 ;
+        } else {
+          if( spec->dim.c.l < spec->layers[i].dim.c.l )
+            spec->dim.c.l = spec->layers[i].dim.c.l ;
+          if( spec->dim.c.r > spec->layers[i].dim.c.r )
+            spec->dim.c.r = spec->layers[i].dim.c.r ;
+          if( spec->dim.c.t < spec->layers[i].dim.c.t )
+            spec->dim.c.t = spec->layers[i].dim.c.t ;
+          if( spec->dim.c.b > spec->layers[i].dim.c.b )
+            spec->dim.c.b = spec->layers[i].dim.c.b ;
+        }
+      }
+    if( first ) {
+      spec->window_mode = USE_CANVAS ;
+    } else {
+      spec->dim.width = spec->dim.c.r - spec->dim.c.l ;
+      spec->dim.height = spec->dim.c.b - spec->dim.c.t ;
+    }
+  }
+  if( spec->window_mode != AUTOCROP ) {
+    if( (spec->window_mode & MANUAL_OFFSET) == 0 )
+      spec->dim.c.t = spec->dim.c.l = 0 ;
+    if( (spec->window_mode & MANUAL_CROP) == 0 ) {      
+      spec->dim.height = XCF.height ;
+      spec->dim.width = XCF.width ;
+    }
+  }
+  computeDimensions(&spec->dim);
+  
   /* Turn off layers that we don't hit at all */
   for( i=0; i<spec->numLayers; i++ )
     if( spec->layers[i].isVisible &&

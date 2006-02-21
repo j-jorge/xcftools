@@ -46,6 +46,10 @@ struct FlattenSpec {
          FORBID_PARTIAL_TRANSPARENCY,
          PARTIAL_TRANSPARENCY_IMPOSSIBLE
   } partial_transparency_mode ;
+  enum { USE_CANVAS = 0,
+         MANUAL_OFFSET = 1,
+         MANUAL_CROP = 2,
+         AUTOCROP = 4 } window_mode ;
   int process_in_memory ;
   int gimpish_indexed ;
 };

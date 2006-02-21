@@ -1,3 +1,14 @@
+2006-02-22  Henning Makholm  <henning@makholm.net>
+
+	* Version 1.0.2
+	* Don't ship aclocal.m4 in tarball; it will be re-assembled
+	  whenever needed anyway.
+	* Add option -C to autocrop to visible layers, suggested
+	  by Anthony DeRobertis (Debian bug #353883).
+	* Change metavariable for -Z option argument from "cmd"
+	  to "command", following suggestion by Anthony DeRobertis
+	  (Debian bug #353872).
+
 2006-02-20  Henning Makholm  <henning@makholm.net>
 
 	* Version 1.0.1

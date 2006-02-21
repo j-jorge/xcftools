@@ -53,6 +53,10 @@ composite_one(rgba bot,rgba top)
      * top pixel is completely transparent, and we get a division
      * by zero if _both_ pixels are fully transparent. These cases
      * must be handled by all callers.
+     *    More snooping in the Gimp sources reveal that it uses
+     *    floating-point for its equivalent of tfrac when the
+     *    bottom layer has an alpha channel. (alphify() macro
+     *    in paint-funcs.c). What gives?
      */
   }
   return (alpha << ALPHA_SHIFT)

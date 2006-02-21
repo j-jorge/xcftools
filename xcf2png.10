@@ -59,6 +59,11 @@ and
 .BR \-z ,
 and
 .BR \-Z .
+.TP
+5)
+.B \-C
+and
+.BR \-O / \-S .
 .SH LAYER SPECIFICATIONS
 If no
 .I layer name

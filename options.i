@@ -57,7 +57,7 @@ OPTION('z',--gzip,input is gzip compressed,
 unzipper = "zcat" ;
 break ;
 
-OPTION('Z',--unpack,(cmd) use 'cmd' to decompress input,
+OPTION('Z',--unpack,(command) use 'command' to decompress input,
        (Specify a command that the input file is filtered through
         before being interpreted as an XCF file. The command is invoked as
         .I command filename
@@ -276,6 +276,8 @@ OPTION('S',--size,(w"x"h) crop image while converting,
   int n = 0 ;
   sscanf(optarg,"%ux%u%n",&w,&h,&n) ;
   if( n && n == strlen(optarg) ) {
+    if( flatspec.window_mode == AUTOCROP ) flatspec.window_mode = USE_CANVAS ;
+    flatspec.window_mode |= MANUAL_CROP ;
     flatspec.dim.width = w ;
     flatspec.dim.height = h ;
   } else
@@ -293,12 +295,27 @@ OPTION('O',--offset,(x","y) translate converted part of image,
   int n = 0 ;
   sscanf(optarg,"%d,%d%n",&x,&y,&n) ;
   if( n && n == strlen(optarg) ) {
+    if( flatspec.window_mode == AUTOCROP ) flatspec.window_mode = USE_CANVAS ;
+    flatspec.window_mode |= MANUAL_OFFSET ;
     flatspec.dim.c.l = x ;
     flatspec.dim.c.t = y ;
   } else
     FatalGeneric(20,_("-O option must have an argument of the form x,y"));
   break ;
 }
+
+OPTION('C',--autocrop,autocrop to visible layer boundaries,
+       (Crop and offset the converted part of the image to just include
+        the boundaries of the visible (or selected) layers.
+        (Note that the
+        .I contents
+        of the layers is not taken into account when autocropping).
+        .IP
+        In the absence of options that specify otherwise, the converted
+        image will cover the entire XCF canvas.
+        ));
+flatspec.window_mode = AUTOCROP ;
+break ;
 
 #ifndef XCFVIEW
 OPTIONGROUP(1il,Layer-selection options);

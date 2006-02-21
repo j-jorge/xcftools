@@ -357,7 +357,7 @@ Version 0, 161x161 RGB color, 10 layers, compressed RLE
 + 122x13+19+74 RGB-alpha Normal Long and low
 + 13x122+74+19 RGB-alpha Difference Tall and narrow
 + 118x118+38+47 RGB-alpha Normal/65% Displaced loop
-- 161x161+0+0 RGB-alpha Normal Doodle
+- 144x141+4+18 RGB-alpha Normal Doodle
 + 161x161+0+0 RGB-alpha Normal Straight loop
 + 50x50+100+105 RGB-alpha Normal/mask Crossed
 + 50x50+8+8 RGB-alpha Normal Mid
@@ -624,17 +624,17 @@ EOF
 testpng A:: B:1,0,0 doodle tiletest Doodle -b '#f00' -f
 
 # 2 colors plus transparency
-testpng odoodle tiletest Doodle 'Straight loop' -f
+testpng odoodle tiletest Doodle 'Straight loop' -f -S5x5 -C
 
 # 3 colors
 cat <<EOF > pngtype.want
-161x161x2
+144x141x2
 color+index
 z0 f0 i0
 PLTE(9)
  00 00 FF  EE 6F 00  FF FF FF
 EOF
-testpng A:: B:0,0,1 odoodle tiletest Doodle 'Straight loop' -fb '#00F'
+testpng A:: B:0,0,1 odoodle tiletest Doodle 'Straight loop' -fb '#00F' -O0,0 -C
 
 # 4 colors
 cat <<EOF > pngtype.want
