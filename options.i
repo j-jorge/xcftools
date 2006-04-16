@@ -112,8 +112,9 @@ OPTION('b',--background,(color) select background color,
         or
         .B #rgb
         hexadecimal values,
-        or as an X11 color name that will be looked up in
-        .BR /usr/lib/X11/rgb.txt .
+        or as an X11 color name
+        (which will only work if a color name database can be found
+         in one of a number of standard locations).
         ));
 {
   unsigned r,g,b ;
@@ -134,26 +135,36 @@ OPTION('b',--background,(color) select background color,
   else if( strcasecmp(optarg,"white") == 0 )
     r = g = b = 255 ;
   else {
-    const char filename[] = "/usr/lib/X11/rgb.txt" ;
-    FILE *colortable = fopen(filename,"rt");
-    if( colortable ) {
-      int clen ;
-      char colorbuf[80] ;
-      do {
-        if( !fgets(colorbuf,sizeof colorbuf,colortable) ) {
-          r = (unsigned)-1 ;
-          break ;
-        }
-        clen = strlen(colorbuf);
-        while( clen && isspace(colorbuf[clen-1]) )
-          clen-- ;
-        colorbuf[clen] = '\0' ;
-        clen = 0 ;
-        sscanf(colorbuf," %u %u %u %n",&r,&g,&b,&clen);
-      } while( clen == 0 || strcasecmp(colorbuf+clen,optarg) != 0 );
-    } else {
-      fprintf(stderr,_("Could not open color database file %s\n"),filename);
-      r = (unsigned)-1 ;
+    const char *filenames[] =  { "/etc/X11/rgb.txt",
+                                 "/usr/lib/X11/rgb.txt",
+                                 "/usr/share/X11/rgb.txt",
+                                 NULL };
+    const char **fnp ;
+    r = (unsigned)-1 ;
+    int any = 0 ;
+    for( fnp = filenames; r == (unsigned)-1 && fnp && *fnp; fnp++ ) {
+      FILE *colortable = fopen(*fnp,"rt");
+      if( colortable ) {
+        any = 1 ;
+        int clen ;
+        char colorbuf[80] ;
+        do {
+          if( !fgets(colorbuf,sizeof colorbuf,colortable) ) {
+            r = (unsigned)-1 ;
+            break ;
+          }
+          clen = strlen(colorbuf);
+          while( clen && isspace(colorbuf[clen-1]) )
+            clen-- ;
+          colorbuf[clen] = '\0' ;
+          clen = 0 ;
+          sscanf(colorbuf," %u %u %u %n",&r,&g,&b,&clen);
+        } while( clen == 0 || strcasecmp(colorbuf+clen,optarg) != 0 );
+        fclose(colortable) ;
+      }
+    }
+    if( !any ) {
+      fprintf(stderr,_("Could not find X11 color database\n"));
     }
   }
   if( r == (unsigned)-1 )

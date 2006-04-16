@@ -100,6 +100,10 @@ one, please notify the author.
 
 .SH FILES
 .TP 8
+.B /etc/X11/rgb.txt
+.TP 8
+.B /usr/share/X11/rgb.txt
+.TP 8
 .B /usr/lib/X11/rgb.txt
 Color name database for
 .BR \-b .

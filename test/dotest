@@ -257,9 +257,10 @@ echo > expected:stderr \
 errtest 20 xcfinfo $S/tiletest.xcf.gz Background 'Long and low'
 
 rm expected:stderr
-rgbfile=/usr/lib/X11/rgb.txt
-( [ -f $rgbfile ] || echo "Could not open color database file $rgbfile" ) \
-    > expected.stderr
+( for a in /etc/X11/rgb.txt /usr/share/X11/rgb.txt /usr/lib/X11/rgb.txt /-/ ;
+  do [ -f $a ] && break ;
+     [ $a = /-/ ] && echo "Could not find X11 color database" ;
+  done ) > expected.stderr
 echo "${XCFTOOLS_PREFIX}xcf2pnm: Unknown background color 'Plaid'" \
     >> expected.stderr
 errtest 20 xcf2pnm $S/tiletest.xcf.gz -b Plaid

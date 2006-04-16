@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Xcftools-manpages VERSION\n"
 "Report-Msgid-Bugs-To: henning@makholm.net\n"
-"POT-Creation-Date: 2006-02-22 01:46+0100\n"
+"POT-Creation-Date: 2006-04-17 04:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,177 +96,178 @@ msgstr ""
 
 #: options.i:110
 msgid "The color can be given as B{#rrggbb} or B{#rgb} hexadecimal\n"
-      "values, or as an X11 color name that will be looked up in\n"
-      "B{/usr/lib/X11/rgb.txt}."
+      "values, or as an X11 color name (which will only work if a color\n"
+      "name database can be found in one of a number of standard\n"
+      "locations)."
 msgstr ""
 
-#: options.i:169
+#: options.i:180
 msgid "Invent a trivial alpha channel even if the flattened image is\n"
       "completely opaque."
 msgstr ""
 
-#: options.i:176
+#: options.i:187
 msgid "Force the output to use RGB color space even if it there are more\n"
       "compact alternatives."
 msgstr ""
 
-#: options.i:179
+#: options.i:190
 msgid "This will be selected automatically if the output file's name\n"
       "ends with B{.ppm}."
 msgstr ""
 
-#: options.i:188
+#: options.i:199
 msgid "Force the output to be a grayscale image even if it may be\n"
       "monochrome."
 msgstr ""
 
-#: options.i:189
+#: options.i:200
 msgid "If any colored pixels are encountered, exit with status 103."
 msgstr ""
 
-#: options.i:190
+#: options.i:201
 msgid "This will be selected automatically if the output file's name\n"
       "ends with B{.pgm}."
 msgstr ""
 
-#: options.i:199
+#: options.i:210
 msgid "Force the output to be a monochrome image."
 msgstr ""
 
-#: options.i:200
+#: options.i:211
 msgid "If any colors except black and white are encountered, exit with\n"
       "status 103."
 msgstr ""
 
-#: options.i:202
+#: options.i:213
 msgid "This will be selected automatically if the output file's name\n"
       "ends with B{.pbm}."
 msgstr ""
 
-#: options.i:212
+#: options.i:223
 msgid "Suppress the automatic choice of B{-c}, B{-g}, or B{-m} based on\n"
       "output filename, and instead select the output format based on\n"
       "image contents."
 msgstr ""
 
-#: options.i:219
+#: options.i:230
 msgid "This is the default if the filename is not recognized, and when\n"
       "writing to stdout."
 msgstr ""
 
-#: options.i:227
+#: options.i:238
 msgid "Use standard RGB compositing for flattening indexed layers."
 msgstr ""
 
-#: options.i:228
+#: options.i:239
 msgid "Without this option, B{%s} will mimic the Gimp's current strategy\n"
       "of rounding each alpha value to either full transparency or full\n"
       "opacity, and interpret all layer modes as B{Normal}."
 msgstr ""
 
-#: options.i:239
+#: options.i:250
 msgid "Assert that the flattened image will have no partial transparency\n"
       "(allowing a more compact representation of the alpha output)."
 msgstr ""
 
-#: options.i:241
+#: options.i:252
 msgid "Exit with status 102 if the flattened image has any partial\n"
       "transparency."
 msgstr ""
 
-#: options.i:243
+#: options.i:254
 msgid "If B{-b} is also given, this tests whether there there is partial\n"
       "transparency before applying the background color."
 msgstr ""
 
-#: options.i:252
+#: options.i:263
 msgid "Do a \"dissolve\" step to eliminate partial transparency after\n"
       "flattening."
 msgstr ""
 
-#: options.i:254
+#: options.i:265
 msgid "If B{-b} is also given, this happens before the background color\n"
       "is applied."
 msgstr ""
 
-#: options.i:262
+#: options.i:273
 msgid "First flatten the entire image to a memory buffer before writing\n"
       "output. Then analyse the image to decide on the details of the\n"
       "output format (e.g., whether a grayscale output is sufficient)."
 msgstr ""
 
-#: options.i:265
+#: options.i:276
 msgid "Without this option, the program flattens only a singe row of\n"
       "\"tiles\" (height 64) at a time."
 msgstr ""
 
-#: options.i:272
+#: options.i:283
 msgid "wB{x}h"
 msgstr ""
 
-#: options.i:272
+#: options.i:283
 msgid "Crop the converted image to width I{w} and height I{h}."
 msgstr ""
 
-#: options.i:289
+#: options.i:300
 msgid "xB{,}y"
 msgstr ""
 
-#: options.i:289
+#: options.i:300
 msgid "Offset the converted part of the image from the top-left corner\n"
       "of the XCF canvas. Usually used with B{-S}."
 msgstr ""
 
-#: options.i:308
+#: options.i:319
 msgid "Crop and offset the converted part of the image to just include\n"
       "the boundaries of the visible (or selected) layers."
 msgstr ""
 
-#: options.i:310
+#: options.i:321
 msgid "(Note that the I{contents} of the layers is not taken into\n"
       "account when autocropping)."
 msgstr ""
 
-#: options.i:314
+#: options.i:325
 msgid "In the absence of options that specify otherwise, the converted\n"
       "image will cover the entire XCF canvas."
 msgstr ""
 
-#: options.i:325
+#: options.i:336
 msgid "mode"
 msgstr ""
 
-#: options.i:325
+#: options.i:336
 msgid "Set the layer mode (e.g., B{Normal} or B{Multiply})."
 msgstr ""
 
-#: options.i:348 options.i:362
+#: options.i:359 options.i:373
 msgid "n"
 msgstr ""
 
-#: options.i:348
+#: options.i:359
 msgid "Set the opacity on a scale from 0 to 100 (as in the Gimp user\n"
       "interface)."
 msgstr ""
 
-#: options.i:362
+#: options.i:373
 msgid "Set the opacity on a scale from 0 to 255 (as used internally)"
 msgstr ""
 
-#: options.i:376
+#: options.i:387
 msgid "Enable the layer mask."
 msgstr ""
 
-#: options.i:382
+#: options.i:393
 msgid "Disable the layer mask."
 msgstr ""
 
-#: options.i:392
+#: options.i:403
 msgid "Use the raw UTF-8 representation from the XCF file to compare and\n"
       "display layer names."
 msgstr ""
 
-#: options.i:394
+#: options.i:405
 msgid "Ordinarily, layer names will be converted to the character set of\n"
       "the current locale."
 msgstr ""
@@ -384,15 +385,15 @@ msgstr ""
 msgid "The name of the layer."
 msgstr ""
 
-#: xcfinfo.10:77 xcf2pnm.10:127 xcf2png.10:106 xcfview.10:54
+#: xcfinfo.10:77 xcf2pnm.10:131 xcf2png.10:110 xcfview.10:54
 msgid "AUTHOR"
 msgstr ""
 
-#: xcfinfo.10:78 xcf2pnm.10:128 xcf2png.10:107 xcfview.10:55
+#: xcfinfo.10:78 xcf2pnm.10:132 xcf2png.10:111 xcfview.10:55
 msgid "B{%s} was written by Henning Makholm <henning@makholm.net>."
 msgstr ""
 
-#: xcfinfo.10:81 xcf2pnm.10:131 xcf2png.10:110 xcfview.10:61
+#: xcfinfo.10:81 xcf2pnm.10:135 xcf2png.10:114 xcfview.10:61
 msgid "SEE ALSO"
 msgstr ""
 
@@ -526,14 +527,22 @@ msgid "FILES"
 msgstr ""
 
 #: xcf2pnm.10:124 xcf2png.10:103
+msgid "B{/etc/X11/rgb.txt}"
+msgstr ""
+
+#: xcf2pnm.10:126 xcf2png.10:105
+msgid "B{/usr/share/X11/rgb.txt}"
+msgstr ""
+
+#: xcf2pnm.10:128 xcf2png.10:107
 msgid "B{/usr/lib/X11/rgb.txt}"
 msgstr ""
 
-#: xcf2pnm.10:125 xcf2png.10:104
+#: xcf2pnm.10:129 xcf2png.10:108
 msgid "Color name database for B{-b}."
 msgstr ""
 
-#: xcf2pnm.10:131
+#: xcf2pnm.10:135
 msgid "B{xcfinfo}(1), B{xcf2png}(1)"
 msgstr ""
 
@@ -552,7 +561,7 @@ msgstr ""
 msgid "B{-g}and B{-c}."
 msgstr ""
 
-#: xcf2png.10:110
+#: xcf2png.10:114
 msgid "B{xcfinfo}(1), B{xcf2pnm}(1)"
 msgstr ""
 

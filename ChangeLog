@@ -1,3 +1,9 @@
+2006-04-17  Henning Makholm  <henning@makholm.net>
+
+	* Version 1.0.3
+	* Also look for color name database in other locations than
+	  /usr/lib/X11, in an attempty to be X11R7 friendly
+
 2006-02-22  Henning Makholm  <henning@makholm.net>
 
 	* Version 1.0.2

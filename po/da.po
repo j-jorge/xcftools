@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcftools 0.9\n"
 "Report-Msgid-Bugs-To: henning@makholm.net\n"
-"POT-Creation-Date: 2006-02-22 01:38+0100\n"
-"PO-Revision-Date: 2006-02-22 01:45+0100\n"
+"POT-Creation-Date: 2006-04-17 04:06+0200\n"
+"PO-Revision-Date: 2006-04-17 04:07+0200\n"
 "Last-Translator: Henning Makholm <henning@makholm.net>\n"
 "Language-Team: Til test af l10n-faciliteter; ikke vedligeholdt\n"
 "MIME-Version: 1.0\n"
@@ -161,37 +161,37 @@ msgstr "aktivér lagmaske"
 msgid "disable layer mask"
 msgstr "deaktivér lagmaske"
 
-#: options.i:155
+#: options.i:167
 #, c-format
-msgid "Could not open color database file %s\n"
-msgstr "Kunne ikke åbne farvenavnsdatabasen %s\n"
+msgid "Could not find X11 color database\n"
+msgstr "Kunne ikke åbne farvenavnsdatabasen\n"
 
-#: options.i:160
+#: options.i:171
 #, c-format
 msgid "Unknown background color '%s'"
 msgstr "Ukendt baggrundsfarve »%s«"
 
-#: options.i:284
+#: options.i:295
 #, c-format
 msgid "-S option must have an argument of the form wxh"
 msgstr "-S-flaget skal have et argument på formen bxh"
 
-#: options.i:303
+#: options.i:314
 #, c-format
 msgid "-O option must have an argument of the form x,y"
 msgstr "-O-flaget skal have et argument på formen x,y"
 
-#: options.i:340
+#: options.i:351
 #, c-format
 msgid "Layer mode '%s' is unknown"
 msgstr "Lagtilstanden »%s« er ukendt"
 
-#: options.i:356
+#: options.i:367
 #, c-format
 msgid "The argument to --percent is not a percentage"
 msgstr "Argumentet til --percent er ikke et procenttal"
 
-#: options.i:369
+#: options.i:380
 #, c-format
 msgid "The argument to --opacity is not a number between 0 and 255"
 msgstr "Argumentet til --opacity er ikke et tal mellem 0 og 255"

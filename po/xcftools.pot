@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: henning@makholm.net\n"
-"POT-Creation-Date: 2006-02-22 01:38+0100\n"
+"POT-Creation-Date: 2006-04-17 04:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -162,37 +162,37 @@ msgstr ""
 msgid "disable layer mask"
 msgstr ""
 
-#: options.i:155
+#: options.i:167
 #, c-format
-msgid "Could not open color database file %s\n"
+msgid "Could not find X11 color database\n"
 msgstr ""
 
-#: options.i:160
+#: options.i:171
 #, c-format
 msgid "Unknown background color '%s'"
 msgstr ""
 
-#: options.i:284
+#: options.i:295
 #, c-format
 msgid "-S option must have an argument of the form wxh"
 msgstr ""
 
-#: options.i:303
+#: options.i:314
 #, c-format
 msgid "-O option must have an argument of the form x,y"
 msgstr ""
 
-#: options.i:340
+#: options.i:351
 #, c-format
 msgid "Layer mode '%s' is unknown"
 msgstr ""
 
-#: options.i:356
+#: options.i:367
 #, c-format
 msgid "The argument to --percent is not a percentage"
 msgstr ""
 
-#: options.i:369
+#: options.i:380
 #, c-format
 msgid "The argument to --opacity is not a number between 0 and 255"
 msgstr ""
