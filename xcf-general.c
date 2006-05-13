@@ -51,14 +51,23 @@ xcfNextprop(uint32_t *master,uint32_t *body)
   type = xcfL(ptr);
   length = xcfL(ptr+4);
   *body = ptr+8 ;
-  *master = ptr+8+length ;
-  total = 8 + length + (type != PROP_END ? 8 : 0) ;
-  if( total < length ) /* Check overwrap */
-    FatalBadXCF("Overlong property at %" PRIX32, ptr);
-  xcfCheckspace(ptr,total,"Overlong property at %" PRIX32,ptr) ;
 
   switch(type) {
-  case PROP_COLORMAP:    minlength = 4+3*xcfL(ptr+8); break;
+  case PROP_COLORMAP:
+    {
+      uint32_t ncolors ;
+      xcfCheckspace(ptr+8,4,"(colormap length)");
+      ncolors = xcfL(ptr+8) ;
+      if( ncolors > 256 )
+        FatalBadXCF("Colormap has %" PRIu32 " entries",ncolors);
+      /* Surprise! Some older verion of the Gimp computed the wrong length
+       * word, and the _reader_ always just reads three bytes per color
+       * and ignores the length tag! Duplicate this so we too can read
+       * the buggy XCF files.
+       */
+      length = minlength = 4+3*ncolors;
+      break;
+    }
   case PROP_COMPRESSION: minlength = 1; break;
   case PROP_OPACITY:     minlength = 4; break;
   case PROP_APPLY_MASK:  minlength = 4; break;
@@ -69,6 +78,11 @@ xcfNextprop(uint32_t *master,uint32_t *body)
   if( length < minlength )
     FatalBadXCF("Short %s property at %" PRIX32 " (%" PRIu32 "<%" PRIu32 ")",
                 showPropType(type),ptr,length,minlength);
+  *master = ptr+8+length ;
+  total = 8 + length + (type != PROP_END ? 8 : 0) ;
+  if( total < length ) /* Check overwrap */
+    FatalBadXCF("Overlong property at %" PRIX32, ptr);
+  xcfCheckspace(ptr,total,"Overlong property at %" PRIX32,ptr) ;
   return type ;
 }
 

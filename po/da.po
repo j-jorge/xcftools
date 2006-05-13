@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcftools 0.9\n"
 "Report-Msgid-Bugs-To: henning@makholm.net\n"
-"POT-Creation-Date: 2006-04-17 04:06+0200\n"
+"POT-Creation-Date: 2006-05-14 04:25+0200\n"
 "PO-Revision-Date: 2006-04-17 04:07+0200\n"
 "Last-Translator: Henning Makholm <henning@makholm.net>\n"
 "Language-Team: Til test af l10n-faciliteter; ikke vedligeholdt\n"
@@ -502,7 +502,7 @@ msgstr "!Kan ikke oprette filen %s"
 msgid "!Error writing file %s"
 msgstr "!Fejl under skrivning til %s"
 
-#: xcf-general.c:158
+#: xcf-general.c:172
 #, c-format
 msgid ""
 "Warning: one or more layer names could not be\n"
@@ -511,12 +511,12 @@ msgstr ""
 "Advarsel: et eller flere lagnavne kunne ikke transkriberes\n"
 "          til det p.t. valgte tegnsæt.\n"
 
-#: xcf-general.c:194
+#: xcf-general.c:208
 #, c-format
 msgid "Not an XCF file at all (magic not recognized)"
 msgstr "Dette er slet ikke en XCF-fil (xcf-signaturen mangler)"
 
-#: xcf-general.c:198
+#: xcf-general.c:212
 #, c-format
 msgid "Warning: XCF version %d not supported (trying anyway...)\n"
 msgstr ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: henning@makholm.net\n"
-"POT-Creation-Date: 2006-04-17 04:06+0200\n"
+"POT-Creation-Date: 2006-05-14 04:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -496,19 +496,19 @@ msgstr ""
 msgid "!Error writing file %s"
 msgstr ""
 
-#: xcf-general.c:158
+#: xcf-general.c:172
 #, c-format
 msgid ""
 "Warning: one or more layer names could not be\n"
 "         translated to the local character set.\n"
 msgstr ""
 
-#: xcf-general.c:194
+#: xcf-general.c:208
 #, c-format
 msgid "Not an XCF file at all (magic not recognized)"
 msgstr ""
 
-#: xcf-general.c:198
+#: xcf-general.c:212
 #, c-format
 msgid "Warning: XCF version %d not supported (trying anyway...)\n"
 msgstr ""

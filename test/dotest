@@ -352,6 +352,7 @@ Version 1, 64x64 Indexed color, 3 layers, compressed RLE
 - 64x64+0+0 Indexed Normal Background
 EOF
 testinfo $S/indextest.xcf.gz
+testinfo $S/badindexed0.xcf.gz
 
 cat <<EOF > expected.stdout
 Version 0, 161x161 RGB color, 10 layers, compressed RLE
@@ -463,6 +464,7 @@ testpnm o:mid a:mid        tiletest -O17,17 -S32x32 Mid -Af
 #
 
 testpnm o:indextest a:indextest indextest
+testpnm o:indextest a:indextest badindexed0
 testpnm o:Subtract a:modeA indextest -T
 testpnm o:index4 indextest Background
 testpnm o:index256 i256
