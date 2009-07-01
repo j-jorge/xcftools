@@ -316,8 +316,10 @@ OPTION('O',--offset,(x","y) translate converted part of image,
 }
 
 OPTION('C',--autocrop,autocrop to visible layer boundaries,
-       (Crop and offset the converted part of the image to just include
+       (Set the converted part of the image such that it just include
         the boundaries of the visible (or selected) layers.
+        This may make it either smaller or larger than the canvas,
+        depending on the position and size of the visible layers.
         (Note that the
         .I contents
         of the layers is not taken into account when autocropping).

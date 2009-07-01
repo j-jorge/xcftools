@@ -46,8 +46,9 @@ and
 .BR \-b .
 .TP
 2)
-.BR \-g and
-.BR \-c .
+.B \-g
+and
+.B \-c .
 .TP
 3)
 .B \-D
@@ -94,6 +95,8 @@ sometimes has different rounding errors than the Gimp itself,
 especially when more than two layers are involved, or in case of
 some of the more exotic layer modes.
 These differences are usually not visible to the eye.
+.P
+Floating selections are currently not handled correctly.
 .P
 There are probably other bugs lurking in corner cases. If you discover
 one, please notify the author.

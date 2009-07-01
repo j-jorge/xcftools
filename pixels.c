@@ -361,8 +361,8 @@ getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
   if( isSubrect(want,dim->c) &&
       (want.l - dim->c.l) % TILE_WIDTH == 0 &&
       (want.t - dim->c.t) % TILE_HEIGHT == 0 ) {
-    unsigned tx = (want.l - dim->c.l) / TILE_WIDTH ;
-    unsigned ty = (want.t - dim->c.t) / TILE_WIDTH ;
+    int tx = TILE_NUM(want.l - dim->c.l);
+    int ty = TILE_NUM(want.t - dim->c.t);
     if( want.r == TILEXn(*dim,tx+1) && want.b == TILEYn(*dim,ty+1) ) {
       /* The common case? An entire single tile from the layer */
       copyTilePixels(tile,tiles->tileptrs[tx + ty*dim->tilesx],tiles->params);
@@ -375,8 +375,10 @@ getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
     unsigned width = want.r-want.l ;
     rgba *pixvert = tile->pixels ;
     rgba *pixhoriz ;
-    unsigned y, ty, l0, l1, lstart, lnum ;
-    unsigned x, tx, c0, c1, cstart, cnum ;
+    int y, ty, l0, l1 ;
+    int x, tx, c0, c1 ;
+    unsigned lstart, lnum ;
+    unsigned cstart, cnum ;
     
     if( !isSubrect(want,dim->c) ) {
       if( want.l < dim->c.l ) pixvert += (dim->c.l - want.l),
@@ -394,7 +396,7 @@ getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
     fprintf(stderr,"jig0 (%d-%d),(%d-%d)\n",left,right,top,bottom);
 #endif
 
-    for( y=want.t, ty=(want.t-dim->c.t)/TILE_HEIGHT, l0=TILEYn(*dim,ty);
+    for( y=want.t, ty=TILE_NUM(want.t-dim->c.t), l0=TILEYn(*dim,ty);
          y<want.b;
          pixvert += lnum*width, ty++, y=l0=l1 ) {
       l1 = TILEYn(*dim,ty+1) ;
@@ -402,7 +404,7 @@ getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
       lnum = (l1 > want.b ? want.b : l1) - y ;
       
       pixhoriz = pixvert ;
-      for( x=want.l, tx=(want.l-dim->c.l)/TILE_WIDTH, c0=TILEXn(*dim,tx);
+      for( x=want.l, tx=TILE_NUM(want.l-dim->c.l), c0=TILEXn(*dim,tx);
            x<want.r;
            pixhoriz += cnum, tx++, x=c0=c1 ) {
         c1 = TILEXn(*dim,tx+1);

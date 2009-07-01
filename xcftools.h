@@ -144,8 +144,17 @@ int xcfNextprop(uint32_t *master,uint32_t *body);
 const char* xcfString(uint32_t ptr,uint32_t *after);
 
 /* These are hardcoded in the Gimp sources: */
-#define TILE_WIDTH 64
-#define TILE_HEIGHT 64
+#define TILE_SHIFT 6
+#define TILE_WIDTH (1<<TILE_SHIFT)
+#define TILE_HEIGHT (1<<TILE_SHIFT)
+/* These definitions of TILE_LEFT and TILE_TOP work correctly for negative
+ * numbers, but on the other hand depend on TILE_WIDTH and TILE_HEIGHT
+ * being powers of 2. That's okay, because the tile size cannot change
+ * anyway.
+ */
+#define TILE_LEFT(x) ((x) & -TILE_WIDTH)
+#define TILE_TOP(y) ((y) & -TILE_HEIGHT)
+#define TILE_NUM(x) ((x) >> TILE_SHIFT)
 
 struct tileDimensions {
   struct rect c ;

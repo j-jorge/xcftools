@@ -17,7 +17,7 @@ dnl Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 dnl
 dnl ------------------------
 dnl The following line is the MASTER SOURCE for the version number
-AC_INIT(Xcftools,1.0.4,henning@makholm.net,xcftools)
+AC_INIT(Xcftools,1.0.5,henning@makholm.net,xcftools)
 AC_CONFIG_SRCDIR(xcfinfo.c)
         
 AC_PROG_INSTALL

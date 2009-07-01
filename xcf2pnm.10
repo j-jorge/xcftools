@@ -16,7 +16,7 @@
 .TH xcf2pnm 1 2006-02-12 "Xcftools" ""
 .SH NAME
 xcf2pnm \- convert from GIMP xcf files to ppm/pgm/pbm format
-.ds p xcfinfo
+.ds p xcf2pnm
 .SH SYNOPSIS
 .B \*p
 [
@@ -115,6 +115,8 @@ sometimes has different rounding errors than the Gimp itself,
 especially when more than two layers are involved, or in case of
 some of the more exotic layer modes.
 These differences are usually not visible to the eye.
+.P
+Floating selections are currently not handled correctly.
 .P
 There are probably other bugs lurking in corner cases. If you discover
 one, please notify the author.

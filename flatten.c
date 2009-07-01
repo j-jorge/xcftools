@@ -379,6 +379,8 @@ merge_exotic(struct Tile *bot, const struct Tile *top,
           HEXTANT(GREEN,BLUE,RED);
           HEXTANT(GREEN,RED,BLUE);
           #undef HEXTANT
+          default:
+            FatalUnexpected("Hue hextant is %d", hsvBot.hue);
           }
         break ;
       }
@@ -619,14 +621,14 @@ flattenIncrementally(struct FlattenSpec *spec,lineCallback callback)
   fillTile(&toptile,0);
 
   for( where.t = spec->dim.c.t; where.t < spec->dim.c.b; where.t=where.b ) {
-    where.b = (where.t+TILE_HEIGHT) - where.t % TILE_HEIGHT ;
+    where.b = TILE_TOP(where.t)+TILE_HEIGHT ;
     if( where.b > spec->dim.c.b ) where.b = spec->dim.c.b ;
     nrows = where.b - where.t ;
     for( y = 0; y < nrows ; y++ )
       rows[y] = xcfmalloc(4*(spec->dim.c.r-spec->dim.c.l));
 
     for( where.l = spec->dim.c.l; where.l < spec->dim.c.r; where.l=where.r ) {
-      where.r = (where.l+TILE_WIDTH) - where.l % TILE_WIDTH ;
+      where.r = TILE_LEFT(where.l)+TILE_WIDTH ;
       if( where.r > spec->dim.c.r ) where.r = spec->dim.c.r ;
       ncols = where.r - where.l ;
 

@@ -184,13 +184,13 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
           spec->dim = spec->layers[i].dim ;
           first = 0 ;
         } else {
-          if( spec->dim.c.l < spec->layers[i].dim.c.l )
+          if( spec->dim.c.l > spec->layers[i].dim.c.l )
             spec->dim.c.l = spec->layers[i].dim.c.l ;
-          if( spec->dim.c.r > spec->layers[i].dim.c.r )
+          if( spec->dim.c.r < spec->layers[i].dim.c.r )
             spec->dim.c.r = spec->layers[i].dim.c.r ;
-          if( spec->dim.c.t < spec->layers[i].dim.c.t )
+          if( spec->dim.c.t > spec->layers[i].dim.c.t )
             spec->dim.c.t = spec->layers[i].dim.c.t ;
-          if( spec->dim.c.b > spec->layers[i].dim.c.b )
+          if( spec->dim.c.b < spec->layers[i].dim.c.b )
             spec->dim.c.b = spec->layers[i].dim.c.b ;
         }
       }

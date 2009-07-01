@@ -16,6 +16,7 @@
 
 all:
 
+datarootdir		= @datarootdir@
 srcdir			= @srcdir@
 prefix			= @prefix@
 exec_prefix		= @exec_prefix@
@@ -33,7 +34,7 @@ CFLAGS			= @CFLAGS@
 LDFLAGS			= @LDFLAGS@ @LIBICONV@
 LIBS			= @LIBS@
 
-INSTALL			= @INSTALL@
+INSTALL			= @INSTALL@ -D
 INSTALL_PROGRAM		= @INSTALL_PROGRAM@
 INSTALL_DATA		= @INSTALL_DATA@
 
@@ -90,24 +91,24 @@ install: all
 	for p in $(BINARIES) ; do \
 	  case $$p in xcfview) strip= ;; *) strip=-s ;; esac ; \
 	  $(INSTALL_PROGRAM) $$strip $$p \
-	    $(bindir)/`echo $$p | $(SED) $(program_transform_name)` \
+	    $(DESTDIR)$(bindir)/`echo $$p | $(SED) $(program_transform_name)` \
 	    || exit 1 ;\
         done
 	for m in $(MANPAGES) ; do \
 	  $(INSTALL_DATA) $$m \
-	    $(mandir)/man1/`echo $$m | $(SED) $(program_transform_name)` \
+	    $(DESTDIR)$(mandir)/man1/`echo $$m | $(SED) $(program_transform_name)` \
 	    || exit 1 ; \
 	done
 	for lang in $(LINGUAS) ; do \
-	  $(srcdir)/install-sh -d $(localedir)/$$lang/LC_MESSAGES ; \
+	  $(srcdir)/install-sh -d $(DESTDIR)$(localedir)/$$lang/LC_MESSAGES ; \
 	  $(INSTALL_DATA) po/$$lang.mo \
-		$(localedir)/$$lang/LC_MESSAGES/$(APPNAME).mo \
+		$(DESTDIR)$(localedir)/$$lang/LC_MESSAGES/$(APPNAME).mo \
 	  || exit 1 ; \
 	done
 	for L in $(MANLINGUAS) ; do \
-	   $(srcdir)/install-sh -d $(mandir)/$$L/man1 || exit 1 ; \
+	   $(srcdir)/install-sh -d $(DESTDIR)$(mandir)/$$L/man1 || exit 1 ; \
 	   for P in $(patsubst %.1,%,$(MANPAGES)) ; do \
-		$(INSTALL_DATA) manpo/$$P.$$L.1 $(mandir)/$$L/man1/$$P.1 \
+		$(INSTALL_DATA) manpo/$$P.$$L.1 $(DESTDIR)$(mandir)/$$L/man1/$$P.1 \
 		|| exit 1; done ; done ;
 
 C_GENERATED = enums.c table.c nlsini.c

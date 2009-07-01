@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: henning@makholm.net\n"
-"POT-Creation-Date: 2006-05-14 04:25+0200\n"
+"POT-Creation-Date: 2009-07-03 01:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -182,17 +182,17 @@ msgstr ""
 msgid "-O option must have an argument of the form x,y"
 msgstr ""
 
-#: options.i:351
+#: options.i:353
 #, c-format
 msgid "Layer mode '%s' is unknown"
 msgstr ""
 
-#: options.i:367
+#: options.i:369
 #, c-format
 msgid "The argument to --percent is not a percentage"
 msgstr ""
 
-#: options.i:380
+#: options.i:382
 #, c-format
 msgid "The argument to --opacity is not a number between 0 and 255"
 msgstr ""
@@ -388,17 +388,17 @@ msgstr ""
 msgid "Monochrome output selected, but not all pixels are black or white"
 msgstr ""
 
-#: flatten.c:386
+#: flatten.c:388
 #, c-format
 msgid "'%s' layer mode"
 msgstr ""
 
-#: flatten.c:566
+#: flatten.c:568
 #, c-format
 msgid "Flattened image has partially transparent pixels"
 msgstr ""
 
-#: flatten.c:672
+#: flatten.c:674
 #, c-format
 msgid "Flattening image ..."
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcftools 0.9\n"
 "Report-Msgid-Bugs-To: henning@makholm.net\n"
-"POT-Creation-Date: 2006-05-14 04:25+0200\n"
+"POT-Creation-Date: 2009-07-03 01:26+0200\n"
 "PO-Revision-Date: 2006-04-17 04:07+0200\n"
 "Last-Translator: Henning Makholm <henning@makholm.net>\n"
 "Language-Team: Til test af l10n-faciliteter; ikke vedligeholdt\n"
@@ -181,17 +181,17 @@ msgstr "-S-flaget skal have et argument på formen bxh"
 msgid "-O option must have an argument of the form x,y"
 msgstr "-O-flaget skal have et argument på formen x,y"
 
-#: options.i:351
+#: options.i:353
 #, c-format
 msgid "Layer mode '%s' is unknown"
 msgstr "Lagtilstanden »%s« er ukendt"
 
-#: options.i:367
+#: options.i:369
 #, c-format
 msgid "The argument to --percent is not a percentage"
 msgstr "Argumentet til --percent er ikke et procenttal"
 
-#: options.i:380
+#: options.i:382
 #, c-format
 msgid "The argument to --opacity is not a number between 0 and 255"
 msgstr "Argumentet til --opacity er ikke et tal mellem 0 og 255"
@@ -388,17 +388,17 @@ msgid "Monochrome output selected, but not all pixels are black or white"
 msgstr ""
 "Der er valgt sort/hvid-format, men billedet indeholder farver eller gråtoner"
 
-#: flatten.c:386
+#: flatten.c:388
 #, c-format
 msgid "'%s' layer mode"
 msgstr "Lagtilstanden »%s«"
 
-#: flatten.c:566
+#: flatten.c:568
 #, c-format
 msgid "Flattened image has partially transparent pixels"
 msgstr "Der er halvgennemsigtige pixels i det fladgjorde billede"
 
-#: flatten.c:672
+#: flatten.c:674
 #, c-format
 msgid "Flattening image ..."
 msgstr "Fladgør billede ..."

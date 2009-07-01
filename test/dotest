@@ -426,10 +426,14 @@ testpnm o:huetest huetest
 #
 
 testpnm o:tiletest tiletest
+testpnm o:tiletest tiletest-128 -O-128,-128 -S 161x161
+testpnm o:tiletest tiletest-61 -O-61,-61 
+testpnm o:gray tiletest-128 Background 'Straight loop' 'Long and low' -C -f
+testpnm o:gray tiletest-61  Background 'Straight loop' 'Long and low' -C -f
 
 #############################################################################
 #
-#   Test output format selection for xcf2pnn with and without -f
+#   Test output format selection for xcf2pnm with and without -f
 #
 
 testpnm o:mono O:-ppm tiletest Background 'Straight loop'
@@ -631,7 +635,7 @@ testpng odoodle tiletest Doodle 'Straight loop' -f -S5x5 -C
 
 # 3 colors
 cat <<EOF > pngtype.want
-144x141x2
+161x161x2
 color+index
 z0 f0 i0
 PLTE(9)
