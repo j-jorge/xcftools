@@ -1,19 +1,19 @@
 /* Generic support functions for Xcftools
  *
- * Copyright (C) 2006  Henning Makholm
+ * This file was written by Henning Makholm <henning@makholm.net>
+ * It is hereby in the public domain.
+ * 
+ * In jurisdictions that do not recognise grants of copyright to the
+ * public domain: I, the author and (presumably, in those jurisdictions)
+ * copyright holder, hereby permit anyone to distribute and use this code,
+ * in source code or binary form, with or without modifications. This
+ * permission is world-wide and irrevocable.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of version 2 of the GNU General Public License as
- * published by the Free Software Foundation.
+ * Of course, I will not be liable for any errors or shortcomings in the
+ * code, since I give it away without asking any compenstations.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * If you use or distribute this code, I would appreciate receiving
+ * credit for writing it, in whichever way you find proper and customary.
  */
 
 #include "xcftools.h"

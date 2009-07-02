@@ -3,13 +3,13 @@
 # Henning Makholm, the xcftools author, have not had occasion to test
 # it, so use at your own peril. In particular, note that there is a
 # hard-coded version number just a few lines in. I make no promises
-# that I'll remember to update it for versions 1.0.5 - caveat emptor!
+# that I'll remember to update it for versions 1.0.6 - caveat emptor!
 
 #############################################################################
 # Variables
 #############################################################################
 %define name    xcftools
-%define version 1.0.5
+%define version 1.0.6
 %define release 1
 
 #############################################################################
@@ -19,7 +19,7 @@ Summary   : xcftools
 Name      : %{name} 
 Version   : %{version} 
 Release   : %{release} 
-License   : See LICENSE file.
+License   : Public Domain
 Group     : Development/Tools
 Source    : xcftools-%version.tar.gz
 Packager  : Marcus Alanen <marcus.alanen@gmail.com>

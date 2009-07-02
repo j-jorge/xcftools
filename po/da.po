@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcftools 0.9\n"
 "Report-Msgid-Bugs-To: henning@makholm.net\n"
-"POT-Creation-Date: 2009-07-03 01:26+0200\n"
+"POT-Creation-Date: 2009-07-03 12:48+0200\n"
 "PO-Revision-Date: 2006-04-17 04:07+0200\n"
 "Last-Translator: Henning Makholm <henning@makholm.net>\n"
 "Language-Team: Til test af l10n-faciliteter; ikke vedligeholdt\n"
@@ -362,27 +362,27 @@ msgstr "Ikke mere lagerplads"
 msgid "The %s option must follow a layer name on the command line"
 msgstr "%s-flaget skal komme efter navnet på et lag"
 
-#: flatspec.c:135
+#: flatspec.c:144
 #, c-format
 msgid "The image has no layer called '%s'"
 msgstr "Billedet har ikke noget lag der hedder »%s«"
 
-#: flatspec.c:148
+#: flatspec.c:157
 #, c-format
 msgid "Layer '%s' has no layer mask to enable"
 msgstr "Laget »%s« har ikke nogen lagmaske at tænde for"
 
-#: flatspec.c:262 xcfinfo.c:97
+#: flatspec.c:272 xcfinfo.c:97
 #, c-format
 msgid "/mask"
 msgstr "/maske"
 
-#: flatspec.c:348 xcf2png.c:233 xcf2pnm.c:158
+#: flatspec.c:358 xcf2png.c:233 xcf2pnm.c:158
 #, c-format
 msgid "Grayscale output selected, but colored pixel(s) found"
 msgstr "Der er valgt gråtoneformat, men billedet indeholder farvede pixels"
 
-#: flatspec.c:352 xcf2pnm.c:172
+#: flatspec.c:362 xcf2pnm.c:172
 #, c-format
 msgid "Monochrome output selected, but not all pixels are black or white"
 msgstr ""

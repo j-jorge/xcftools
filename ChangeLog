@@ -1,3 +1,13 @@
+2009-07-03  Henning Makholm  <henning@makholm.net>
+
+	* Version 1.0.6
+	* Change licensing from GPL-2 to PD.
+	* Fix bug: A layer without an alpha channel bug with an active
+	  layer mask was wrongly considered to obscure all lower layers.
+	* Fix bug: xcf2pnm would guess PBM as the output format even if
+	  the background was explicitly set to an intermediate gray, or
+	  if -T might produce grays.
+
 2009-07-02  Henning Makholm  <henning@makholm.net>
 
 	* Version 1.0.5

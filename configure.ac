@@ -1,23 +1,23 @@
 dnl Configure script for xcftools
 dnl
-dnl Copyright (C) 2006  Henning Makholm
+dnl This file was written by Henning Makholm <henning@makholm.net>
+dnl It is hereby in the public domain.
+dnl 
+dnl In jurisdictions that do not recognise grants of copyright to the
+dnl public domain: I, the author and (presumably, in those jurisdictions)
+dnl copyright holder, hereby permit anyone to distribute and use this code,
+dnl in source code or binary form, with or without modifications. This
+dnl permission is world-wide and irrevocable.
 dnl
-dnl This program is free software; you can redistribute it and/or modify
-dnl it under the terms of version 2 of the GNU General Public License as
-dnl published by the Free Software Foundation.
+dnl Of course, I will not be liable for any errors or shortcomings in the
+dnl  code, since I give it away without asking any compenstations.
 dnl
-dnl This program is distributed in the hope that it will be useful,
-dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
-dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-dnl GNU General Public License for more details.
-dnl
-dnl You should have received a copy of the GNU General Public License
-dnl along with this program; if not, write to the Free Software
-dnl Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+dnl If you use or distribute this code, I would appreciate receiving
+dnl credit for writing it, in whichever way you find proper and customary.
 dnl
 dnl ------------------------
 dnl The following line is the MASTER SOURCE for the version number
-AC_INIT(Xcftools,1.0.5,henning@makholm.net,xcftools)
+AC_INIT(Xcftools,1.0.6,henning@makholm.net,xcftools)
 AC_CONFIG_SRCDIR(xcfinfo.c)
         
 AC_PROG_INSTALL
