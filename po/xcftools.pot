@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: henning@makholm.net\n"
-"POT-Creation-Date: 2009-07-03 12:48+0200\n"
+"POT-Creation-Date: 2009-07-03 13:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -353,7 +353,7 @@ msgstr ""
 msgid "Fractal"
 msgstr ""
 
-#: flatspec.c:45 utils.c:110
+#: flatspec.c:45 utils.c:105
 #, c-format
 msgid "Out of memory"
 msgstr ""
@@ -474,24 +474,15 @@ msgstr ""
 
 #: utils.c:94
 #, c-format
-msgid ""
-"This program is free software; you can modify and distribute it\n"
-"under the terms of the GNU General Public License, version 2.\n"
-"There is no warranty for %s.\n"
-"\n"
-msgstr ""
-
-#: utils.c:99
-#, c-format
 msgid "Type \"%s -h\" to get an option summary.\n"
 msgstr ""
 
-#: utils.c:135
+#: utils.c:130
 #, c-format
 msgid "!Cannot create file %s"
 msgstr ""
 
-#: utils.c:159
+#: utils.c:154
 #, c-format
 msgid "!Error writing file %s"
 msgstr ""

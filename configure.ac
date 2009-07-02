@@ -17,7 +17,7 @@ dnl credit for writing it, in whichever way you find proper and customary.
 dnl
 dnl ------------------------
 dnl The following line is the MASTER SOURCE for the version number
-AC_INIT(Xcftools,1.0.6,henning@makholm.net,xcftools)
+AC_INIT(Xcftools,1.0.7,henning@makholm.net,xcftools)
 AC_CONFIG_SRCDIR(xcfinfo.c)
         
 AC_PROG_INSTALL

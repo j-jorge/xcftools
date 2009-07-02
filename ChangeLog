@@ -1,5 +1,10 @@
 2009-07-03  Henning Makholm  <henning@makholm.net>
 
+	* Version 1.0.7
+	* Fix GPL-to-PD transition: missed copyrigh blurb in online banner.
+
+2009-07-03  Henning Makholm  <henning@makholm.net>
+
 	* Version 1.0.6
 	* Change licensing from GPL-2 to PD.
 	* Fix bug: A layer without an alpha channel bug with an active

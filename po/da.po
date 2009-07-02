@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcftools 0.9\n"
 "Report-Msgid-Bugs-To: henning@makholm.net\n"
-"POT-Creation-Date: 2009-07-03 12:48+0200\n"
-"PO-Revision-Date: 2006-04-17 04:07+0200\n"
+"POT-Creation-Date: 2009-07-03 13:55+0200\n"
+"PO-Revision-Date: 2009-07-03 14:42+0200\n"
 "Last-Translator: Henning Makholm <henning@makholm.net>\n"
 "Language-Team: Til test af l10n-faciliteter; ikke vedligeholdt\n"
 "MIME-Version: 1.0\n"
@@ -352,7 +352,7 @@ msgstr ""
 msgid "Fractal"
 msgstr ""
 
-#: flatspec.c:45 utils.c:110
+#: flatspec.c:45 utils.c:105
 #, c-format
 msgid "Out of memory"
 msgstr "Ikke mere lagerplads"
@@ -476,28 +476,15 @@ msgstr "Billedet indeholder egenskaber som dette program ikke forstår:"
 
 #: utils.c:94
 #, c-format
-msgid ""
-"This program is free software; you can modify and distribute it\n"
-"under the terms of the GNU General Public License, version 2.\n"
-"There is no warranty for %s.\n"
-"\n"
-msgstr ""
-"Dette program er fri software; du må ændre og sprede det under de\n"
-"betingelser der fremgår af version 2 af GNU General Public License.\n"
-"Bemærk at %s leveres uden garanti.\n"
-"\n"
-
-#: utils.c:99
-#, c-format
 msgid "Type \"%s -h\" to get an option summary.\n"
 msgstr "Kommandoen »%s -h« giver en oversigt over kommandolinjeflag.\n"
 
-#: utils.c:135
+#: utils.c:130
 #, c-format
 msgid "!Cannot create file %s"
 msgstr "!Kan ikke oprette filen %s"
 
-#: utils.c:159
+#: utils.c:154
 #, c-format
 msgid "!Error writing file %s"
 msgstr "!Fejl under skrivning til %s"

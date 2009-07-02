@@ -3,13 +3,13 @@
 # Henning Makholm, the xcftools author, have not had occasion to test
 # it, so use at your own peril. In particular, note that there is a
 # hard-coded version number just a few lines in. I make no promises
-# that I'll remember to update it for versions 1.0.6 - caveat emptor!
+# that I'll remember to update it for versions 1.0.7 - caveat emptor!
 
 #############################################################################
 # Variables
 #############################################################################
 %define name    xcftools
-%define version 1.0.6
+%define version 1.0.7
 %define release 1
 
 #############################################################################

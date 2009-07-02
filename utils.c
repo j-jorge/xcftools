@@ -91,11 +91,6 @@ gpl_blurb(void)
 {
   fprintf(stderr,PACKAGE_STRING "\n");
   fprintf(stderr,
-          _("This program is free software; you can modify and distribute it\n"
-            "under the terms of the GNU General Public License, version 2.\n"
-            "There is no warranty for %s.\n\n"),
-          PACKAGE_NAME);
-  fprintf(stderr,
           _("Type \"%s -h\" to get an option summary.\n"),progname);
   exit(1) ;
 }
