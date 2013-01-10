@@ -181,6 +181,9 @@ struct xcfLayer {
   uint32_t propptr ;
   struct xcfTiles pixels ;
   struct xcfTiles mask ;
+  int isGroup ;
+  unsigned pathLength ;
+  unsigned *path ;
 }; 
 
 extern struct xcfImage {

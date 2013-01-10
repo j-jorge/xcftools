@@ -42,6 +42,23 @@ usage(FILE *where)
   }
 }
 
+static void
+printLayerPath
+( unsigned layerIndex, const char* pathSeparator )
+{
+  int depth = XCF.layers[layerIndex].pathLength ;
+  int i = layerIndex;
+
+  if ( depth != 0 ) {
+    do {
+      i++;
+    } while ( XCF.layers[i].pathLength != depth - 1 );
+
+    printLayerPath( i, pathSeparator ) ;
+    printf( "%s%s", pathSeparator, XCF.layers[i].name );
+  }
+}
+
 int
 main(int argc,char **argv)
 {
@@ -49,6 +66,7 @@ main(int argc,char **argv)
   int option ;
   const char *unzipper = NULL ;
   const char *infile = NULL ;
+  const char *pathSeparator = "|";
 
   setlocale(LC_ALL,"");
   progname = argv[0] ;
@@ -95,7 +113,17 @@ main(int argc,char **argv)
       printf("/%02d%%",XCF.layers[i].opacity * 100 / 255);
     if( XCF.layers[i].hasMask )
       printf(_("/mask"));
-    printf(" %s\n",XCF.layers[i].name);
+    if( XCF.layers[i].isGroup )
+      printf(_("/group"));
+
+    printf( " " );
+
+    if ( XCF.version > 2 ) {
+      printLayerPath( i, pathSeparator );
+      printf( "%s", pathSeparator );
+    }
+
+    printf("%s\n",XCF.layers[i].name);
   }
       
   return 0 ;

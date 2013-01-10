@@ -47,6 +47,15 @@ OPTION('j',--bzip,input is bzip2 compressed,
         ));
 unzipper = "bzcat" ;
 break ;
+
+#ifdef XCFINFO
+OPTION('p',--path-separator, (string) use 'string' to separate the groups in the paths,
+       (This string will be used to separate the name of the containing groups
+        when manipulating layers.
+        ));
+pathSeparator = optarg ;
+break ;
+#endif
      
 OPTION('z',--gzip,input is gzip compressed,
        (Equivalent to
