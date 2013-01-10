@@ -20,3 +20,11 @@ xcf*.1il
 *.1
 xcf*.oi
 options.mi
+*.o
+*~
+
+manpo/all
+manpo/stamp
+
+po/*.mo
+po/stamp
