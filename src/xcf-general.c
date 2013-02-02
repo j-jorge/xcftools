@@ -169,7 +169,7 @@ xcfString(uint32_t ptr,uint32_t *after)
   {
     static int warned = 0 ;
     if( !warned ) {
-      fprintf(stderr,_("Warning: one or more layer names could not be\n"
+      fprintf(stderr,gettext("Warning: one or more layer names could not be\n"
                        "         translated to the local character set.\n"));
       warned = 1 ;
     }
@@ -205,11 +205,11 @@ getBasicXcfInfo(void)
           sscanf((char*)xcf_file,"gimp xcf v%d",&XCF.version) == 1 )
     ;
   else
-    FatalBadXCF(_("Not an XCF file at all (magic not recognized)"));
+    FatalBadXCF(gettext("Not an XCF file at all (magic not recognized)"));
 
   if( XCF.version < 0 || XCF.version > 3 ) {
     fprintf(stderr,
-            _("Warning: XCF version %d not supported (trying anyway...)\n"),
+            gettext("Warning: XCF version %d not supported (trying anyway...)\n"),
             XCF.version);
   }
   

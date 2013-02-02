@@ -59,7 +59,7 @@ struct FlattenSpec {
 void init_flatspec(struct FlattenSpec *);
 
 void add_layer_request(struct FlattenSpec *,const char *name);
-struct xcfLayer *lastlayerspec(struct FlattenSpec *,const char *option);
+struct xcfLayer *lastlayerspec( struct FlattenSpec * );
 
 typedef enum out_color_mode (*guesser) (struct FlattenSpec *,rgba **);
 

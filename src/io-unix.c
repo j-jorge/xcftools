@@ -75,7 +75,7 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
 #if HAVE_MMAP
     xcfstream = tmpfile() ;
     if( !xcfstream )
-      FatalUnexpected(_("!Cannot create temporary unzipped file"));
+      FatalUnexpected(gettext("!Cannot create temporary unzipped file"));
     outfd = fileno(xcfstream) ;
 #else
     int fh[2] ;
@@ -94,7 +94,7 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
       }
       fclose(xcfstream) ;
       execlp(unzipper,unzipper,filename,NULL) ;
-      fprintf(stderr,_("Cannot execute "));
+      fprintf(stderr,gettext("Cannot execute "));
       perror(unzipper);
       exit(126) ;
     }
@@ -111,7 +111,7 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
     } else {
       fclose(xcfstream) ;
       xcfstream = 0 ;
-      FatalGeneric(126,_("%s terminated abnormally"),unzipper);
+      FatalGeneric(126,gettext("%s terminated abnormally"),unzipper);
     }
 #else
     close(fh[0]) ;
@@ -123,7 +123,7 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
   } else {
     xcfstream = fopen(filename,"rb") ;
     if( !xcfstream )
-      FatalGeneric(21,_("!Cannot open %s"),filename);
+      FatalGeneric(21,gettext("!Cannot open %s"),filename);
   }
   /* OK, now we have an open stream ... */
   if( fstat(fileno(xcfstream),&statbuf) == 0 &&
@@ -143,12 +143,12 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
 #endif
     xcf_file = malloc(xcf_length);
     if( xcf_file == 0 )
-      FatalUnexpected(_("Out of memory for xcf data"));
+      FatalUnexpected(gettext("Out of memory for xcf data"));
     if( fread(xcf_file,1,xcf_length,xcfstream) != xcf_length ) {
       if( feof(xcfstream) )
-        FatalUnexpected(_("XCF file shrunk while reading it"));
+        FatalUnexpected(gettext("XCF file shrunk while reading it"));
       else
-        FatalUnexpected(_("!Could not read xcf data"));
+        FatalUnexpected(gettext("!Could not read xcf data"));
     }
     fclose(xcfstream) ;
     xcfstream = 0 ;
@@ -159,14 +159,14 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
     while(1) {
       xcf_file = realloc(xcf_file,blocksize) ;
       if( xcf_file == 0 )
-        FatalUnexpected(_("Out of memory for xcf data"));
+        FatalUnexpected(gettext("Out of memory for xcf data"));
       size_t actual = fread(xcf_file+xcf_length,1,blocksize-xcf_length,
                             xcfstream) ;
       xcf_length += actual ;
       if( feof(xcfstream) )
         break ;
       if( xcf_length < blocksize ) {
-        FatalUnexpected(_("!Could not read xcf data")) ;
+        FatalUnexpected(gettext("!Could not read xcf data")) ;
       }
       blocksize += (blocksize >> 1) & ~(size_t)0x3FFF ; /* 16 KB granularity */
     }

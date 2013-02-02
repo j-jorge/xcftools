@@ -131,10 +131,10 @@ initLayer(struct xcfLayer *layer) {
     DEF(INDEXED);
     DEF(INDEXEDA);
   default:
-    FatalUnsupportedXCF(_("Layer type %s"),_(showGimpImageType(layer->type)));
+    FatalUnsupportedXCF(gettext("Layer type %s"),gettext(showGimpImageType(layer->type)));
   }
   initTileDirectory(&layer->dim,&layer->pixels,
-                    _(showGimpImageType(layer->type)));
+                    gettext(showGimpImageType(layer->type)));
   layer->mask.params = &convertChannel ;
   initTileDirectory(&layer->dim,&layer->mask,"layer mask");
 }
@@ -149,7 +149,7 @@ initColormap(void) {
   }
   ncolors = xcfL(XCF.colormapptr) ;
   if( ncolors > 256 )
-    FatalUnsupportedXCF(_("Color map has more than 256 entries"));
+    FatalUnsupportedXCF(gettext("Color map has more than 256 entries"));
   copyStraightPixels(colormap,ncolors,XCF.colormapptr+4,&convertColormap);
   colormapLength = ncolors ;
 #ifdef xDEBUG
@@ -184,7 +184,7 @@ struct Tile *
 forkTile(struct Tile* tile)
 {
   if( ++tile->refcount <= 0 )
-    FatalUnsupportedXCF(_("Unbelievably many layers?\n"
+    FatalUnsupportedXCF(gettext("Unbelievably many layers?\n"
                           "More likely to be a bug in %s"),progname);
   return tile ;
 }
@@ -337,8 +337,8 @@ copyTilePixels(struct Tile *dest, uint32_t ptr,convertParams *params)
     copyRLEpixels(dest->pixels,dest->count,ptr,params);
     break ;
   default:
-    FatalUnsupportedXCF(_("%s compression"),
-                        _(showXcfCompressionType(XCF.compression)));
+    FatalUnsupportedXCF(gettext("%s compression"),
+                        gettext(showXcfCompressionType(XCF.compression)));
   }
 }
 

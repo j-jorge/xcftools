@@ -36,9 +36,9 @@
 static void
 usage(FILE *where)
 {
-  fprintf(where,_("Usage: %s [options] filename.xcf[.gz] [layers]\n"),
+  fprintf(where,gettext("Usage: %s [options] filename.xcf[.gz] [layers]\n"),
           progname) ;
-  fprintf(where,_("Options:\n"));
+  fprintf(where,gettext("Options:\n"));
   opt_usage(where);
   if( where == stderr ) {
     exit(1);
@@ -62,8 +62,8 @@ start_writing(FILE **f,int version)
                           "PPM" };
 
   if( verboseFlag )
-    fprintf(stderr,f == &outfile ? _("Writing converted image as %s\n")
-            : _("Writing transparency map as %s\n"),
+    fprintf(stderr,f == &outfile ? gettext("Writing converted image as %s\n")
+            : gettext("Writing transparency map as %s\n"),
             format[version]);
   
   *f = openout( f == &outfile ? flatspec.output_filename
@@ -72,9 +72,9 @@ start_writing(FILE **f,int version)
   if( suppress_byline )
     ;
   else if( f == &outfile )
-    fprintf(*f,_(" # Converted by xcf2pnm %s"),PACKAGE_VERSION);
+    fprintf(*f,gettext(" # Converted by xcf2pnm %s"),PACKAGE_VERSION);
   else
-    fprintf(*f,_(" # Transparency map by xcf2pnm %s"),PACKAGE_VERSION);
+    fprintf(*f,gettext(" # Transparency map by xcf2pnm %s"),PACKAGE_VERSION);
   fprintf(*f,"\n%d %d\n%s",
           flatspec.dim.width,
           flatspec.dim.height,
@@ -128,7 +128,7 @@ callback_common(unsigned num,rgba *pixels)
     unsigned i ;
     for( i=0; i < num; i++ )
       if( !FULLALPHA(pixels[i]) )
-        FatalGeneric(100,_("Transparency found, but -a option not given"));
+        FatalGeneric(100,gettext("Transparency found, but -a option not given"));
   }
   xcffree(pixels) ;
 }
@@ -155,7 +155,7 @@ pgm_callback(unsigned num,rgba *pixels)
     int gray = degrayPixel(pixels[i]) ;
     if( gray == -1 )
       FatalGeneric(103,
-                   _("Grayscale output selected, but colored pixel(s) found"));
+                   gettext("Grayscale output selected, but colored pixel(s) found"));
     putc( gray, outfile );
   }
   callback_common(num,pixels);
@@ -169,7 +169,7 @@ pbm_callback(unsigned num,rgba *pixels)
                    ((rgba)255 << RED_SHIFT) +
                    ((rgba)255 << GREEN_SHIFT) +
                    ((rgba)255 << BLUE_SHIFT)) )
-    FatalGeneric(103,_("Monochrome output selected, but not all pixels "
+    FatalGeneric(103,gettext("Monochrome output selected, but not all pixels "
                        "are black or white"));
   callback_common(num,pixels);
 }
@@ -190,7 +190,7 @@ static lineCallback
 selectCallback(void)
 {
   if( flatspec.transmap_filename && ALPHA(flatspec.default_pixel) >= 128 )
-    FatalGeneric(101,_("The -a option was given, "
+    FatalGeneric(101,gettext("The -a option was given, "
                        "but the image has no transparency"));
   
   switch( flatspec.out_color_mode ) {

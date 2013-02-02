@@ -18,7 +18,10 @@
 
 #include "xcftools.h"
 #include "flatten.h"
+#include "nlsini.h"
+#include "options.h"
 #include "palette.h"
+
 #include <png.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,21 +36,20 @@
 #define getopt_long(argc,argv,optstring,l1,l2) getopt(argc,argv,optstring)
 #endif
 
-#include "xcf2png.oi"
-
 static void
 usage(FILE *where)
 {
-  fprintf(where,_("Usage: %s [options] filename.xcf[.gz] [layers]\n"),
+  fprintf(where,gettext("Usage: %s [options] filename.xcf[.gz] [layers]\n"),
           progname) ;
-  fprintf(where,_("Options:\n"));
-  opt_usage(where);
+  fprintf(where,gettext("Options:\n"));
+  // opt_usage(where);
   if( where == stderr ) {
     exit(1);
   }
 }
 
-static struct FlattenSpec flatspec ;
+static struct FlattenSpec flatspec;
+static struct ProcessControl process;
 
 static FILE *outfile = NULL ;
 static png_structp libpng = NULL ;
@@ -56,7 +58,7 @@ static png_infop libpng2 = NULL ;
 static void
 my_error_callback(png_structp png_ptr, png_const_charp errormsg)
 {
-  FatalUnexpected(_("Libpng error '%s'"),errormsg);
+  FatalUnexpected(gettext("Libpng error '%s'"),errormsg);
 }
 
   
@@ -75,7 +77,7 @@ init_output(void)
                                    my_error_callback,
                                    png_error_ptr_NULL);
   if( !libpng )
-    FatalUnexpected(_("Couldn't initialize libpng library"));
+    FatalUnexpected(gettext("Couldn't initialize libpng library"));
   
   libpng2 = png_create_info_struct(libpng);
   if( !libpng2 )
@@ -144,14 +146,14 @@ init_output(void)
 
   if( verboseFlag ) {
     fprintf(stderr,"Writing PNG: %s%s%s%s, %d bits",
-            color_type & PNG_COLOR_MASK_COLOR ? _("color") : _("grayscale"),
-            color_type & PNG_COLOR_MASK_PALETTE ? _("+palette") : "",
-            color_type & PNG_COLOR_MASK_ALPHA ? _("+alpha") : "",
+            color_type & PNG_COLOR_MASK_COLOR ? gettext("color") : gettext("grayscale"),
+            color_type & PNG_COLOR_MASK_PALETTE ? gettext("+palette") : "",
+            color_type & PNG_COLOR_MASK_ALPHA ? gettext("+alpha") : "",
             ptrans || NULLALPHA(flatspec.default_pixel)
-            ? _("+transparency") : "",
+            ? gettext("+transparency") : "",
             bit_depth);
     if( pngpalette )
-      fprintf(stderr,_(" (%d colors)"),paletteSize);
+      fprintf(stderr,gettext(" (%d colors)"),paletteSize);
     fprintf(stderr,"\n");
   }
   
@@ -230,7 +232,7 @@ graying_callback(unsigned num, rgba *pixels) {
     int g = degrayPixel(pixel) ;
     if( g == -1 )
       FatalGeneric(103,
-                   _("Grayscale output selected, but colored pixel(s) found"));
+                   gettext("Grayscale output selected, but colored pixel(s) found"));
     *fillptr++ = g ;
     *fillptr++ = ALPHA(pixel) ;
   }
@@ -354,8 +356,6 @@ int
 main(int argc,char **argv)
 {
   int option ;
-  const char *unzipper = NULL ;
-  const char *infile = NULL ;
 
   setlocale(LC_ALL,"");
   progname = argv[0] ;
@@ -364,26 +364,13 @@ main(int argc,char **argv)
   if( argc <= 1 ) gpl_blurb() ;
   
   init_flatspec(&flatspec) ;
-  while( (option=getopt_long(argc,argv,"-"OPTSTRING,longopts,NULL)) >= 0 )
-    switch(option) {
-      #define OPTION(char,long,desc,man) case char:
-      #include "options.i"
-    case 1:
-      if( infile ) 
-        add_layer_request(&flatspec,optarg);
-      else
-        infile = optarg ;
-      break ;
-    case '?':
-      usage(stderr);
-    default:
-      FatalUnexpected("Getopt(_long) unexpectedly returned '%c'",option);
-    }
-  if( infile == NULL ) {
-    usage(stderr);
-  }
-  
-  read_or_mmap_xcf(infile,unzipper);
+  init_process_control( &process );
+
+  if ( option_parse
+       ( argc, argv, NULL /*short_options*/, NULL /*long_options*/, &process, &flatspec ) )
+    exit(1);
+
+  read_or_mmap_xcf( process.inputFile, process.unzipper );
   getBasicXcfInfo() ;
   initColormap();
  

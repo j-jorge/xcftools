@@ -34,8 +34,8 @@
 static void
 usage(FILE *where)
 {
-  fprintf(where,_("Usage: %s [options] filename.xcf[.gz]\n"),progname) ;
-  fprintf(where,_("Options:\n"));
+  fprintf(where,gettext("Usage: %s [options] filename.xcf[.gz]\n"),progname) ;
+  fprintf(where,gettext("Options:\n"));
   opt_usage(where) ;
   if( where == stderr ) {
     exit(1);
@@ -81,7 +81,7 @@ main(int argc,char **argv)
     case 1:
       if( infile ) {
         FatalGeneric
-          (20,_("Only one XCF file per command line, please"));
+          (20,gettext("Only one XCF file per command line, please"));
       } else {
         infile = optarg ;
         break ;
@@ -97,24 +97,24 @@ main(int argc,char **argv)
 
   read_or_mmap_xcf(infile,unzipper);
   getBasicXcfInfo() ;
-  printf(_("Version %d, %dx%d %s, %d layers, compressed %s\n"),
+  printf(gettext("Version %d, %dx%d %s, %d layers, compressed %s\n"),
          XCF.version,XCF.width,XCF.height,
-         _(showGimpImageBaseType(XCF.type)),
+         gettext(showGimpImageBaseType(XCF.type)),
          XCF.numLayers,
-         _(showXcfCompressionType(XCF.compression)));
+         gettext(showXcfCompressionType(XCF.compression)));
   for( i = XCF.numLayers ; i-- ; ) {
     printf("%c %dx%d%+d%+d %s %s",
            XCF.layers[i].isVisible ? '+' : '-',
            XCF.layers[i].dim.width, XCF.layers[i].dim.height,
            XCF.layers[i].dim.c.l, XCF.layers[i].dim.c.t,
-           _(showGimpImageType(XCF.layers[i].type)),
-           _(showGimpLayerModeEffects(XCF.layers[i].mode)));
+           gettext(showGimpImageType(XCF.layers[i].type)),
+           gettext(showGimpLayerModeEffects(XCF.layers[i].mode)));
     if( XCF.layers[i].opacity < 255 )
       printf("/%02d%%",XCF.layers[i].opacity * 100 / 255);
     if( XCF.layers[i].hasMask )
-      printf(_("/mask"));
+      printf(gettext("/mask"));
     if( XCF.layers[i].isGroup )
-      printf(_("/group"));
+      printf(gettext("/group"));
 
     printf( " " );
 

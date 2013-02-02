@@ -23,8 +23,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-static rgba __ATTRIBUTE__((noinline,const))
-composite_one(rgba bot,rgba top)
+static rgba composite_one( rgba bot, rgba top )
 {
   unsigned tfrac, alpha ;
 
@@ -73,8 +72,7 @@ composite_one(rgba bot,rgba top)
  * merge_normal() will share ownership of top.
  * Return: may be shared.
  */
-static struct Tile * __ATTRIBUTE__((noinline))
-merge_normal(struct Tile *bot, struct Tile *top)
+static struct Tile * merge_normal(struct Tile *bot, struct Tile *top)
 {
   unsigned i ;
   assertTileCompatibility(bot,top);
@@ -119,7 +117,7 @@ merge_normal(struct Tile *bot, struct Tile *top)
   return bot ;
 }
 
-#define exotic_combinator static inline unsigned __ATTRIBUTE__((const))
+#define exotic_combinator static inline unsigned
 
 
 
@@ -260,9 +258,8 @@ RGBtoHSV(rgba rgb,struct HSV *hsv)
 /* merge_exotic() destructively updates bot.
  * merge_exotic() reads but does not free top.
  */
-static void __ATTRIBUTE__((noinline))
-merge_exotic(struct Tile *bot, const struct Tile *top,
-             GimpLayerModeEffects mode)
+static void merge_exotic( struct Tile *bot, const struct Tile *top,
+                          GimpLayerModeEffects mode )
 {
   unsigned i ;
   assertTileCompatibility(bot,top);
@@ -385,8 +382,8 @@ merge_exotic(struct Tile *bot, const struct Tile *top,
         break ;
       }
     default:
-      FatalUnsupportedXCF(_("'%s' layer mode"),
-                          _(showGimpLayerModeEffects(mode)));
+      FatalUnsupportedXCF(gettext("'%s' layer mode"),
+                          gettext(showGimpLayerModeEffects(mode)));
     }
     if( FULLALPHA(bot->pixels[i] & top->pixels[i]) )
       bot->pixels[i] = (bot->pixels[i] & (255 << ALPHA_SHIFT)) +
@@ -565,7 +562,7 @@ addBackground(struct FlattenSpec *spec, struct Tile *tile, unsigned ncols)
   switch( spec->partial_transparency_mode ) {
   case FORBID_PARTIAL_TRANSPARENCY:
     if( !(tileSummary(tile) & TILESUMMARY_CRISP) )
-      FatalGeneric(102,_("Flattened image has partially transparent pixels"));
+      FatalGeneric(102,gettext("Flattened image has partially transparent pixels"));
     break ;
   case DISSOLVE_PARTIAL_TRANSPARENCY:
     dissolveTile(tile);
@@ -671,7 +668,7 @@ flattenAll(struct FlattenSpec *spec)
 {
   rgba **rows = xcfmalloc(spec->dim.height * sizeof(rgba*));
   if( verboseFlag )
-    fprintf(stderr,_("Flattening image ..."));
+    fprintf(stderr,gettext("Flattening image ..."));
   collectPointer = rows ;
   flattenIncrementally(spec,collector);
   if( verboseFlag )

@@ -42,7 +42,7 @@ add_layer_request(struct FlattenSpec *spec, const char *layer)
   spec->layers = realloc(spec->layers,
                          sizeof(struct xcfLayer) * (1+spec->numLayers));
   if( spec->layers == NULL )
-    FatalUnexpected(_("Out of memory"));
+    FatalUnexpected(gettext("Out of memory"));
   spec->layers[spec->numLayers].name = layer ;
   spec->layers[spec->numLayers].mode = (GimpLayerModeEffects)-1 ;
   spec->layers[spec->numLayers].opacity = 9999 ;
@@ -51,11 +51,8 @@ add_layer_request(struct FlattenSpec *spec, const char *layer)
 }
 
 struct xcfLayer *
-lastlayerspec(struct FlattenSpec *spec,const char *option)
+lastlayerspec( struct FlattenSpec *spec )
 {
-  if( spec->numLayers == 0 )
-    FatalGeneric(20,_("The %s option must follow a layer name on the "
-                      "command line"),option);
   return spec->layers + (spec->numLayers-1) ;
 }
 
@@ -141,7 +138,7 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
 
       for( j=0; ; j++ ) {
         if( j == XCF.numLayers )
-          FatalGeneric(22,_("The image has no layer called '%s'"),
+          FatalGeneric(22,gettext("The image has no layer called '%s'"),
                        spec->layers[i].name);
         if( strcmp(spec->layers[i].name,XCF.layers[j].name) == 0 )
           break ;
@@ -154,7 +151,7 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
         XCF.layers[j].hasMask : spec->layers[i].hasMask ;
       if( hasMask && !XCF.layers[j].hasMask &&
           XCF.layers[j].mask.hierarchy == 0 )
-        FatalGeneric(22,_("Layer '%s' has no layer mask to enable"),
+        FatalGeneric(22,gettext("Layer '%s' has no layer mask to enable"),
                      spec->layers[i].name);
       spec->layers[i] = XCF.layers[j] ;
       spec->layers[i].mode = mode ;
@@ -264,12 +261,12 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
                 spec->layers[i].dim.width, spec->layers[i].dim.height,
                 spec->layers[i].dim.c.l - spec->dim.c.l,
                 spec->layers[i].dim.c.t - spec->dim.c.t,
-                _(showGimpImageType(spec->layers[i].type)),
-                _(showGimpLayerModeEffects(spec->layers[i].mode)));
+                gettext(showGimpImageType(spec->layers[i].type)),
+                gettext(showGimpLayerModeEffects(spec->layers[i].mode)));
         if( spec->layers[i].opacity < 255 )
           fprintf(stderr,"/%02d%%",spec->layers[i].opacity * 100 / 255);
         if( XCF.layers[i].hasMask )
-          fprintf(stderr,_("/mask"));
+          fprintf(stderr,gettext("/mask"));
         fprintf(stderr," %s\n",spec->layers[i].name);
       }
     }
@@ -355,11 +352,11 @@ analyse_colormode(struct FlattenSpec *spec,rgba **allPixels,
   case COLOR_GRAY:
     if( (status & 1) == 0 )
       FatalGeneric(103,
-                   _("Grayscale output selected, but colored pixel(s) found"));
+                   gettext("Grayscale output selected, but colored pixel(s) found"));
     break ;
   case COLOR_MONO:
     if( (status & 2) == 0 )
-      FatalGeneric(103,_("Monochrome output selected, but not all pixels "
+      FatalGeneric(103,gettext("Monochrome output selected, but not all pixels "
                          "are black or white"));
     break ;
   case COLOR_BY_FILENAME: /* Should not happen ... */

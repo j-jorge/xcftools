@@ -114,7 +114,7 @@ struct Tile *forkTile(struct Tile*);
 void freeTile(struct Tile*);
 #define invalidateSummary(tile,mask) \
   do{ assert((tile)->refcount==1); (tile)->summary &= mask; } while(0)
-summary_t __ATTRIBUTE__((pure)) tileSummary(struct Tile *);
+summary_t tileSummary(struct Tile *);
 
 void fillTile(struct Tile*,rgba);
 

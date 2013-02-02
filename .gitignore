@@ -1,22 +1,8 @@
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
 Makefile
-autom4te.cache
-config.h
-config.log
-config.status
-aclocal.m4
-enums.[ch]
-table.c
-nlsini.c
-xcfinfo
-xcf2pnm
-xcf2png
-xcfview
-xcf**.1i
-xcf*.1il
-*.1
-xcf*.oi
-options.mi
-*.o
+bin/
 *~
 
 manpo/all
