@@ -22,36 +22,6 @@
 #include <string.h>
 
 /*----------------------------------------------------------------------------*/
-const struct option longopts[] = {
-  option_help,
-  option_verbose,
-  option_bzip,
-  option_gzip,
-  option_unpack,
-  option_output,
-  option_background,
-  option_force_alpha,
-  option_color,
-  option_colour,
-  option_gray,
-  option_grey,
-  option_truecolor,
-  option_for_gif,
-  option_dissolve,
-  option_full_image,
-  option_size,
-  option_offset,
-  option_autocrop,
-  option_mode,
-  option_percent,
-  option_opacity,
-  option_mask,
-  option_nomask,
-  option_utf8,
-  { 0 }
-};
-
-/*----------------------------------------------------------------------------*/
 void option_show_version( const char* app_name )
 {
   printf( "%s - %s\n", app_name, PACKAGE_STRING );
@@ -452,15 +422,17 @@ int process_option
 
 /*----------------------------------------------------------------------------*/
 void show_help
-( const char* progname, const char* short_options, struct option* long_options )
+( const char* progname, const char* short_options,
+  const struct option* long_options )
 {
   printf( "There is no help. You're alone." );
 } // show_help()
 
 /*----------------------------------------------------------------------------*/
 int option_parse
-( int argc, char** argv, const char* short_options, struct option* long_options,
-  struct ProcessControl* p, struct FlattenSpec* flatspec )
+( int argc, char** argv, const char* short_options,
+  const struct option* long_options, struct ProcessControl* p,
+  struct FlattenSpec* flatspec )
 {
   int option;
   const char* progname = argv[0];

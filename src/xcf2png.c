@@ -55,6 +55,60 @@ static FILE *outfile = NULL ;
 static png_structp libpng = NULL ;
 static png_infop libpng2 = NULL ;
 
+/*----------------------------------------------------------------------------*/
+const struct option long_options[] = {
+  option_help,
+  option_version,
+  option_verbose,
+  option_bzip,
+  option_gzip,
+  option_unpack,
+  option_output,
+  option_background,
+  option_force_alpha,
+  option_color,
+  option_colour,
+  option_gray,
+  option_grey,
+  option_truecolor,
+  option_for_gif,
+  option_dissolve,
+  option_full_image,
+  option_size,
+  option_offset,
+  option_autocrop,
+  option_mode,
+  option_percent,
+  option_opacity,
+  option_mask,
+  option_nomask,
+  option_utf8,
+  { 0 }
+};
+
+/*----------------------------------------------------------------------------*/
+const char* const short_options = short_options_prefix
+  short_option_help
+  short_option_version
+  short_option_verbose
+  short_option_bzip
+  short_option_gzip
+  short_option_unpack
+  short_option_output
+  short_option_background
+  short_option_force_alpha
+  short_option_color
+  short_option_gray
+  short_option_truecolor
+  short_option_for_gif
+  short_option_dissolve
+  short_option_full_image
+  short_option_size
+  short_option_offset
+  short_option_autocrop
+  short_option_utf8
+  ;
+
 static void
 my_error_callback(png_structp png_ptr, png_const_charp errormsg)
 {
@@ -367,7 +421,7 @@ main(int argc,char **argv)
   init_process_control( &process );
 
   if ( option_parse
-       ( argc, argv, NULL /*short_options*/, NULL /*long_options*/, &process, &flatspec ) )
+       ( argc, argv, short_options, long_options, &process, &flatspec ) )
     exit(1);
 
   read_or_mmap_xcf( process.inputFile, process.unzipper );
