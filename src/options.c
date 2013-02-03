@@ -421,11 +421,145 @@ int process_option
 } // process_option()
 
 /*----------------------------------------------------------------------------*/
-void show_help
-( const char* progname, const char* short_options,
-  const struct option* long_options )
+int get_option_index( const struct option* long_options, int option )
 {
-  printf( "There is no help. You're alone." );
+  int i;
+
+  for ( i=0; long_options[i].name != NULL; ++i )
+    if ( long_options[i].val == option )
+      return i;
+
+  return -1;
+} // get_option_index()
+
+/*----------------------------------------------------------------------------*/
+int has_layer_option( const struct option* long_options )
+{
+  return (get_option_index( long_options, option_mode_value ) != -1)
+    || (get_option_index( long_options, option_percent_value ) != -1)
+    || (get_option_index( long_options, option_opacity_value ) != -1)
+    || (get_option_index( long_options, option_mask_value ) != -1)
+    || (get_option_index( long_options, option_nomask_value ) != -1)
+    || (get_option_index( long_options, option_utf8_value ) != -1);
+} // has_layer_option()
+
+/*----------------------------------------------------------------------------*/
+void print_option_arg
+( const struct option* long_options, int option_value, const char* message,
+  const char* command )
+{
+  const int index = get_option_index( long_options, option_value );
+  const struct option* option;
+  int fill = 30;
+
+  if ( index < 0 )
+    return;
+  else
+    option = &long_options[index];
+
+  fill -= printf( "  " );
+
+  if ( isprint( long_options[index].val ) )
+    fill -= printf( "-%c, ", (char)option->val );
+
+  fill -= printf( "--%s", option->name );
+
+  if ( command != NULL )
+    fill -= printf( "=%s", command );
+
+  if ( fill > 0 )
+    printf( "%*.*s%s\n", fill, fill, " ", message );
+  else
+  printf( " %s\n", message );
+} // print_option_arg()
+
+/*----------------------------------------------------------------------------*/
+void print_option
+( const struct option* long_options, int option_value, const char* message )
+{
+  print_option_arg( long_options, option_value, message, NULL );
+} // print_option()
+
+/*----------------------------------------------------------------------------*/
+void show_help
+( const char* progname, const struct option* long_options )
+{
+  const int with_layer_option = has_layer_option( long_options );
+  if ( with_layer_option )
+    printf( gettext( "Usage: %s [options] filename.xcf[.gz | .bz2] [layers]\n"),
+            progname );
+  else
+    printf( gettext( "Usage: %s [options] filename.xcf[.gz | .bz2]\n"),
+            progname );
+
+  printf( gettext( "Options:\n" ) );
+
+  print_option( long_options, option_help_value, gettext("show this message") );
+  print_option( long_options, option_version_value, gettext("show version") );
+  print_option
+    ( long_options, option_verbose_value, gettext("show progress messages") );
+  print_option
+    ( long_options, option_bzip_value, gettext("input is bzip2 compressed") );
+  print_option
+    ( long_options, option_gzip_value, gettext("input is gzip compressed") );
+  print_option_arg
+    ( long_options, option_unpack_value,
+      gettext("use 'command' to decompress input"), "command" );
+  print_option_arg
+    ( long_options, option_output_value, gettext("name output file"),
+      "filename" );
+  print_option_arg
+    ( long_options, option_background_value,
+      gettext("select background color"), "color" );
+  print_option
+    ( long_options, option_force_alpha_value,
+      gettext("force alpha channel in output") );
+  print_option
+    ( long_options, option_color_value, gettext("select color output") );
+  print_option
+    ( long_options, option_gray_value, gettext("select grayscale output") );
+  print_option
+    ( long_options, option_truecolor_value,
+      gettext("treat indexed images as RGB for flattening") );
+  print_option
+    ( long_options, option_for_gif_value,
+      gettext("disallow partiel transparency") );
+  print_option
+    ( long_options, option_dissolve_value,
+      gettext("dissolve partial transparency") );
+  print_option
+    ( long_options, option_full_image_value,
+      gettext("flatten to memory; then analyse") );
+  print_option_arg
+    ( long_options, option_size_value, gettext("crop image while converting"),
+      "WxH" );
+  print_option_arg
+    ( long_options, option_offset_value,
+      gettext("translate converted part of image"), "x,y" );
+  print_option
+    ( long_options, option_autocrop_value,
+      gettext("autocrop to visible layer boundaries") );
+
+  if ( with_layer_option )
+    {
+      printf( gettext( "Layer-selection options:\n" ) );
+
+      print_option_arg
+        ( long_options, option_mode_value, gettext("set layer mode"), "mode" );
+      print_option_arg
+        ( long_options, option_percent_value,
+          gettext("set opacity in percent"), "n" );
+      print_option_arg
+        ( long_options, option_opacity_value,
+          gettext("set opacity in 1/255 units"), "n" );
+      print_option
+        ( long_options, option_mask_value, gettext("enable layer mask") );
+      print_option
+        ( long_options, option_nomask_value, gettext("disable layer mask") );
+      print_option
+        ( long_options, option_utf8_value,
+          gettext("use UTF-8 for layer names") );
+    }
 } // show_help()
 
 /*----------------------------------------------------------------------------*/
@@ -449,7 +583,7 @@ int option_parse
   if ( option_result == 1 )
     option_show_version( progname );
   else if ( ( p->inputFile == NULL ) || ( option_result < 0 ) )
-    show_help( progname, short_options, long_options );
+    show_help( progname, long_options );
 
   return option_result != 0;
 } // option_parse()
