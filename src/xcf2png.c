@@ -49,7 +49,6 @@ usage(FILE *where)
 }
 
 static struct FlattenSpec flatspec;
-static struct ProcessControl process;
 
 static FILE *outfile = NULL ;
 static png_structp libpng = NULL ;
@@ -409,7 +408,7 @@ findUnusedColor(rgba *pixels[],unsigned width,unsigned height)
 int
 main(int argc,char **argv)
 {
-  int option ;
+  struct ProcessControl process;
 
   setlocale(LC_ALL,"");
   progname = argv[0] ;
@@ -423,6 +422,10 @@ main(int argc,char **argv)
   if ( option_parse
        ( argc, argv, short_options, long_options, &process, &flatspec ) )
     exit(1);
+
+  // set the global flags
+  verboseFlag = process.verboseFlag;
+  use_utf8 = process.use_utf8;
 
   read_or_mmap_xcf( process.inputFile, process.unzipper );
   getBasicXcfInfo() ;
