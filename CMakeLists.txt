@@ -15,7 +15,10 @@ set(
   src/flatten.c
   src/nlsini.c
   src/options.c
+  src/palette.c
+  src/pixels.c
   src/process.c
+  src/table.c
 )
 
 #-------------------------------------------------------------------------------
@@ -23,8 +26,6 @@ set(
   XCFINFO_SOURCE_FILES
   ${XCFTOOLS_COMMON_SOURCE_FILES}
   src/io-unix.c
-  src/palette.c
-  src/pixels.c
   src/scaletab.c
   src/utils.c
   src/xcf-general.c
@@ -46,7 +47,6 @@ set(
   src/palette.c
   src/pixels.c
   src/scaletab.c
-  src/table.c
   src/utils.c
   src/xcf2png.c
   src/xcf-general.c
@@ -73,8 +73,6 @@ set(
   XCF2XPM_SOURCE_FILES
   ${XCFTOOLS_COMMON_SOURCE_FILES}
   src/io-unix.c
-  src/palette.c
-  src/pixels.c
   src/scaletab.c
   src/utils.c
   src/xcf2pnm.c

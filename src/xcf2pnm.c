@@ -18,37 +18,80 @@
 
 #include "xcftools.h"
 #include "flatten.h"
+#include "nlsini.h"
+#include "options.h"
+#include "version.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
 #include <ctype.h>
-#if HAVE_GETOPT_H
 #include <getopt.h>
-#else
-#include <unistd.h>
-#endif
-#ifndef HAVE_GETOPT_LONG
-#define getopt_long(argc,argv,optstring,l1,l2) getopt(argc,argv,optstring)
-#endif
-
-#include "xcf2pnm.oi"
-
-static void
-usage(FILE *where)
-{
-  fprintf(where,gettext("Usage: %s [options] filename.xcf[.gz] [layers]\n"),
-          progname) ;
-  fprintf(where,gettext("Options:\n"));
-  opt_usage(where);
-  if( where == stderr ) {
-    exit(1);
-  }
-}
 
 static int suppress_byline ;
 static struct FlattenSpec flatspec ;
 static FILE *outfile = NULL ;
 static FILE *transfile = NULL ;
+
+/*----------------------------------------------------------------------------*/
+const struct option long_options[] = {
+  option_help,
+  option_version,
+  option_verbose,
+  option_bzip,
+  option_gzip,
+  option_unpack,
+  option_output,
+  option_alpha,
+  option_background,
+  option_force_alpha,
+  option_color,
+  option_colour,
+  option_gray,
+  option_grey,
+  option_mono,
+  option_pnm,
+  option_truecolor,
+  option_for_gif,
+  option_dissolve,
+  option_full_image,
+  option_size,
+  option_offset,
+  option_autocrop,
+  option_mode,
+  option_percent,
+  option_opacity,
+  option_mask,
+  option_nomask,
+  option_utf8,
+  { 0 }
+};
+
+/*----------------------------------------------------------------------------*/
+const char* const short_options = short_options_prefix
+  short_option_help
+  short_option_version
+  short_option_verbose
+  short_option_bzip
+  short_option_gzip
+  short_option_unpack
+  short_option_output
+  short_option_alpha
+  short_option_background
+  short_option_force_alpha
+  short_option_color
+  short_option_gray
+  short_option_mono
+  short_option_pnm
+  short_option_truecolor
+  short_option_for_gif
+  short_option_dissolve
+  short_option_full_image
+  short_option_size
+  short_option_offset
+  short_option_autocrop
+  short_option_utf8
+  ;
 
 static void
 start_writing(FILE **f,int version)
@@ -72,9 +115,9 @@ start_writing(FILE **f,int version)
   if( suppress_byline )
     ;
   else if( f == &outfile )
-    fprintf(*f,gettext(" # Converted by xcf2pnm %s"),PACKAGE_VERSION);
+    fprintf(*f,gettext(" # Converted by xcf2pnm %s"), PACKAGE_STRING);
   else
-    fprintf(*f,gettext(" # Transparency map by xcf2pnm %s"),PACKAGE_VERSION);
+    fprintf(*f,gettext(" # Transparency map by xcf2pnm %s"), PACKAGE_STRING);
   fprintf(*f,"\n%d %d\n%s",
           flatspec.dim.width,
           flatspec.dim.height,
@@ -128,7 +171,8 @@ callback_common(unsigned num,rgba *pixels)
     unsigned i ;
     for( i=0; i < num; i++ )
       if( !FULLALPHA(pixels[i]) )
-        FatalGeneric(100,gettext("Transparency found, but -a option not given"));
+        FatalGeneric
+          (100, gettext("Transparency found, but -a option not given"));
   }
   xcffree(pixels) ;
 }
@@ -204,9 +248,7 @@ selectCallback(void)
 int
 main(int argc,char **argv)
 {
-  int option ;
-  const char *unzipper = NULL ;
-  const char *infile = NULL ;
+  struct ProcessControl process;
 
   setlocale(LC_ALL,"");
   progname = argv[0] ;
@@ -215,33 +257,17 @@ main(int argc,char **argv)
   if( argc <= 1 ) gpl_blurb() ;
   
   init_flatspec(&flatspec) ;
+  init_process_control( &process );
+
   flatspec.out_color_mode = COLOR_BY_FILENAME ;
-  while( (option=getopt_long(argc,argv,"-@#"OPTSTRING,longopts,NULL)) >= 0 )
-    switch(option) {
-      #define OPTION(char,long,desc,man) case char:
-      #include "options.i"
-    case 1:
-      if( infile ) 
-        add_layer_request(&flatspec,optarg);
-      else
-        infile = optarg ;
-      break ;
-    case '?':
-      usage(stderr);
-    case '@':
-      /* Non-documented option for build-time test */
-      suppress_byline = 1 ;
-      break ;
-    case '#':
-      /* Non-documented option for xcfview */
-      flatspec.default_pixel = CHECKERED_BACKGROUND ;
-      break ;
-    default:
-      FatalUnexpected("Getopt(_long) unexpectedly returned '%c'",option);
-    }
-  if( infile == NULL ) {
-    usage(stderr);
-  }
+
+  if ( option_parse
+       ( argc, argv, short_options, long_options, &process, &flatspec ) )
+    exit(1);
+
+  // set the global flags
+  verboseFlag = process.verboseFlag;
+  use_utf8 = process.use_utf8;
 
   if( flatspec.out_color_mode == COLOR_BY_FILENAME &&
       strlen(flatspec.output_filename) > 4 &&
@@ -258,7 +284,7 @@ main(int argc,char **argv)
   if( flatspec.out_color_mode == COLOR_BY_FILENAME )
     flatspec.out_color_mode = COLOR_BY_CONTENTS ;
   
-  read_or_mmap_xcf(infile,unzipper);
+  read_or_mmap_xcf( process.inputFile, process.unzipper );
   getBasicXcfInfo() ;
   initColormap();
  

@@ -141,6 +141,13 @@ void option_set_background( struct FlattenSpec* flatspec, char* color )
 } // option_set_background()
 
 /*----------------------------------------------------------------------------*/
+void option_set_checkered_background
+( struct FlattenSpec* flatspec )
+{
+  flatspec->default_pixel = CHECKERED_BACKGROUND;
+} // option_set_checkered_background()
+
+/*----------------------------------------------------------------------------*/
 void option_set_force_alpha( struct FlattenSpec* flatspec )
 {
   flatspec->default_pixel = FORCE_ALPHA_CHANNEL ;
@@ -355,8 +362,14 @@ int process_option
     case option_output_value:
       option_set_output( flatspec, argval );
       break;
+    case option_alpha_value:
+      option_set_alpha( flatspec, argval );
+      break;
     case option_background_value:
       option_set_background( flatspec, argval );
+      break;
+    case option_checkered_background_value:
+      option_set_checkered_background( flatspec );
       break;
     case option_force_alpha_value:
       option_set_force_alpha( flatspec );
@@ -366,6 +379,12 @@ int process_option
       break;
     case option_gray_value:
       option_set_gray( flatspec );
+      break;
+    case option_mono_value:
+      option_set_mono( flatspec );
+      break;
+    case option_pnm_value:
+      option_set_pnm( flatspec );
       break;
     case option_truecolor_value:
       option_set_truecolor( flatspec );
@@ -509,8 +528,14 @@ void show_help
     ( long_options, option_output_value, gettext("name output file"),
       "filename" );
   print_option_arg
+    ( long_options, option_alpha_value, gettext("write transparency map"),
+      "filename" );
+  print_option_arg
     ( long_options, option_background_value,
       gettext("select background color"), "color" );
+  print_option
+    ( long_options, option_checkered_background_value,
+      gettext("render on a checkered background") );
   print_option
     ( long_options, option_force_alpha_value,
       gettext("force alpha channel in output") );
@@ -518,6 +543,12 @@ void show_help
     ( long_options, option_color_value, gettext("select color output") );
   print_option
     ( long_options, option_gray_value, gettext("select grayscale output") );
+  print_option
+    ( long_options, option_mono_value,
+      gettext("select monochrome output") );
+  print_option
+    ( long_options, option_pnm_value,
+      gettext("select --color, --gray or --mono by image content") );
   print_option
     ( long_options, option_truecolor_value,
       gettext("treat indexed images as RGB for flattening") );

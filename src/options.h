@@ -61,9 +61,20 @@
 #define option_output { "output", 1, NULL, option_output_value }
 
 /*----------------------------------------------------------------------------*/
+#define option_alpha_value 'a'
+#define short_option_alpha "a:"
+#define option_alpha { "alpha", 1, NULL, option_alpha_value }
+
+/*----------------------------------------------------------------------------*/
 #define option_background_value 'b'
 #define short_option_background "b:"
 #define option_background { "background", 1, NULL, option_background_value }
+
+/*----------------------------------------------------------------------------*/
+#define option_checkered_background_value '#'
+#define short_option_checkered_background "#"
+#define option_checkered_background \
+  { "checkered-background", 0, NULL, option_checkered_background }
 
 /*----------------------------------------------------------------------------*/
 #define option_force_alpha_value 'A'
@@ -81,6 +92,16 @@
 #define short_option_gray "g"
 #define option_gray { "gray", 0, NULL, option_gray_value }
 #define option_grey { "grey", 0, NULL, option_gray_value }
+
+/*----------------------------------------------------------------------------*/
+#define option_mono_value 'm'
+#define short_option_mono "m"
+#define option_mono { "mono", 0, NULL, option_mono_value }
+
+/*----------------------------------------------------------------------------*/
+#define option_pnm_value 'n'
+#define short_option_pnm "n"
+#define option_pnm { "pnm", 0, NULL, option_pnm_value }
 
 /*----------------------------------------------------------------------------*/
 #define option_truecolor_value 'T'

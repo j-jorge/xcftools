@@ -27,26 +27,7 @@
 #include <string.h>
 #include <locale.h>
 #include <ctype.h>
-#if HAVE_GETOPT_H
 #include <getopt.h>
-#else
-#include <unistd.h>
-#endif
-#ifndef HAVE_GETOPT_LONG
-#define getopt_long(argc,argv,optstring,l1,l2) getopt(argc,argv,optstring)
-#endif
-
-static void
-usage(FILE *where)
-{
-  fprintf(where,gettext("Usage: %s [options] filename.xcf[.gz] [layers]\n"),
-          progname) ;
-  fprintf(where,gettext("Options:\n"));
-  // opt_usage(where);
-  if( where == stderr ) {
-    exit(1);
-  }
-}
 
 static struct FlattenSpec flatspec;
 
