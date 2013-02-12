@@ -198,8 +198,9 @@ pgm_callback(unsigned num,rgba *pixels)
   for( i=0; i < num; i++ ) {
     int gray = degrayPixel(pixels[i]) ;
     if( gray == -1 )
-      FatalGeneric(103,
-                   gettext("Grayscale output selected, but colored pixel(s) found"));
+      FatalGeneric
+        ( 103,
+          gettext("Grayscale output selected, but colored pixel(s) found") );
     putc( gray, outfile );
   }
   callback_common(num,pixels);
@@ -213,8 +214,10 @@ pbm_callback(unsigned num,rgba *pixels)
                    ((rgba)255 << RED_SHIFT) +
                    ((rgba)255 << GREEN_SHIFT) +
                    ((rgba)255 << BLUE_SHIFT)) )
-    FatalGeneric(103,gettext("Monochrome output selected, but not all pixels "
-                       "are black or white"));
+    FatalGeneric
+      ( 103,
+        gettext( "Monochrome output selected, but not all pixels "
+                 "are black or white" ) );
   callback_common(num,pixels);
 }
 

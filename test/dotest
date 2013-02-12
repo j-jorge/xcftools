@@ -20,7 +20,7 @@
 export LC_CTYPE=C
 export LC_MESSAGES=C
 
-: ${XCFTOOLS_PREFIX=../}
+: ${XCFTOOLS_PREFIX=../bin/}
 
 totaltests=0
 failedtests=0
@@ -181,11 +181,11 @@ cp /dev/null expected.stdout
 #
 
 echo > expected:stderr  \
-    "The --mode option must follow a layer name on the command line"
+    "There is no layer to which the mode can be applied"
 errtest 20 xcf2pnm $S/modetest.xcf.gz --mode Addition A B
 
 echo > expected:stderr \
-    "The --percent option must follow a layer name on the command line"
+    "There is no layer to which the percent can be applied"
 errtest 20 xcf2png $S/tiletest.xcf.gz --percent 33 Mid
 
 echo > expected:stderr \
@@ -267,12 +267,12 @@ echo "${XCFTOOLS_PREFIX}xcf2pnm: Unknown background color 'Plaid'" \
 errtest 20 xcf2pnm $S/tiletest.xcf.gz -b Plaid
 
 echo > expected:stderr \
-    "-S option must have an argument of the form wxh"
+    "The size must have the form WxH"
 errtest 20 xcf2pnm $S/tiletest.xcf.gz -S 10x
 errtest 20 xcf2pnm $S/tiletest.xcf.gz -S 10x20x30
 
 echo > expected:stderr \
-    "-O option must have an argument of the form x,y"
+    "The offset must have the form x,y"
 errtest 20 xcf2pnm $S/tiletest.xcf.gz -S 10x10 -O 2x4
 
 echo > expected:stderr \
@@ -280,13 +280,13 @@ echo > expected:stderr \
 errtest 20 xcf2png $S/modetest.xcf.gz B A --mode GammaShift
 
 echo > expected:stderr \
-    "The argument to --percent is not a percentage"
+    "The percent value is not a percentage"
 errtest 20 xcf2pnm $S/tiletest.xcf.gz Background Mid --percent -3
 errtest 20 xcf2pnm $S/tiletest.xcf.gz Background Mid --percent 20.2
 errtest 20 xcf2pnm $S/tiletest.xcf.gz Background Mid --percent 101
 
 echo > expected:stderr \
-    "The argument to --opacity is not a number between 0 and 255"
+    "The opacity is not a number between 0 and 255"
 errtest 20 xcf2pnm $S/tiletest.xcf.gz Background Mid --opacity -3
 errtest 20 xcf2pnm $S/tiletest.xcf.gz Background Mid --opacity 220.2
 errtest 20 xcf2pnm $S/tiletest.xcf.gz Background Mid --opacity 256

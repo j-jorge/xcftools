@@ -253,20 +253,25 @@ void option_set_autocrop( struct FlattenSpec* flatspec )
 void option_set_mode( struct FlattenSpec* flatspec, char* mode )
 {
   GimpLayerModeEffects m ;
-  int found = 1;
+  int found = 0;
 
   if( flatspec->numLayers == 0 )
     FatalGeneric
       ( 20,
         gettext("There is no layer to which the mode can be applied") );
 
-  for( m = 0; (found == 0) && (m < GimpLayerModeEffects_LAST); m++ )
+  for( m = 0; (found == 0) && (m <= GimpLayerModeEffects_LAST); )
     if( strcmp( mode, gettext(showGimpLayerModeEffects(m)) ) == 0 )
       found = 1;
-    
-  for( m = 0; (found == 0) && (m < GimpLayerModeEffects_LAST); m++ )
-    if( strcmp( mode, showGimpLayerModeEffects(m) ) == 0 )
-      found = 1;
+    else
+      ++m;
+
+  if ( found == 0 )
+    for( m = 0; (found == 0) && (m <= GimpLayerModeEffects_LAST); )
+      if( strcmp( mode, showGimpLayerModeEffects(m) ) == 0 )
+        found = 1;
+      else
+        ++m;
 
   if ( found )
     lastlayerspec( flatspec )->mode = m;
@@ -432,8 +437,11 @@ int process_option
     case 1:
       if ( p->inputFile == NULL )
         p->inputFile = argval;
-      else
+      else if ( flatspec != NULL )
         add_layer_request( flatspec, optarg );
+      else
+        FatalGeneric
+          (20, gettext("Only one XCF file per command line, please"));
       break ;
     default:
       FatalUnexpected("Getopt(_long) unexpectedly returned '%c'", option);

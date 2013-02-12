@@ -24,9 +24,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <errno.h>
-#if HAVE_MMAP
 #include <sys/mman.h>
-#endif
 
 static FILE *xcfstream = 0 ;
 
@@ -72,20 +70,12 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
   
   if( *unzipper ) {
     int pid, status, outfd ;
-#if HAVE_MMAP
+
     xcfstream = tmpfile() ;
     if( !xcfstream )
       FatalUnexpected(gettext("!Cannot create temporary unzipped file"));
     outfd = fileno(xcfstream) ;
-#else
-    int fh[2] ;
-    if( pipe(fh) < 0 )
-      FatalUnexpected("!Cannot create pipe for %s",unzipper);
-    xcfstream = fdopen(fh[1],"rb") ;
-    if( !xcfstream )
-      FatalUnexpected("!Cannot fdopen() unzipper pipe");
-    outfd = fh[0] ;
-#endif
+
     if( (pid = fork()) == 0 ) {
       /* We're the child */
       if( dup2(outfd,1) < 0 ) {
@@ -98,7 +88,7 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
       perror(unzipper);
       exit(126) ;
     }
-#if HAVE_MMAP
+
     while( wait(&status) != pid )
       ;
     if( WIFEXITED(status) ) {
@@ -113,9 +103,6 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
       xcfstream = 0 ;
       FatalGeneric(126,gettext("%s terminated abnormally"),unzipper);
     }
-#else
-    close(fh[0]) ;
-#endif
   } else if( strcmp(filename,"-") == 0 ) {
     xcfstream = fdopen(dup(0),"rb") ;
     if( !xcfstream )
@@ -129,7 +116,7 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
   if( fstat(fileno(xcfstream),&statbuf) == 0 &&
       (statbuf.st_mode & S_IFMT) == S_IFREG ) {
     xcf_length = statbuf.st_size ;
-#if HAVE_MMAP
+
     xcf_file = mmap(0,xcf_length,PROT_READ,MAP_SHARED,fileno(xcfstream),0);
     if( xcf_file != (void*)-1 )
       return ;
@@ -140,7 +127,7 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
       errno = saved ;
       FatalUnexpected("!Could not mmap input");
     }
-#endif
+
     xcf_file = malloc(xcf_length);
     if( xcf_file == 0 )
       FatalUnexpected(gettext("Out of memory for xcf data"));

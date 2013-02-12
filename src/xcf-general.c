@@ -19,11 +19,7 @@
 #include "xcftools.h"
 #include <string.h>
 #include <errno.h>
-#ifdef HAVE_ICONV
-# include <iconv.h>
-#elif !defined(ICONV_CONST)
-# define ICONV_CONST const
-#endif
+#include <iconv.h>
 
 uint8_t *xcf_file = 0 ;
 size_t xcf_length ;
@@ -91,13 +87,13 @@ xcfString(uint32_t ptr,uint32_t *after)
 {
   uint32_t length ;
   unsigned i ;
-  ICONV_CONST char *utf8master ;
+  char *utf8master ;
   
   xcfCheckspace(ptr,4,"(string length)");
   length = xcfL(ptr) ;
   ptr += 4 ;
   xcfCheckspace(ptr,length,"(string)");
-  utf8master = (ICONV_CONST char*)(xcf_file+ptr) ;
+  utf8master = (char*)(xcf_file+ptr) ;
   if( after ) *after = ptr + length ;
   if( length == 0 || utf8master[length-1] != 0 )
     FatalBadXCF("String at %" PRIX32 " not zero-terminated",ptr-4);
@@ -116,7 +112,7 @@ xcfString(uint32_t ptr,uint32_t *after)
     if( (int8_t) utf8master[i] < 0 )
       break ;
   }
-#ifdef HAVE_ICONV
+
   {
     size_t targetsize = length+1 ;
     int sloppy_translation = 0 ;
@@ -130,7 +126,7 @@ xcfString(uint32_t ptr,uint32_t *after)
     else
       while(1) {
         char *buffer = xcfmalloc(targetsize) ;
-        ICONV_CONST char *inbuf = utf8master ;
+        char *inbuf = utf8master ;
         char *outbuf = buffer ;
         size_t incount = length ;
         size_t outcount = targetsize ;
@@ -165,7 +161,7 @@ xcfString(uint32_t ptr,uint32_t *after)
         FatalUnexpected("!iconv on layer name at %"PRIX32,ptr);
       }
   }
-#endif
+
   {
     static int warned = 0 ;
     if( !warned ) {
