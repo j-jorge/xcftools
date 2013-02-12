@@ -17,30 +17,38 @@
  */
 
 #include "xcftools.h"
+#include "nlsini.h"
+#include "options.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-#if HAVE_GETOPT_H
 #include <getopt.h>
-#else
-#include <unistd.h>
-#endif
-#ifndef HAVE_GETOPT_LONG
-#define getopt_long(argc,argv,optstring,l1,l2) getopt(argc,argv,optstring)
-#endif
 
-#include "xcfinfo.oi"
+/*----------------------------------------------------------------------------*/
+const struct option long_options[] = {
+  option_help,
+  option_version,
+  option_verbose,
+  option_bzip,
+  option_gzip,
+  option_unpack,
+  option_path_separator,
+  option_utf8,
+  { 0 }
+};
 
-static void
-usage(FILE *where)
-{
-  fprintf(where,gettext("Usage: %s [options] filename.xcf[.gz]\n"),progname) ;
-  fprintf(where,gettext("Options:\n"));
-  opt_usage(where) ;
-  if( where == stderr ) {
-    exit(1);
-  }
-}
+/*----------------------------------------------------------------------------*/
+const char* const short_options = short_options_prefix
+  short_option_help
+  short_option_version
+  short_option_verbose
+  short_option_bzip
+  short_option_gzip
+  short_option_unpack
+  short_option_path_separator
+  short_option_utf8
+  ;
 
 static void
 printLayerPath
@@ -63,10 +71,8 @@ int
 main(int argc,char **argv)
 {
   int i ;
-  int option ;
-  const char *unzipper = NULL ;
-  const char *infile = NULL ;
-  const char *pathSeparator = "|";
+
+  struct ProcessControl process;
 
   setlocale(LC_ALL,"");
   progname = argv[0] ;
@@ -74,34 +80,25 @@ main(int argc,char **argv)
 
   if( argc <= 1 ) gpl_blurb() ;
 
-  while( (option=getopt_long(argc,argv,"-"OPTSTRING,longopts,NULL)) >= 0 )
-    switch(option) {
-      #define OPTION(char,long,desc,man) case char:
-      #include "options.i"
-    case 1:
-      if( infile ) {
-        FatalGeneric
-          (20,gettext("Only one XCF file per command line, please"));
-      } else {
-        infile = optarg ;
-        break ;
-      }
-    case '?':
-      usage(stderr);
-    default:
-      FatalUnexpected("Getopt(_long) unexpectedly returned '%c'",option);
-    }
-  if( infile == NULL ) {
-    usage(stderr);
-  }
+  init_process_control( &process );
 
-  read_or_mmap_xcf(infile,unzipper);
+  if ( option_parse
+       ( argc, argv, short_options, long_options, &process, NULL ) )
+    exit(1);
+
+  // set the global flags
+  verboseFlag = process.verboseFlag;
+  use_utf8 = process.use_utf8;
+
+  read_or_mmap_xcf( process.inputFile, process.unzipper );
   getBasicXcfInfo() ;
+
   printf(gettext("Version %d, %dx%d %s, %d layers, compressed %s\n"),
          XCF.version,XCF.width,XCF.height,
          gettext(showGimpImageBaseType(XCF.type)),
          XCF.numLayers,
          gettext(showXcfCompressionType(XCF.compression)));
+
   for( i = XCF.numLayers ; i-- ; ) {
     printf("%c %dx%d%+d%+d %s %s",
            XCF.layers[i].isVisible ? '+' : '-',
@@ -119,8 +116,8 @@ main(int argc,char **argv)
     printf( " " );
 
     if ( XCF.version > 2 ) {
-      printLayerPath( i, pathSeparator );
-      printf( "%s", pathSeparator );
+      printLayerPath( i, process.pathSeparator );
+      printf( "%s", process.pathSeparator );
     }
 
     printf("%s\n",XCF.layers[i].name);

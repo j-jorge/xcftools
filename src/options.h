@@ -56,6 +56,12 @@
 #define option_unpack { "unpack", 1, NULL, option_unpack_value }
 
 /*----------------------------------------------------------------------------*/
+#define option_path_separator_value 'p'
+#define short_option_path_separator "p:"
+#define option_path_separator                                   \
+  { "path-separator", 1, NULL, option_path_separator_value }
+
+/*----------------------------------------------------------------------------*/
 #define option_output_value 'o'
 #define short_option_output "o:"
 #define option_output { "output", 1, NULL, option_output_value }

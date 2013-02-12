@@ -362,6 +362,9 @@ int process_option
     case option_output_value:
       option_set_output( flatspec, argval );
       break;
+    case option_path_separator_value:
+      option_set_path_separator( p, argval );
+      break;
     case option_alpha_value:
       option_set_alpha( flatspec, argval );
       break;
@@ -459,6 +462,7 @@ int has_layer_option( const struct option* long_options )
     || (get_option_index( long_options, option_opacity_value ) != -1)
     || (get_option_index( long_options, option_mask_value ) != -1)
     || (get_option_index( long_options, option_nomask_value ) != -1)
+    || (get_option_index( long_options, option_path_separator_value ) != -1)
     || (get_option_index( long_options, option_utf8_value ) != -1);
 } // has_layer_option()
 
@@ -587,6 +591,10 @@ void show_help
         ( long_options, option_mask_value, gettext("enable layer mask") );
       print_option
         ( long_options, option_nomask_value, gettext("disable layer mask") );
+      print_option_arg
+        ( long_options, option_path_separator_value,
+          gettext("use 'string' to separate the groups in the paths"),
+          "string" );
       print_option
         ( long_options, option_utf8_value,
           gettext("use UTF-8 for layer names") );
