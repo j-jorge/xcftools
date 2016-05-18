@@ -208,8 +208,11 @@ init_output(void)
 #endif
     break ;
   case PNG_COLOR_TYPE_GRAY:
-    png_set_filler(libpng,0,PNG_FILLER_AFTER);
+  {
+    // only supported with more than 8 bits, otherwise emit error: png_set_filler is invalid for low bit depth gray output'
+    if (bit_depth >= 8) png_set_filler(libpng,0,PNG_FILLER_AFTER);
     break ;
+  }
   case PNG_COLOR_TYPE_GRAY_ALPHA:
   case PNG_COLOR_TYPE_PALETTE:
     break ;
