@@ -59,7 +59,14 @@ my_error_callback(png_structp png_ptr, png_const_charp errormsg)
   FatalUnexpected(_("Libpng error '%s'"),errormsg);
 }
 
-  
+#ifndef png_voidp_NULL
+#define png_voidp_NULL	NULL
+#endif
+
+#ifndef png_error_ptr_NULL
+#define png_error_ptr_NULL	NULL
+#endif
+
 static void
 init_output(void)
 {
@@ -71,9 +78,9 @@ init_output(void)
   
   outfile = openout(flatspec.output_filename);
   libpng = png_create_write_struct(PNG_LIBPNG_VER_STRING,
-                                   NULL,
+                                   png_voidp_NULL,
                                    my_error_callback,
-                                   NULL);
+                                   png_error_ptr_NULL);
   if( !libpng )
     FatalUnexpected(_("Couldn't initialize libpng library"));
   
