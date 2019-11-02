@@ -30,6 +30,7 @@ VERSION			= @PACKAGE_VERSION@
 APPNAME			= @PACKAGE_TARNAME@
 program_transform_name	= @program_transform_name@
 
+CC			= @CC@
 CFLAGS			= @CFLAGS@
 LDFLAGS			= @LDFLAGS@ @LIBICONV@
 LIBS			= @LIBS@
