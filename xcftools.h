@@ -121,7 +121,7 @@ FILE* openout(const char*);
 void closeout(FILE *,const char*);
 
 struct rect {
-  int t, b, l, r ;
+  int64_t t, b, l, r ;
 };
 
 #define isSubrect(A,B) \
