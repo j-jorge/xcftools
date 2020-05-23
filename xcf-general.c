@@ -2,7 +2,7 @@
  *
  * This file was written by Henning Makholm <henning@makholm.net>
  * It is hereby in the public domain.
- * 
+ *
  * In jurisdictions that do not recognise grants of copyright to the
  * public domain: I, the author and (presumably, in those jurisdictions)
  * copyright holder, hereby permit anyone to distribute and use this code,
@@ -19,6 +19,8 @@
 #include "xcftools.h"
 #include <string.h>
 #include <errno.h>
+#include <limits.h>
+#include <stdlib.h>
 #ifdef HAVE_ICONV
 # include <iconv.h>
 #elif !defined(ICONV_CONST)
@@ -93,7 +95,7 @@ xcfString(xcfptr_t ptr,xcfptr_t *after)
   uint32_t length ;
   unsigned i ;
   ICONV_CONST char *utf8master ;
-  
+
   xcfCheckspace(ptr,4,"(string length)");
   length = xcfL(ptr) ;
   ptr += 4 ;
@@ -183,6 +185,24 @@ xcfString(xcfptr_t ptr,xcfptr_t *after)
 void
 computeDimensions(struct tileDimensions *d)
 {
+  // [ CVE-2019-5086 and CVE-2019-5087 ]
+  // This part of code is the check to prevent integer overflow, see
+  // CVE-2019-5086 and CVE-2019-5087
+
+  if ((d->c.l + d->width)*4 > INT_MAX) {
+    fprintf(stderr,("Width is too large (%ld)! Stopping execution...\n"),
+            (d->c.l + d->width));
+    exit(EXIT_FAILURE);
+  }
+
+  if ((d->c.t + d->height)*4 > INT_MAX) {
+    fprintf(stderr,("Height is too large (%ld)! Stopping execution...\n"),
+            (d->c.t + d->height));
+    exit(EXIT_FAILURE);
+  }
+
+  // [ CVE-2019-5086 and CVE-2019-5087 ]
+
   d->c.r = d->c.l + d->width ;
   d->c.b = d->c.t + d->height ;
   d->tilesx = (d->width+TILE_WIDTH-1)/TILE_WIDTH ;
@@ -198,7 +218,7 @@ getBasicXcfInfo(void)
   xcfptr_t ptr, data, layerfile ;
   PropType type ;
   int i, j ;
-  
+
   xcfCheckspace(0,14+7*4,"(very short)");
   if( strcmp((char*)xcf_file,"gimp xcf file") == 0 )
     XCF.version = 0 ;
@@ -214,10 +234,10 @@ getBasicXcfInfo(void)
             _("Warning: XCF version %d not supported (trying anyway...)\n"),
             XCF.version);
   }
-  
+
   XCF.compression = COMPRESS_NONE ;
   XCF.colormapptr = 0 ;
-  
+
   ptr = 14 ;
   XCF.width    = xcfL(ptr); ptr += 4 ;
   XCF.height   = xcfL(ptr); ptr += 4 ;
@@ -293,9 +313,9 @@ getBasicXcfInfo(void)
         L->pathLength = (ptr - data - 2) / 4 ;
 
         if ( L->pathLength != 0 ) {
-         
+
           L->path = xcfmalloc( L->pathLength * sizeof(unsigned) ) ;
-          
+
           for ( j = 0; j!=L->pathLength; j++ )
             *(L->path + j) = (unsigned)xcfL(data + 4 * j);
         }
