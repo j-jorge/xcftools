@@ -57,6 +57,7 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
     char bufmagic[2] ;
     char gzmagic[2] = { 0x1f, 0x8b } ;
     char bzmagic[2] = { 'B', 'Z' } ;
+    char xzmagic[2] = { 0xfd, '7' } ;
 
     xcfstream = fopen(filename,"rb") ;
     if( !xcfstream )
@@ -79,9 +80,10 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
         unzipper = "zcat" ;
       else if( memcmp(bufmagic, bzmagic, 2) == 0 )
         unzipper = "bzcat" ;
+      else if( memcmp(bufmagic, xzmagic, 2) == 0 )
+        unzipper = "xzcat" ;
       else
         unzipper = "" ;
-
     }
     else
       FatalUnexpected(_("!Could not read xcf file stat")) ;
