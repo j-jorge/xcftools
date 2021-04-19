@@ -55,8 +55,11 @@ read_or_mmap_xcf(const char *filename,const char *unzipper)
 
   if( !unzipper ) {
     char bufmagic[2] ;
+    // 0x1f, 0x8b, 0x08; 8 for deflate
     char gzmagic[2] = { 0x1f, 0x8b } ;
+    // 'B', 'Z', 'h'; h for huffman
     char bzmagic[2] = { 'B', 'Z' } ;
+    // 0xfd, '7', 'z', 'X', 'Z'
     char xzmagic[2] = { 0xfd, '7' } ;
 
     xcfstream = fopen(filename,"rb") ;
