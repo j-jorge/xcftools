@@ -190,6 +190,7 @@ extern struct xcfImage {
   int version ;
   unsigned width, height ;
   GimpImageBaseType type ;
+  GimpPrecision pformat ;
   XcfCompressionType compression ;
   int numLayers ;
   struct xcfLayer *layers ;

@@ -154,6 +154,33 @@ typedef enum
 } GimpPDBStatusType;
 
 
+#define GIMP_TYPE_PRECISION (gimp_precision_get_type ())
+
+GType gimp_precision_get_type (void) G_GNUC_CONST;
+
+typedef enum
+{
+  GIMP_PRECISION_U8_LINEAR         = 100, /*< desc="8-bit linear integer"         >*/
+  GIMP_PRECISION_U8_NON_LINEAR     = 150, /*< desc="8-bit non-linear integer"          >*/
+  GIMP_PRECISION_U8_PERCEPTUAL     = 175, /*< desc="8-bit perceptual integer"          >*/
+  GIMP_PRECISION_U16_LINEAR        = 200, /*< desc="16-bit linear integer"        >*/
+  GIMP_PRECISION_U16_NON_LINEAR    = 250, /*< desc="16-bit non-linear integer"         >*/
+  GIMP_PRECISION_U16_PERCEPTUAL    = 275, /*< desc="16-bit perceptual integer"         >*/
+  GIMP_PRECISION_U32_LINEAR        = 300, /*< desc="32-bit linear integer"        >*/
+  GIMP_PRECISION_U32_NON_LINEAR    = 350, /*< desc="32-bit non-linear integer"         >*/
+  GIMP_PRECISION_U32_PERCEPTUAL    = 375, /*< desc="32-bit perceptual integer"         >*/
+  GIMP_PRECISION_HALF_LINEAR       = 500, /*< desc="16-bit linear floating point" >*/
+  GIMP_PRECISION_HALF_NON_LINEAR   = 550, /*< desc="16-bit non-linear floating point"  >*/
+  GIMP_PRECISION_HALF_PERCEPTUAL   = 575, /*< desc="16-bit perceptual floating point"  >*/
+  GIMP_PRECISION_FLOAT_LINEAR      = 600, /*< desc="32-bit linear floating point" >*/
+  GIMP_PRECISION_FLOAT_NON_LINEAR  = 650, /*< desc="32-bit non-linear floating point"  >*/
+  GIMP_PRECISION_FLOAT_PERCEPTUAL  = 675, /*< desc="32-bit perceptual floating point"  >*/
+  GIMP_PRECISION_DOUBLE_LINEAR     = 700, /*< desc="64-bit linear floating point" >*/
+  GIMP_PRECISION_DOUBLE_NON_LINEAR = 750, /*< desc="64-bit non-linear floating point"  >*/
+  GIMP_PRECISION_DOUBLE_PERCEPTUAL = 775, /*< desc="64-bit perceptual floating point"  >*/
+} GimpPrecision;
+
+
 #define GIMP_TYPE_MESSAGE_HANDLER_TYPE (gimp_message_handler_type_get_type ())
 
 GType gimp_message_handler_type_get_type (void) G_GNUC_CONST;

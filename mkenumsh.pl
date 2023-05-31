@@ -24,6 +24,7 @@ my @wantenums = qw( GimpImageBaseType
                     GimpLayerModeEffects
                     PropType
                     XcfCompressionType
+                    GimpPrecision
                     );
 my %wantenums ;
 @wantenums{@wantenums} = (-1) x @wantenums ;
