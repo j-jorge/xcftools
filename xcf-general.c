@@ -220,6 +220,14 @@ getBasicXcfInfo(void)
   XCF.width    = xcfL(ptr); ptr += 4 ;
   XCF.height   = xcfL(ptr); ptr += 4 ;
   XCF.type     = xcfL(ptr); ptr += 4 ;
+  XCF.pformat  = GIMP_PRECISION_U8_NON_LINEAR;
+  if( XCF.version >= 4 ) {
+      XCF.pformat = xcfL(ptr); ptr += 4 ;
+  }
+  if( XCF.pformat != GIMP_PRECISION_U8_NON_LINEAR ) {
+    fprintf(stderr,
+	    _("Warning: XCF non-unorm8-gamma pixels format not supported (trying anyway...)\n"));
+  }
   while( (type = xcfNextprop(&ptr,&data)) != PROP_END ) {
     switch(type) {
     case PROP_COLORMAP:
