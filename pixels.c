@@ -21,6 +21,8 @@
 #include "pixels.h"
 #include <assert.h>
 #include <string.h>
+#include <stdlib.h>
+#include <zlib.h>
 
 rgba colormap[256] ;
 unsigned colormapLength=0 ;
@@ -234,15 +236,12 @@ fillTile(struct Tile *tile,rgba data)
 /* ****************************************************************** */
 
 static void
-copyStraightPixels(rgba *dest,unsigned npixels,
-                   xcfptr_t ptr,convertParams *params)
+copyDecodedPixels(rgba *dest,unsigned npixels,
+                   uint8_t *bp,convertParams *params)
 {
   unsigned bpp = params->bpp;
   const rgba *lookup = params->lookup;
   rgba base_pixel = params->base_pixel ;
-  uint8_t *bp = xcf_file + ptr ;
-  xcfCheckspace(ptr,bpp*npixels,
-                "pixel array (%u x %d bpp) at %"PRIXPTR,npixels,bpp,ptr);
   while( npixels-- ) {
     rgba pixel = base_pixel ;
     unsigned i ;
@@ -255,6 +254,53 @@ copyStraightPixels(rgba *dest,unsigned npixels,
     }
     *dest++ = pixel ;
   }
+}
+
+static void
+copyStraightPixels(rgba *dest,unsigned npixels,
+                   xcfptr_t ptr,convertParams *params)
+{
+  unsigned bpp = params->bpp;
+  uint8_t *bp = xcf_file + ptr ;
+  xcfCheckspace(ptr,bpp*npixels,
+                "pixel array (%u x %d bpp) at %"PRIXPTR,npixels,bpp,ptr);
+  copyDecodedPixels(dest,npixels,bp,params) ;
+}
+
+static void
+copyDeflatedPixels(rgba *dest,unsigned pixels,xcfptr_t ptr,convertParams *params)
+{
+  z_stream zs ;
+  int zret ;
+  uint8_t *buf ;
+  size_t bufsz, used ;
+  uInt prevout ;
+
+  bufsz = used = 0 ;
+  buf = 0 ;
+  memset(&zs,0,sizeof(zs));
+  inflateInit(&zs) ;
+  zs.next_in = (Bytef *)xcf_file+ptr ;
+  zs.avail_in = xcf_length - ptr ;
+  while( 1 ) {
+    if(bufsz - used < 65536) {
+      bufsz = bufsz == 0 ? 65536 : bufsz*2 ;
+      buf = realloc(buf,bufsz) ;
+      if( buf == 0 )
+	FatalUnexpected(_("Out of memory for pixel data"));
+    }
+    zs.next_out = (Bytef *)buf+used ;
+    zs.avail_out = prevout = bufsz-used ;
+    zret = inflate(&zs,Z_NO_FLUSH) ;
+    used += prevout-zs.avail_out ;
+    if( zret == Z_STREAM_END ) {
+      break ;
+    } else if( zret != Z_OK ) {
+      FatalBadXCF("Invalid Zlib pixel data at %" PRIXPTR ": %s",ptr,zError(zret));
+    }
+  }
+  copyDecodedPixels(dest,pixels,buf,params) ;
+  free(buf) ;
 }
 
 static inline void
@@ -335,6 +381,9 @@ copyTilePixels(struct Tile *dest, xcfptr_t ptr,convertParams *params)
     break ;
   case COMPRESS_RLE:
     copyRLEpixels(dest->pixels,dest->count,ptr,params);
+    break ;
+  case COMPRESS_ZLIB:
+    copyDeflatedPixels(dest->pixels,dest->count,ptr,params);
     break ;
   default:
     FatalUnsupportedXCF(_("%s compression"),
