@@ -239,7 +239,6 @@ errtest 125 xcfinfo answer/modeA.png
 
 rm expected:stderr
 cat > expected.stderr <<EOF
-Warning: XCF version 345 not supported (trying anyway...)
 ${XCFTOOLS_PREFIX}xcf2png: Corrupted or truncated XCF file
  (0x1C7 bytes): Overlong property at 82
 EOF
