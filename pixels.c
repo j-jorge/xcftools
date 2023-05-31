@@ -56,14 +56,14 @@ static convertParams convertChannel   = { 1, {ALPHA_SHIFT}, 0, 0 };
 
 /* ****************************************************************** */
 
-static inline int
-tileDirectoryOneLevel(struct tileDimensions *dim,uint32_t ptr)
+static inline xcfptr_t
+tileDirectoryOneLevel(struct tileDimensions *dim,xcfptr_t ptr)
 {
   if( ptr == 0 )
     return 0 ;
   if( xcfL(ptr  ) != dim->c.r - dim->c.l ||
       xcfL(ptr+4) != dim->c.b - dim->c.t )
-    FatalBadXCF("Drawable size mismatch at %" PRIX32, ptr);
+    FatalBadXCF("Drawable size mismatch at %" PRIXPTR, ptr);
   return ptr += 8 ;
 }
 
@@ -71,8 +71,8 @@ static void
 initTileDirectory(struct tileDimensions *dim,struct xcfTiles *tiles,
                   const char *type)
 {
-  uint32_t ptr ;
-  uint32_t data ;
+  xcfptr_t ptr ;
+  xcfptr_t data ;
 
   ptr = tiles->hierarchy ;
   tiles->hierarchy = 0 ;
@@ -92,29 +92,29 @@ initTileDirectory(struct tileDimensions *dim,struct xcfTiles *tiles,
    * the bpp value and a list of "level" pointers; but only the
    * first level actually contains data.
    */
-  data = xcfL(ptr) ;
   if( xcfL(ptr) != tiles->params->bpp )
     FatalBadXCF("%"PRIu32" bytes per pixel for %s drawable",xcfL(ptr),type);
   ptr = xcfOffset(ptr+4,3*4) ;
   if( (ptr = tileDirectoryOneLevel(dim,ptr)) == 0 ) return ;
 
-  xcfCheckspace(ptr,dim->ntiles*4+4,"Tile directory at %" PRIX32,ptr);
+  xcfCheckspace(ptr,dim->ntiles*4+4,"Tile directory at %" PRIXPTR,ptr);
   if( xcfL(ptr + dim->ntiles*4) != 0 )
-    FatalBadXCF("Wrong sized tile directory at %" PRIX32,ptr);
-#define REUSE_RAW_DATA tiles->tileptrs = (uint32_t*)(xcf_file + ptr)
-#if defined(WORDS_BIGENDIAN) && defined(CAN_DO_UNALIGNED_WORDS)
-  REUSE_RAW_DATA;
-#else
+    FatalBadXCF("Wrong sized tile directory at %" PRIXPTR,ptr);
 # if defined(WORDS_BIGENDIAN)
-  if( (ptr&3) == 0 ) REUSE_RAW_DATA; else
+  if( (xcfPsz == sizeof(xcfptr_t))
+# if ! defined(CAN_DO_UNALIGNED_WORDS)
+      && ((ptr&(sizeof(xcfptr_t)-1)) == 0)
+# endif
+      )
+    tiles->tileptrs = (xcfptr_t*)(xcf_file + ptr);
+  else
 # endif
     {
       unsigned i ;
-      tiles->tileptrs = xcfmalloc(dim->ntiles * sizeof(uint32_t)) ;
+      tiles->tileptrs = xcfmalloc(dim->ntiles * sizeof(xcfptr_t)) ;
       for( i = 0 ; i < dim->ntiles ; i++ )
-        tiles->tileptrs[i] = xcfL(ptr+i*4);
+        tiles->tileptrs[i] = xcfP(ptr+i*xcfPsz);
     }
-#endif
 }
 
 void
@@ -139,7 +139,7 @@ initLayer(struct xcfLayer *layer) {
   initTileDirectory(&layer->dim,&layer->mask,"layer mask");
 }
 static void copyStraightPixels(rgba *dest,unsigned npixels,
-                               uint32_t ptr,convertParams *params);
+                               xcfptr_t ptr,convertParams *params);
 void
 initColormap(void) {
   uint32_t ncolors ;
@@ -235,14 +235,14 @@ fillTile(struct Tile *tile,rgba data)
 
 static void
 copyStraightPixels(rgba *dest,unsigned npixels,
-                   uint32_t ptr,convertParams *params)
+                   xcfptr_t ptr,convertParams *params)
 {
   unsigned bpp = params->bpp;
   const rgba *lookup = params->lookup;
   rgba base_pixel = params->base_pixel ;
   uint8_t *bp = xcf_file + ptr ;
   xcfCheckspace(ptr,bpp*npixels,
-                "pixel array (%u x %d bpp) at %"PRIX32,npixels,bpp,ptr);
+                "pixel array (%u x %d bpp) at %"PRIXPTR,npixels,bpp,ptr);
   while( npixels-- ) {
     rgba pixel = base_pixel ;
     unsigned i ;
@@ -258,13 +258,13 @@ copyStraightPixels(rgba *dest,unsigned npixels,
 }
 
 static inline void
-copyRLEpixels(rgba *dest,unsigned npixels,uint32_t ptr,convertParams *params)
+copyRLEpixels(rgba *dest,unsigned npixels,xcfptr_t ptr,convertParams *params)
 {
   unsigned i,j ;
   rgba base_pixel = params->base_pixel ;
 
 #ifdef xDEBUG
-  fprintf(stderr,"RLE stream at %x, want %u x %u pixels, base %x\n",
+  fprintf(stderr,"RLE stream at %" PRIXPTR ", want %u x %u pixels, base %x\n",
           ptr,params->bpp,npixels,base_pixel);
 #endif
 
@@ -291,7 +291,7 @@ copyRLEpixels(rgba *dest,unsigned npixels,uint32_t ptr,convertParams *params)
         count += xcf_file[ptr++] ;
       }
       if( j + count > npixels )
-        FatalBadXCF("Overlong RLE run at %"PRIX32" (plane %u, %u left)",
+        FatalBadXCF("Overlong RLE run at %"PRIXPTR" (plane %u, %u left)",
                     ptr,i,npixels-j);
       if( countspec >= 0 ) {
         rgba data = (uint32_t) xcf_file[ptr++] << shift ;
@@ -311,7 +311,7 @@ copyRLEpixels(rgba *dest,unsigned npixels,uint32_t ptr,convertParams *params)
     }
   }
 #ifdef xDEBUG
-  fprintf(stderr,"RLE decoding OK at %"PRIX32"\n",ptr);
+  fprintf(stderr,"RLE decoding OK at %"PRIXPTR"\n",ptr);
   /*
   for( j = 0 ; j < npixels ; j++ ) {
     if( j % 8 == 0 ) fprintf(stderr,"\n");
@@ -323,7 +323,7 @@ copyRLEpixels(rgba *dest,unsigned npixels,uint32_t ptr,convertParams *params)
 }
 
 static inline void
-copyTilePixels(struct Tile *dest, uint32_t ptr,convertParams *params)
+copyTilePixels(struct Tile *dest, xcfptr_t ptr,convertParams *params)
 {
   if( FULLALPHA(params->base_pixel) )
     dest->summary = TILESUMMARY_UPTODATE+TILESUMMARY_ALLFULL+TILESUMMARY_CRISP;

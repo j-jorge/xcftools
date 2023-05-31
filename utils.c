@@ -66,7 +66,7 @@ FatalBadXCF(const char* format,...)
 }
 
 void
-xcfCheckspace(uint32_t addr,int spaceafter,const char *format,...)
+xcfCheckspace(xcfptr_t addr,int spaceafter,const char *format,...)
 {
   if( xcf_length < spaceafter || addr > xcf_length - spaceafter ) {
     va_list v; va_start(v,format);

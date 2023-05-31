@@ -49,6 +49,8 @@ typedef signed long int   int32_t ;
 # define PRIXPTR "lX"
 #endif
 
+typedef uintptr_t xcfptr_t ;
+
 #if __GNUC__
 # define __ATTRIBUTE__ __attribute__
 #else
@@ -88,6 +90,36 @@ static inline uint32_t ntohl(uint32_t a) {
 #else
 # define xcfL(a) ((a) & 3 ? xcfBE(a) : ntohl(*(uint32_t *)(xcf_file + (a))))
 #endif
+
+/* Similarly, for doubleword values */
+
+#define xcfLBE(a) ( ((uint64_t)xcf_file[(a)  ] << 56) + \
+                    ((uint64_t)xcf_file[(a)+1] << 48) + \
+                    ((uint64_t)xcf_file[(a)+2] << 40) + \
+                    ((uint64_t)xcf_file[(a)+1] << 32) + \
+                    ((uint64_t)xcf_file[(a)+2] << 24) + \
+                    ((uint64_t)xcf_file[(a)+1] << 16) + \
+                    ((uint64_t)xcf_file[(a)+2] << 8 ) + \
+                    ((uint64_t)xcf_file[(a)+3]      ) )
+#define xcfLLE(a) ( ((uint64_t)xcf_file[(a)  ]      ) + \
+                    ((uint64_t)xcf_file[(a)+1] << 8 ) + \
+                    ((uint64_t)xcf_file[(a)+2] << 16) + \
+                    ((uint64_t)xcf_file[(a)+1] << 24 ) + \
+                    ((uint64_t)xcf_file[(a)+2] << 32) + \
+                    ((uint64_t)xcf_file[(a)+1] << 40) + \
+                    ((uint64_t)xcf_file[(a)+2] << 48) + \
+                    ((uint64_t)xcf_file[(a)+3] << 56) )
+
+#if CAN_DO_UNALIGNED_WORDS
+# define xcfLL(a) be64toh(*(uint64_t *)(xcf_file + (a)))
+#else
+# define xcfLL(a) ((a) & 7 ? xcfLBE(a) : be64toh(*(uint64_t *)(xcf_file + (a))))
+#endif
+
+/* Simiarly, for pointer values */
+
+#define xcfP(a) (XCF.version >= 11 ? xcfLL(a) : xcfL(a))
+#define xcfPsz  (XCF.version >= 11 ? 8 : 4)
 
 /* ****************************************************************** */
 
@@ -136,12 +168,12 @@ extern uint8_t *xcf_file ;
 extern size_t xcf_length ;
 extern int use_utf8 ;
 
-void xcfCheckspace(uint32_t addr,int spaceafter, const char *format,...)
+void xcfCheckspace(xcfptr_t addr,int spaceafter, const char *format,...)
      __ATTRIBUTE__((format(printf,3,4)));
-uint32_t xcfOffset(uint32_t addr,int spaceafter);
+xcfptr_t xcfOffset(xcfptr_t addr,int spaceafter);
 
-int xcfNextprop(uint32_t *master,uint32_t *body);
-const char* xcfString(uint32_t ptr,uint32_t *after);
+int xcfNextprop(xcfptr_t *master,xcfptr_t *body);
+const char* xcfString(xcfptr_t ptr,xcfptr_t *after);
 
 /* These are hardcoded in the Gimp sources: */
 #define TILE_SHIFT 6
@@ -167,8 +199,8 @@ void computeDimensions(struct tileDimensions *);
 
 struct xcfTiles {
   const struct _convertParams *params ;
-  uint32_t *tileptrs ;
-  uint32_t hierarchy ;
+  xcfptr_t *tileptrs ;
+  xcfptr_t hierarchy ;
 };
 
 struct xcfLayer {
@@ -178,7 +210,7 @@ struct xcfLayer {
   GimpImageType type ;
   unsigned int opacity ;
   int isVisible, hasMask ;
-  uint32_t propptr ;
+  xcfptr_t propptr ;
   struct xcfTiles pixels ;
   struct xcfTiles mask ;
   int isGroup ;
@@ -194,7 +226,7 @@ extern struct xcfImage {
   XcfCompressionType compression ;
   int numLayers ;
   struct xcfLayer *layers ;
-  uint32_t colormapptr ;
+  xcfptr_t colormapptr ;
 } XCF ;
 
 void getBasicXcfInfo(void);
