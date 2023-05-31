@@ -99,8 +99,8 @@ initTileDirectory(struct tileDimensions *dim,struct xcfTiles *tiles,
   ptr = xcfOffset(ptr+4,3*4) ;
   if( (ptr = tileDirectoryOneLevel(dim,ptr)) == 0 ) return ;
 
-  xcfCheckspace(ptr,dim->ntiles*4+4,"Tile directory at %" PRIXPTR,ptr);
-  if( xcfL(ptr + dim->ntiles*4) != 0 )
+  xcfCheckspace(ptr,(dim->ntiles+1)*xcfPsz,"Tile directory at %" PRIXPTR,ptr);
+  if( xcfP(ptr + dim->ntiles*xcfPsz) != 0 )
     FatalBadXCF("Wrong sized tile directory at %" PRIXPTR,ptr);
 # if defined(WORDS_BIGENDIAN)
   if( (xcfPsz == sizeof(xcfptr_t))
