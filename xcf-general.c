@@ -26,25 +26,26 @@
 #endif
 
 uint8_t *xcf_file = 0 ;
-size_t xcf_length ;
+xcfptr_t xcf_length ;
 int use_utf8 = 0 ;
 
-uint32_t
-xcfOffset(uint32_t addr,int spaceafter)
+xcfptr_t
+xcfOffset(xcfptr_t addr,int spaceafter)
 {
-  uint32_t apparent ;
+  xcfptr_t apparent ;
   xcfCheckspace(addr,4,"(xcfOffset)");
-  apparent = xcfL(addr);
+  apparent = xcfP(addr);
   xcfCheckspace(apparent,spaceafter,
-                "Too large offset (%" PRIX32 ") at position %" PRIX32,
+                "Too large offset (%" PRIXPTR ") at position %" PRIXPTR,
                 apparent,addr);
   return apparent ;
 }
 
 int
-xcfNextprop(uint32_t *master,uint32_t *body)
+xcfNextprop(xcfptr_t *master,xcfptr_t *body)
 {
-  uint32_t ptr, length, total, minlength ;
+  xcfptr_t ptr ;
+  uint32_t length, total, minlength ;
   PropType type ;
   ptr = *master ;
   xcfCheckspace(ptr,8,"(property header)");
@@ -76,18 +77,18 @@ xcfNextprop(uint32_t *master,uint32_t *body)
   default:               minlength = 0; break;
   }
   if( length < minlength )
-    FatalBadXCF("Short %s property at %" PRIX32 " (%" PRIu32 "<%" PRIu32 ")",
+    FatalBadXCF("Short %s property at %" PRIXPTR " (%" PRIu32 "<%" PRIu32 ")",
                 showPropType(type),ptr,length,minlength);
   *master = ptr+8+length ;
   total = 8 + length + (type != PROP_END ? 8 : 0) ;
   if( total < length ) /* Check overwrap */
-    FatalBadXCF("Overlong property at %" PRIX32, ptr);
-  xcfCheckspace(ptr,total,"Overlong property at %" PRIX32,ptr) ;
+    FatalBadXCF("Overlong property at %" PRIXPTR, ptr);
+  xcfCheckspace(ptr,total,"Overlong property at %" PRIXPTR,ptr) ;
   return type ;
 }
 
 const char*
-xcfString(uint32_t ptr,uint32_t *after)
+xcfString(xcfptr_t ptr,xcfptr_t *after)
 {
   uint32_t length ;
   unsigned i ;
@@ -100,7 +101,7 @@ xcfString(uint32_t ptr,uint32_t *after)
   utf8master = (ICONV_CONST char*)(xcf_file+ptr) ;
   if( after ) *after = ptr + length ;
   if( length == 0 || utf8master[length-1] != 0 )
-    FatalBadXCF("String at %" PRIX32 " not zero-terminated",ptr-4);
+    FatalBadXCF("String at %" PRIXPTR " not zero-terminated",ptr-4);
   length-- ;
 
   if( use_utf8 ) return utf8master ;
@@ -112,7 +113,7 @@ xcfString(uint32_t ptr,uint32_t *after)
     if( i == length )
       return utf8master ; /* Only ASCII after all */
     if( utf8master[i] == 0 )
-      FatalBadXCF("String at %" PRIX32 " has embedded zeroes",ptr-4);
+      FatalBadXCF("String at %" PRIXPTR " has embedded zeroes",ptr-4);
     if( (int8_t) utf8master[i] < 0 )
       break ;
   }
@@ -162,7 +163,7 @@ xcfString(uint32_t ptr,uint32_t *after)
           xcffree(buffer) ;
           continue ;
         }
-        FatalUnexpected("!iconv on layer name at %"PRIX32,ptr);
+        FatalUnexpected("!iconv on layer name at %"PRIXPTR,ptr);
       }
   }
 #endif
@@ -194,7 +195,7 @@ struct xcfImage XCF ;
 void
 getBasicXcfInfo(void)
 {
-  uint32_t ptr, data, layerfile ;
+  xcfptr_t ptr, data, layerfile ;
   PropType type ;
   int i, j ;
   
@@ -207,7 +208,8 @@ getBasicXcfInfo(void)
   else
     FatalBadXCF(_("Not an XCF file at all (magic not recognized)"));
 
-  if( XCF.version < 0 || XCF.version > 3 ) {
+  if(!( XCF.version >= 0 && XCF.version <= 3 ) &&
+     !( XCF.version >= 7 && XCF.version <= 12 )) {
     fprintf(stderr,
             _("Warning: XCF version %d not supported (trying anyway...)\n"),
             XCF.version);
@@ -226,7 +228,7 @@ getBasicXcfInfo(void)
   }
   if( XCF.pformat != GIMP_PRECISION_U8_NON_LINEAR ) {
     fprintf(stderr,
-	    _("Warning: XCF non-unorm8-gamma pixels format not supported (trying anyway...)\n"));
+            _("Warning: XCF non-unorm8-gamma pixels format not supported (trying anyway...)\n"));
   }
   while( (type = xcfNextprop(&ptr,&data)) != PROP_END ) {
     switch(type) {
@@ -243,12 +245,12 @@ getBasicXcfInfo(void)
   }
 
   layerfile = ptr ;
-  for( XCF.numLayers = 0 ; xcfOffset(ptr,8*4) ; XCF.numLayers++, ptr+=4  )
+  for( XCF.numLayers = 0 ; xcfOffset(ptr,8*4) ; XCF.numLayers++, ptr+=xcfPsz  )
     ;
   XCF.layers = xcfmalloc(XCF.numLayers * sizeof(struct xcfLayer)) ;
   for( i = 0 ; i < XCF.numLayers ; i++ ) {
     struct xcfLayer *L = XCF.layers + i ;
-    ptr = xcfL(layerfile+4*(XCF.numLayers-1-i)) ;
+    ptr = xcfP(layerfile+xcfPsz*(XCF.numLayers-1-i)) ;
 
     L->mode = GIMP_NORMAL_MODE ;
     L->opacity = 255 ;
@@ -305,9 +307,9 @@ getBasicXcfInfo(void)
     }
     xcfCheckspace(ptr,8,"(end of layer %s)",L->name);
     L->pixels.tileptrs = 0 ;
-    L->pixels.hierarchy = xcfOffset(ptr  ,4*4);
+    L->pixels.hierarchy = xcfOffset(ptr  ,4*3+xcfPsz*2);
     L->mask.tileptrs = 0 ;
-    L->mask.hierarchy   = xcfOffset(ptr+4,4*4);
+    L->mask.hierarchy   = xcfOffset(ptr+xcfPsz,4*3+xcfPsz*2);
 
     computeDimensions(&L->dim);
   }
