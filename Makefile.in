@@ -76,11 +76,11 @@ xcfinfo$e: xcfinfo.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o nlsini.$o
 
 xcf2pnm$e: xcf2pnm.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o nlsini.$o \
 	   pixels.$o flatten.$o flatspec.$o scaletab.$o table.$o
-	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
+	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS) -lz
 
 xcf2png$e: xcf2png.$o $(FILEIO).$o enums.$o xcf-general.$o utils.$o nlsini.$o \
 	   pixels.$o flatten.$o flatspec.$o scaletab.$o table.$o palette.$o
-	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS) -lpng
+	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS) -lpng -lz
 
 xcfview: xcfview.in Makefile
 	sed '1s,/usr/bin/perl,@PERL@,' < $< > $@
