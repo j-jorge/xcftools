@@ -50,26 +50,51 @@ void
 read_or_mmap_xcf(const char *filename,const char *unzipper)
 {
   struct stat statbuf ;
-  
+
   free_or_close_xcf() ;
 
-  if( strcmp(filename,"-") != 0 ) {
-    if( access(filename,R_OK) != 0 )
-      FatalGeneric(21,"!%s",filename);
-  }
-
   if( !unzipper ) {
-    const char *pc ;
-    pc = filename + strlen(filename) ;
-    if( pc-filename > 2 && strcmp(pc-2,"gz") == 0 )
-      unzipper = "zcat" ;
-    else if ( pc-filename > 3 && strcmp(pc-3,"bz2") == 0 )
-      unzipper = "bzcat" ;
+    char bufmagic[2] ;
+    // 0x1f, 0x8b, 0x08; 8 for deflate
+    char gzmagic[2] = { 0x1f, 0x8b } ;
+    // 'B', 'Z', 'h'; h for huffman
+    char bzmagic[2] = { 'B', 'Z' } ;
+    // 0xfd, '7', 'z', 'X', 'Z'
+    char xzmagic[2] = { 0xfd, '7' } ;
+
+    xcfstream = fopen(filename,"rb") ;
+    if( !xcfstream )
+      FatalGeneric(21,_("!Cannot open %s"),filename);
+
+    if( strcmp(filename,"-") != 0 )
+      if( access(filename,R_OK) != 0 )
+        FatalGeneric(21,"!%s",filename);
+
+    if( fstat(fileno(xcfstream),&statbuf) == 0 &&
+      (statbuf.st_mode & S_IFMT) == S_IFREG ) {
+      xcf_length = statbuf.st_size ;
+      if( xcf_length > 1 )
+        if( fread(bufmagic, 2, 1, xcfstream) == 0 )
+          FatalUnexpected(_("!Could not read xcf file")) ;
+      else
+        unzipper = "";
+
+      if( memcmp(bufmagic, gzmagic, 2) == 0 )
+        unzipper = "zcat" ;
+      else if( memcmp(bufmagic, bzmagic, 2) == 0 )
+        unzipper = "bzcat" ;
+      else if( memcmp(bufmagic, xzmagic, 2) == 0 )
+        unzipper = "xzcat" ;
+      else
+        unzipper = "" ;
+    }
     else
-      unzipper = "" ;
+      FatalUnexpected(_("!Could not read xcf file stat")) ;
+
+    fclose(xcfstream) ;
   } else if( strcmp(unzipper,"cat") == 0 )
     unzipper = "" ;
-  
+
   if( *unzipper ) {
     int pid, status, outfd ;
 #if HAVE_MMAP
