@@ -706,6 +706,12 @@ z0 f0 i0
 EOF
 testpng A:-pgm index256 i256 -A
 
+# Zlib pixel compression
+testpng zlib zlib
+
+# 64-bit XCF pointers
+testpng zlib wide-pointers
+
 #############################################################################
 #
 #   Various tests for regression of bugs that slipped through the
